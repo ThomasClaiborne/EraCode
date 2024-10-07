@@ -20,7 +20,10 @@ public class Enemy : MonoBehaviour, IDamage
         get;
         set;
     }
-   
+
+    public delegate void EnemyDeath();
+    public event EnemyDeath OnDeath;
+
     private int currentWaypointIndex = 0;
 
     private int currentHealth;
@@ -93,7 +96,7 @@ public class Enemy : MonoBehaviour, IDamage
             amount *= 2;
 
         currentHealth -= amount;
-        Debug.Log("Enemy took " + amount + " damage. Health left: " + currentHealth);
+        //Debug.Log("Enemy took " + amount + " damage. Health left: " + currentHealth);
         StartCoroutine(flashMat());
 
         if (currentHealth <= 0)
@@ -102,6 +105,13 @@ public class Enemy : MonoBehaviour, IDamage
 
     void Die()
     {
+        if(OnDeath != null)
+        {
+
+           OnDeath.Invoke();
+            Debug.Log("Enemy has died!");
+        }
+
         Destroy(gameObject);
     }
 
