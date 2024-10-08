@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+
         player = GameObject.FindWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
         playerWall = GameObject.FindWithTag("PlayerWall").GetComponent<PlayerWall>();

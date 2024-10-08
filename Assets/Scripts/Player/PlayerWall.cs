@@ -69,7 +69,7 @@ public class PlayerWall : MonoBehaviour, IDamage
     {
         Debug.Log("Wall has been destroyed!");
         GameManager.Instance.isWallDestroyed = true;
-        GameManager.Instance.LoseGame();
         Destroy(gameObject); 
+        GameManager.Instance.LoseGame();
     }
 }

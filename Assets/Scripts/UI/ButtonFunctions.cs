@@ -13,7 +13,6 @@ public class ButtonFunctions : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         GameManager.Instance.isWallDestroyed = false;
-        GameManager.Instance.ResetGameState();
         GameManager.Instance.stateUnpaused();
     }
 

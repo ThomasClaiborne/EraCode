@@ -21,10 +21,10 @@ public class PlayerController : MonoBehaviour
     {
         RotateTowardsMouse();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Shoot();
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Shoot();
+        //}
     }
 
     void RotateTowardsMouse()

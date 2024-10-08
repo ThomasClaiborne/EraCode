@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour, IDamage
     private int currentWaypointIndex = 0;
 
     private int currentHealth;
+    private bool isFlashing;
 
     private
 
@@ -82,7 +83,7 @@ public class Enemy : MonoBehaviour, IDamage
                 IDamage wall = GameManager.Instance.playerWall.GetComponent<IDamage>();
                 if (wall != null)
                 {
-                    wall.takeDamage(10, false); 
+                    wall.takeDamage(damageAmount, false); 
                     Debug.Log("Enemy attacks the wall. Wall health decreasing...");
                 }
             }
@@ -117,10 +118,17 @@ public class Enemy : MonoBehaviour, IDamage
 
     IEnumerator flashMat()
     {
+        if (isFlashing)
+            yield break;
+
+        isFlashing = true;
+
         Material tempColor = model.material;
         model.material = tempMat;
         yield return new WaitForSeconds(0.1f);
         model.material = tempColor;
+
+        isFlashing = false;
     }
 
 
