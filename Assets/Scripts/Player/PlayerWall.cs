@@ -3,27 +3,52 @@ using UnityEngine;
 
 public class PlayerWall : MonoBehaviour, IDamage
 {
-    public int maxHealth = 10;
     public Transform[] wallSegments;
     [SerializeField] Material tempMat;
 
-    private int currentHealth;
+    [Header("--Stats--")]
+    public int HP;
+
+
+    int HPMax;
+
 
     void Start()
     {
-        currentHealth = maxHealth;
+        HPMax = HP;
+        HUDManager.Instance.WallHPText.text = HP.ToString();
     }
 
     public void takeDamage(int amount, bool headshot)
     {
-        currentHealth -= amount;
+        HP -= amount;
+        HUDManager.Instance.DecreaseHealth(amount, HP, HPMax);
+        HUDManager.Instance.WallHPText.text = HP.ToString();
         StartCoroutine(flashMat());
-        Debug.Log("Wall took " + amount + " damage. Health left: " + currentHealth);
+        Debug.Log("Wall took " + amount + " damage. Health left: " + HP);
 
-        if (currentHealth <= 0)
+        if (HP <= 0)
         {
             DestroyWall();
         }
+    }
+
+    public void heal(int amount)
+    {
+        HP += amount;
+        if (HP > HPMax)
+        {
+            HP = HPMax;
+        }
+        HUDManager.Instance.IncreaseHealth(amount, HP, HPMax);
+        HUDManager.Instance.WallHPText.text = HP.ToString();
+        Debug.Log("Wall healed for " + amount + " health. Health left: " + HP);
+    }
+
+    void UpdateHPBar()
+    {
+        float fillAmount = (float)HP / HPMax;
+        HUDManager.Instance.wallHPBar.fillAmount = fillAmount;
     }
 
     IEnumerator flashMat()
