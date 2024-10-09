@@ -21,8 +21,10 @@ public class HUDManager : MonoBehaviour
 
     public float lerpSpeed = 2f;
 
-   private Coroutine currentCoroutine;
-    
+    private Coroutine currentCoroutine;
+    private Dictionary<TextMeshProUGUI, Coroutine> lerpCoroutines = new Dictionary<TextMeshProUGUI, Coroutine>();
+    private Color defaultAmmoTextColor;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,7 +37,7 @@ public class HUDManager : MonoBehaviour
     }
     void Start()
     {
-        
+        defaultAmmoTextColor = weaponAmmoText.color;
     }
 
     void Update()
@@ -95,4 +97,42 @@ public class HUDManager : MonoBehaviour
         wallHPBarAnimate.color = wallHPBar.color;
     }
 
+    public void TriggerTextLerp(TextMeshProUGUI textElement, Color targetColor, float duration)
+    {
+        if (lerpCoroutines.ContainsKey(textElement) && lerpCoroutines[textElement] != null)
+        {
+            StopCoroutine(lerpCoroutines[textElement]);
+        }
+
+        lerpCoroutines[textElement] = StartCoroutine(LerpTextColor(textElement, targetColor, duration));
+    }
+
+    private IEnumerator LerpTextColor(TextMeshProUGUI textElement, Color targetColor, float duration)
+    {
+        Color originalColor = textElement.color;
+        float time = 0;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            textElement.color = Color.Lerp(originalColor, targetColor, time / duration);
+            yield return null;
+        }
+
+        textElement.color = targetColor;
+
+        yield return new WaitForSeconds(0.2f);
+
+        time = 0;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            textElement.color = Color.Lerp(targetColor, defaultAmmoTextColor, time / duration);
+            yield return null;
+        }
+
+        textElement.color = defaultAmmoTextColor;
+
+        lerpCoroutines[textElement] = null;
+    }
 }

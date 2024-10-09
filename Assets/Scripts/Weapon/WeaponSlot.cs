@@ -16,6 +16,7 @@ public class WeaponSlot : MonoBehaviour
     private bool canShoot = true;
     private bool isShooting = false;
     private bool isReloading = false;
+    private Dictionary<WeaponData, int> ammoCountPerWeapon = new Dictionary<WeaponData, int>();
 
     private void Start()
     {
@@ -37,6 +38,8 @@ public class WeaponSlot : MonoBehaviour
             {
                 Shoot();
             }
+            if (currentClipSize <= 0)
+                HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
         }
         else
         {
@@ -44,6 +47,8 @@ public class WeaponSlot : MonoBehaviour
             {
                 Shoot();
             }
+            if (currentClipSize <= 0)
+                HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.5f);
         }
 
         if (Input.GetKeyDown(KeyCode.R) && CanReload())
@@ -186,21 +191,18 @@ public class WeaponSlot : MonoBehaviour
 
     private void EquipWeapon(WeaponData newWeapon)
     {
-        // Destroy the current weapon object if it exists
-        if (currentWeaponObject != null)
-        {
-            Destroy(currentWeaponObject);
-        }
+        if (currentWeaponObject != null) Destroy(currentWeaponObject);
+
+        if (currentWeapon != null) ammoCountPerWeapon[currentWeapon] = currentClipSize;
 
         currentWeapon = newWeapon;
-        currentClipSize = currentWeapon.clipSize;
+        currentClipSize = ammoCountPerWeapon.ContainsKey(currentWeapon) ?
+                          ammoCountPerWeapon[currentWeapon] : currentWeapon.clipSize;
 
-        // Instantiate the new weapon object
         currentWeaponObject = Instantiate(currentWeapon.weaponModel, weaponHolder);
         currentWeaponObject.transform.localPosition = currentWeapon.holdPosition;
         currentWeaponObject.transform.localRotation = Quaternion.Euler(currentWeapon.holdRotation);
 
-        // Update UI or any other necessary components
         UpdateHUD();
     }
 
