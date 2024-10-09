@@ -17,6 +17,8 @@ public class WeaponSlot : MonoBehaviour
     private bool isShooting = false;
     private bool isReloading = false;
     private Dictionary<WeaponData, int> ammoCountPerWeapon = new Dictionary<WeaponData, int>();
+    private Coroutine reloadCoroutine;
+    private Coroutine reloadVisualsCoroutine;
 
     private void Start()
     {
@@ -49,7 +51,7 @@ public class WeaponSlot : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R) && CanReload())
         {
-            StartCoroutine(Reload());
+            reloadCoroutine = StartCoroutine(Reload());
         }
     }
 
@@ -142,9 +144,11 @@ public class WeaponSlot : MonoBehaviour
         isReloading = true;
         // Play reload animation and audio
         //PlayReloadAudio();
-        StartCoroutine(reloadingVisuals());
+        reloadVisualsCoroutine = StartCoroutine(reloadingVisuals());
 
         yield return new WaitForSeconds(currentWeapon.reloadTime);
+
+        if (!isReloading) yield break;
 
         if (currentWeapon.isInfiniteAmmo)
         {
@@ -174,11 +178,32 @@ public class WeaponSlot : MonoBehaviour
         HUDManager.Instance.weaponReloading.text = "";
     }
 
+    private void CancelReload()
+    {
+        if (isReloading)
+        {
+            isReloading = false;
+            if (reloadCoroutine != null)
+            {
+                StopCoroutine(reloadCoroutine);
+                reloadCoroutine = null;
+            }
+            if (reloadVisualsCoroutine != null)
+            {
+                StopCoroutine(reloadVisualsCoroutine);
+                reloadVisualsCoroutine = null;
+            }
+            HUDManager.Instance.weaponReloading.text = "";
+        }
+    }
+
 
     private void SwitchToSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= weaponSlots.Length) return;
-        if (weaponSlots[slotIndex] == null && slotIndex != 0) return; // Don't switch to empty slots, except slot 0
+        if (weaponSlots[slotIndex] == null && slotIndex != 0) return;
+
+        CancelReload();
 
         currentSlotIndex = slotIndex;
         EquipWeapon(weaponSlots[slotIndex]);
