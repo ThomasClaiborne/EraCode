@@ -3317,37 +3317,91 @@ MonoBehaviour:
     - spawnTime: 1
       spawnerID: 1
       numberOfEnemies: 1
+      enemyID: 0
     - spawnTime: 1
       spawnerID: 2
       numberOfEnemies: 1
-  - duration: 10
+      enemyID: 0
+    - spawnTime: 20
+      spawnerID: 0
+      numberOfEnemies: 1
+      enemyID: 0
+  - duration: 20
     spawnEvents:
     - spawnTime: 1
       spawnerID: 2
       numberOfEnemies: 1
+      enemyID: 0
     - spawnTime: 1
       spawnerID: 0
       numberOfEnemies: 1
+      enemyID: 0
     - spawnTime: 2
       spawnerID: 1
       numberOfEnemies: 1
-  - duration: 10
+      enemyID: 0
+    - spawnTime: 4
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 0.5
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 2
+      spawnerID: 0
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 0
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 1
+  - duration: 20
     spawnEvents:
     - spawnTime: 1
       spawnerID: 0
       numberOfEnemies: 1
-    - spawnTime: 2
+      enemyID: 0
+    - spawnTime: 1
       spawnerID: 2
       numberOfEnemies: 1
+      enemyID: 0
     - spawnTime: 1
       spawnerID: 0
       numberOfEnemies: 1
-    - spawnTime: 2
-      spawnerID: 1
-      numberOfEnemies: 1
+      enemyID: 0
     - spawnTime: 1
       spawnerID: 1
       numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 4
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 0.5
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 0.5
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 0.5
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 1
+    - spawnTime: 5
+      spawnerID: 0
+      numberOfEnemies: 1
+      enemyID: 2
+    - spawnTime: 2
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 2
   waveCooldown: 3
   isPaused: 0
   isWallDestroyed: 0

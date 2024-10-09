@@ -59,7 +59,7 @@ MonoBehaviour:
   holdRotation: {x: 0, y: 0, z: 0}
   damage: 1
   clipSize: 25
-  ammo: 47
+  ammo: 75
   reloadTime: 1.5
   fireRate: 0.2
   bulletDistance: 100

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-
-    [SerializeField] GameObject enemyPrefab;
+    [Header("Enemy Prefabs")]
+    [SerializeField] GameObject[] enemyPrefabs;
 
     [Header("Waypoints")]
     [SerializeField] Color waypointGizmoColor;
@@ -18,9 +18,16 @@ public class EnemySpawner : MonoBehaviour
     public int numberofEnemies;
     public int spawnerID;
 
-    public void SpawnEnemy()
+    public void SpawnEnemy(int enemyID)
     {
-        GameObject newEnemy = Instantiate(enemyPrefab, transform.position, transform.rotation);
+
+        if (enemyID < 0 || enemyID >= enemyPrefabs.Length)
+        {
+            Debug.LogError("Invalid enemy ID: " + enemyID);
+            return; // Handle invalid ID
+        }
+
+        GameObject newEnemy = Instantiate(enemyPrefabs[enemyID], transform.position, transform.rotation);
         Enemy enemyScript = newEnemy.GetComponent<Enemy>();
 
         if (waypoints != null && waypoints.Length > 0)

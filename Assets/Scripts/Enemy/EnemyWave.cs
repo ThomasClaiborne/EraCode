@@ -10,6 +10,7 @@ public class SpawnEvent
     public float spawnTime;
     public int spawnerID;
     public int numberOfEnemies;
+    public int enemyID;
 }
 
 

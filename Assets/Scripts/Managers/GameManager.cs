@@ -69,8 +69,8 @@ public class GameManager : MonoBehaviour
     {
         yield return StartCoroutine(WaveCooldown());
         isWaveInProgress = true;
-        float startTime = Time.time;
 
+        enemiesRemaining = wave.spawnEvents.Sum(e => e.numberOfEnemies);
         foreach (var spawnEvent in wave.spawnEvents)
         {
             float delay = spawnEvent.spawnTime;
@@ -83,8 +83,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < numberOfEnemies; i++)
                 {
-                    enemySpawners[spawnerID].SpawnEnemy();
-                    enemiesRemaining++;
+                    enemySpawners[spawnerID].SpawnEnemy(spawnEvent.enemyID);
                 }
             }
         }
@@ -97,7 +96,7 @@ public class GameManager : MonoBehaviour
         isWaveInProgress = false;
         currentWaveIndex++;
         StartNextWave();
-        Debug.Log("Wave completed!");
+        Debug.Log("Wave " + (currentWaveIndex + 1) + " completed!");
     }
 
     IEnumerator WaveCooldown()

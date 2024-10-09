@@ -1,11 +1,14 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour, IDamage
 {
     private enum EnemyState { Traveling, Attacking }
     private EnemyState currentState;
 
+    [SerializeField] private Image healthBar;
+    [SerializeField] private Image healthBarBackground;
     [SerializeField] Renderer model;
     [SerializeField] Material tempMat;
 
@@ -14,6 +17,7 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] int damageAmount = 20;
     [SerializeField] float attackInterval = 1.0f;
     [SerializeField] float attackTimer = 0;
+
 
     public Transform[] waypoints
     {
@@ -91,13 +95,24 @@ public class Enemy : MonoBehaviour, IDamage
         }
     }
 
+    void UpdateHealthBar()
+    {
+        if (healthBar != null)
+        {
+            if (healthBarBackground.IsActive() == false)
+                healthBarBackground.gameObject.SetActive(true);
+
+            healthBar.fillAmount = (float)currentHealth / maxHealth;
+        }
+    }
+
     public void takeDamage(int amount, bool headshot)
     {
         if (headshot)
             amount *= 2;
 
         currentHealth -= amount;
-        //Debug.Log("Enemy took " + amount + " damage. Health left: " + currentHealth);
+        UpdateHealthBar();
         StartCoroutine(flashMat());
 
         if (currentHealth <= 0)
