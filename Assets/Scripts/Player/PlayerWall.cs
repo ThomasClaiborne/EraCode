@@ -11,12 +11,13 @@ public class PlayerWall : MonoBehaviour, IDamage
 
 
     int HPMax;
-
+    Material tempColor;
 
     void Start()
     {
         HPMax = HP;
         HUDManager.Instance.WallHPText.text = HP.ToString();
+        tempColor = wallSegments[0].GetComponent<MeshRenderer>().material;
     }
 
     public void takeDamage(int amount, bool headshot)
@@ -53,7 +54,6 @@ public class PlayerWall : MonoBehaviour, IDamage
 
     IEnumerator flashMat()
     {
-        Material tempColor = wallSegments[0].GetComponent<MeshRenderer>().material;
         foreach (Transform segment in wallSegments)
         {
             segment.GetComponent<MeshRenderer>().material = tempMat;

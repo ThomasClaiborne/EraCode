@@ -17,7 +17,7 @@ public class WeaponData: MonoBehaviour
     public int ammo;
     public float reloadTime;
     public float fireRate;
-    public float bulletDistance;
+    public float bulletLifeSpan;
     public float maxSpreadAngle;
     public int bulletCount;
     public float recoil;

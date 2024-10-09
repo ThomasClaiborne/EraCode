@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] private Image healthBarBackground;
     [SerializeField] Renderer model;
     [SerializeField] Material tempMat;
+    [SerializeField] GameObject deathEffect;
 
     [SerializeField] int maxHealth = 100; 
     [SerializeField] float speed = 3f; 
@@ -126,6 +127,8 @@ public class Enemy : MonoBehaviour, IDamage
         {
             isDead = true;
             OnDeath.Invoke();
+            GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+            Destroy(effect, 0.5f);
             Debug.Log("Enemy has died!");
         }
         Destroy(gameObject);

@@ -53,8 +53,10 @@ MonoBehaviour:
   healthBarBackground: {fileID: 8502618618087553124}
   model: {fileID: 5927412934000701431}
   tempMat: {fileID: 2100000, guid: 4ec86c87c024026408326ab2ebda65bc, type: 2}
-  maxHealth: 10
-  speed: 1
+  deathEffect: {fileID: 1829163952570794, guid: f171ac3dbb620c44e81cd88ddee1cbbd,
+    type: 3}
+  maxHealth: 15
+  speed: 1.25
   damageAmount: 10
   attackInterval: 1.3
   attackTimer: 0

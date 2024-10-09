@@ -91,7 +91,7 @@ public class WeaponSlot : MonoBehaviour
                 BulletController bulletController = bullet.GetComponent<BulletController>();
 
                 bulletController.damageAmount = currentWeapon.damage;
-                bulletController.timeToDestroy = currentWeapon.bulletDistance;
+                bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
 
                 float spreadAngle = -currentWeapon.maxSpreadAngle + (i * angleStep);
                 Quaternion spreadRotation = Quaternion.Euler(0, spreadAngle, 0);
@@ -106,11 +106,11 @@ public class WeaponSlot : MonoBehaviour
             BulletController bulletController = bullet.GetComponent<BulletController>();
 
             bulletController.damageAmount = currentWeapon.damage;
-            bulletController.timeToDestroy = currentWeapon.bulletDistance;
+            bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
 
             bullet.transform.forward = shootPoint.forward;
         }
-
+        currentClipSize--;
         // Visual and audio effects
         //Instantiate(currentWeapon.muzzleFlash, currentWeapon.shootPoint.position, currentWeapon.shootPoint.rotation);
         //if (currentWeapon.ejectBullet)
@@ -120,10 +120,6 @@ public class WeaponSlot : MonoBehaviour
         //PlayRandomShotSound();
 
         // Ammo management
-        if (!currentWeapon.isInfiniteAmmo)
-        {
-            currentClipSize--;
-        }
 
         UpdateHUD();
         // Apply recoil
@@ -234,7 +230,7 @@ public class WeaponSlot : MonoBehaviour
     private void UpdateHUD()
     {
         HUDManager.Instance.weaponNameText.text = currentWeapon.weaponName;
-        HUDManager.Instance.weaponAmmoText.text = currentClipSize + " / " + (currentWeapon.isInfiniteAmmo ? "INFINITE" : currentWeapon.ammo.ToString());
+        HUDManager.Instance.weaponAmmoText.text = currentClipSize + " / " + (currentWeapon.isInfiniteAmmo ? "\u221E" : currentWeapon.ammo.ToString());
     }
 
     // Additional helper methods as needed
