@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour, IDamage
 
     private int currentHealth;
     private bool isFlashing;
+    private bool isDead; 
 
     private
 
@@ -121,13 +122,12 @@ public class Enemy : MonoBehaviour, IDamage
 
     void Die()
     {
-        if(OnDeath != null)
+        if(OnDeath != null && !isDead)
         {
-
-           OnDeath.Invoke();
+            isDead = true;
+            OnDeath.Invoke();
             Debug.Log("Enemy has died!");
         }
-
         Destroy(gameObject);
     }
 

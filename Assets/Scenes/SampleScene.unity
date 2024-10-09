@@ -3322,7 +3322,7 @@ MonoBehaviour:
       spawnerID: 2
       numberOfEnemies: 1
       enemyID: 0
-    - spawnTime: 20
+    - spawnTime: 1
       spawnerID: 0
       numberOfEnemies: 1
       enemyID: 0
