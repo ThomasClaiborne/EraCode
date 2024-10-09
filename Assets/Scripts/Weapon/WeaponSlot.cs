@@ -38,8 +38,6 @@ public class WeaponSlot : MonoBehaviour
             {
                 Shoot();
             }
-            if (currentClipSize <= 0)
-                HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
         }
         else
         {
@@ -47,8 +45,6 @@ public class WeaponSlot : MonoBehaviour
             {
                 Shoot();
             }
-            if (currentClipSize <= 0)
-                HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.5f);
         }
 
         if (Input.GetKeyDown(KeyCode.R) && CanReload())
@@ -59,6 +55,9 @@ public class WeaponSlot : MonoBehaviour
 
     private bool CanShoot()
     {
+        if (currentClipSize <= 0)
+            HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
+
         return canShoot && !isReloading && currentClipSize > 0 &&
                (currentWeapon.isAutomatic || (!currentWeapon.isAutomatic && !isShooting));
     }

@@ -121,7 +121,7 @@ public class HUDManager : MonoBehaviour
 
         textElement.color = targetColor;
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         time = 0;
         while (time < duration)
