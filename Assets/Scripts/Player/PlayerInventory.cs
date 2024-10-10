@@ -1,13 +1,25 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance { get; private set; }
-
     public int Currency { get; private set; }
     public List<WeaponData> OwnedWeapons { get; private set; }
-    public WeaponData[] EquippedWeapons { get; private set; }
+    private WeaponData[] _equippedWeapons;
+    public WeaponData[] EquippedWeapons
+    {
+        get { return _equippedWeapons; }
+        private set { _equippedWeapons = value; }
+    }
+
+    [SerializeField] private WeaponData playerPistol;
+    public WeaponInventory AllWeapons { get; private set; }
+
+    private const string CURRENCY_KEY = "PlayerCurrency";
+    private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
+    private const string EQUIPPED_WEAPONS_KEY = "EquippedWeapons";
 
     private void Awake()
     {
@@ -15,7 +27,8 @@ public class PlayerInventory : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeInventory();
+            AllWeapons = GetComponent<WeaponInventory>();
+            InitializeInventory();   
         }
         else
         {
@@ -25,14 +38,20 @@ public class PlayerInventory : MonoBehaviour
 
     private void InitializeInventory()
     {
-        Currency = 0;
         OwnedWeapons = new List<WeaponData>();
-        EquippedWeapons = new WeaponData[3];
+        _equippedWeapons = new WeaponData[3];
+        LoadInventory();
+
+        if (_equippedWeapons[0] == null)
+        {
+            EquipWeapon(playerPistol, 0);
+        }
     }
 
     public void AddCurrency(int amount)
     {
         Currency += amount;
+        SaveInventory();
     }
 
     public bool SpendCurrency(int amount)
@@ -40,6 +59,7 @@ public class PlayerInventory : MonoBehaviour
         if (Currency >= amount)
         {
             Currency -= amount;
+            SaveInventory();
             return true;
         }
         return false;
@@ -50,6 +70,7 @@ public class PlayerInventory : MonoBehaviour
         if (!OwnedWeapons.Contains(weapon))
         {
             OwnedWeapons.Add(weapon);
+            SaveInventory();
         }
     }
 
@@ -60,19 +81,76 @@ public class PlayerInventory : MonoBehaviour
 
     public void EquipWeapon(WeaponData weapon, int slot)
     {
-        if (slot >= 0 && slot < EquippedWeapons.Length && OwnedWeapons.Contains(weapon))
+        if (slot >= 0 && slot < EquippedWeapons.Length &&
+            OwnedWeapons.Contains(weapon) || weapon == playerPistol)
         {
             EquippedWeapons[slot] = weapon;
+            SaveInventory();
         }
     }
 
     public void SaveInventory()
     {
-        // Implement saving logic (e.g., using PlayerPrefs or a more robust saving system)
+        PlayerPrefs.SetInt(CURRENCY_KEY, Currency);
+
+        string ownedWeaponsString = string.Join(",", OwnedWeapons.Select(w => w.weaponId));
+        PlayerPrefs.SetString(OWNED_WEAPONS_KEY, ownedWeaponsString);
+
+        string equippedWeaponsString = string.Join(",", EquippedWeapons.Select(w => w != null ? w.weaponId : "null"));
+        PlayerPrefs.SetString(EQUIPPED_WEAPONS_KEY, equippedWeaponsString);
+
+        PlayerPrefs.Save();
     }
 
     public void LoadInventory()
     {
-        // Implement loading logic
+        Currency = PlayerPrefs.GetInt(CURRENCY_KEY, 0);
+
+        string ownedWeaponsString = PlayerPrefs.GetString(OWNED_WEAPONS_KEY, "");
+        if (!string.IsNullOrEmpty(ownedWeaponsString))
+        {
+            string[] weaponIds = ownedWeaponsString.Split(',');
+            OwnedWeapons = weaponIds
+                .Select(FindWeaponById)
+                .Where(w => w != null)
+                .ToList();
+        }
+
+        string equippedWeaponsString = PlayerPrefs.GetString(EQUIPPED_WEAPONS_KEY, "");
+        if (!string.IsNullOrEmpty(equippedWeaponsString))
+        {
+            string[] equippedIds = equippedWeaponsString.Split(',');
+            for (int i = 0; i < 3; i++)
+            {
+                if (i < equippedIds.Length && equippedIds[i] != "null")
+                {
+                    _equippedWeapons[i] = FindWeaponById(equippedIds[i]);
+                }
+                else
+                {
+                    _equippedWeapons[i] = null;
+                }
+            }
+        }
+    }
+
+    private WeaponData FindWeaponById(string weaponId)
+    {
+        return AllWeapons.allWeapons.FirstOrDefault(w => w.weaponId == weaponId);
+    }
+
+    public void ResetInventory()
+    {
+        Currency = 0;
+        OwnedWeapons.Clear();
+        EquippedWeapons = new WeaponData[3];
+        EquipWeapon(playerPistol, 0);
+
+        PlayerPrefs.DeleteKey(CURRENCY_KEY);
+        PlayerPrefs.DeleteKey(OWNED_WEAPONS_KEY);
+        PlayerPrefs.DeleteKey(EQUIPPED_WEAPONS_KEY);
+        PlayerPrefs.Save();
+
+        SaveInventory();
     }
 }
