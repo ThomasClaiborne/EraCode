@@ -19,6 +19,9 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI weaponAmmoText;
     public TextMeshProUGUI weaponReloading;
 
+    [Header("--Message--")]
+    public TextMeshProUGUI messageText;
+
     public float lerpSpeed = 2f;
 
     private Coroutine currentCoroutine;

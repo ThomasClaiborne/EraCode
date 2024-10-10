@@ -7534,6 +7534,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16b377ca27c4892499f15827af0c1a0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPistol: {fileID: 8912522260170000092, guid: cd35aced3695e9746b7c6f423b94705c,
+    type: 3}
+  AllWeaponsPrefab: {fileID: 1326787399595159164, guid: 303929b38f2f3d34ba8b1d01bf9e032f,
+    type: 3}
 --- !u!4 &2127486619
 Transform:
   m_ObjectHideFlags: 0

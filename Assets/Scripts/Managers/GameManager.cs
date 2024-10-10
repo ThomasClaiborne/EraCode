@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public PlayerController playerController;
     public PlayerWall playerWall;
+    public WeaponSlot weaponSlot;
     public EnemySpawner[] enemySpawners;
     public List<EnemyWave> enemyWaves;
 
@@ -36,9 +37,11 @@ public class GameManager : MonoBehaviour
 
         player = GameObject.FindWithTag("Player");
         playerController = player.GetComponent<PlayerController>();
+        weaponSlot = player.GetComponent<WeaponSlot>();
         playerWall = GameObject.FindWithTag("PlayerWall").GetComponent<PlayerWall>();
 
         InitializeEnemySpawners();
+        SyncEquippedWeapons();
     }
     void Start()
     {
@@ -49,6 +52,23 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    private void SyncEquippedWeapons()
+    {
+        if (PlayerInventory.Instance != null && weaponSlot != null)
+        {
+            for (int i = 0; i < PlayerInventory.Instance.EquippedWeapons.Length; i++)
+            {
+                WeaponData weapon = PlayerInventory.Instance.EquippedWeapons[i];
+                weaponSlot.AddWeaponToSlot(weapon, i);
+            }
+        }
+        else
+        {
+            Debug.LogError("PlayerInventory or WeaponSlot is null in GameManager");
+        }
+    }
+
 
     private void StartNextWave()
     {
@@ -152,19 +172,6 @@ public class GameManager : MonoBehaviour
         isPaused = true;
         Time.timeScale = 0;
         UIManager.Instance.ShowLoseMenu();
-    }
-
-    public void ResetGameState()
-    {
-        Debug.Log("Current Wave Index before restart: " + currentWaveIndex);
-        enemySpawners = null;
-        enemySpawners = FindObjectsOfType<EnemySpawner>();
-        enemiesRemaining = 0;
-        currentWaveIndex = 0;
-        isWaveInProgress = false;
-
-        StopAllCoroutines();
-        StartNextWave();
     }
 
     void InitializeEnemySpawners()

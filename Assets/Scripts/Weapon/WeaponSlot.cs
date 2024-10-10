@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponSlot : MonoBehaviour
 {
     [SerializeField] private Transform weaponHolder; 
-    [SerializeField] private WeaponData defaultWeapon;
+    //[SerializeField] private WeaponData defaultWeapon;
     [SerializeField] private WeaponData[] weaponSlots = new WeaponData[3]; 
     [SerializeField] private int currentSlotIndex = 0;
 
@@ -22,7 +22,7 @@ public class WeaponSlot : MonoBehaviour
 
     private void Start()
     {
-        weaponSlots[0] = defaultWeapon;
+        //weaponSlots[0] = defaultWeapon;
         SwitchToSlot(0);
         UpdateHUD();
     }
@@ -201,12 +201,30 @@ public class WeaponSlot : MonoBehaviour
     private void SwitchToSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= weaponSlots.Length) return;
-        if (weaponSlots[slotIndex] == null && slotIndex != 0) return;
+        if (weaponSlots[slotIndex] == null && slotIndex != 0)
+        {
+            ShowEmptySlotMessage(slotIndex);
+            return;
+        }
 
         CancelReload();
 
         currentSlotIndex = slotIndex;
         EquipWeapon(weaponSlots[slotIndex]);
+    }
+
+    private void ShowEmptySlotMessage(int slotIndex)
+    {
+        string message = $"Slot {slotIndex + 1} is empty";
+        HUDManager.Instance.messageText.text = message;
+        HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.messageText, Color.red, 0.5f);
+        StartCoroutine(ClearMessageAfterDelay(1.0f));
+    }
+
+    private IEnumerator ClearMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HUDManager.Instance.messageText.text = "";
     }
 
     private void EquipWeapon(WeaponData newWeapon)
@@ -228,7 +246,7 @@ public class WeaponSlot : MonoBehaviour
 
     public void AddWeaponToSlot(WeaponData weapon, int slotIndex)
     {
-        if (slotIndex <= 0 || slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
+        if (slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
         weaponSlots[slotIndex] = weapon;
         UpdateHUD();
     }
@@ -254,8 +272,11 @@ public class WeaponSlot : MonoBehaviour
 
     private void UpdateHUD()
     {
-        HUDManager.Instance.weaponNameText.text = currentWeapon.weaponName;
-        HUDManager.Instance.weaponAmmoText.text = currentClipSize + " / " + (currentWeapon.isInfiniteAmmo ? "\u221E" : currentWeapon.ammo.ToString());
+        if (currentWeapon)
+        {
+            HUDManager.Instance.weaponNameText.text = currentWeapon.weaponName;
+            HUDManager.Instance.weaponAmmoText.text = currentClipSize + " / " + (currentWeapon.isInfiniteAmmo ? "\u221E" : currentWeapon.ammo.ToString()); 
+        }
     }
 
     // Additional helper methods as needed

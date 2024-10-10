@@ -15,7 +15,7 @@ public class PlayerInventory : MonoBehaviour
     }
 
     [SerializeField] private WeaponData playerPistol;
-    public WeaponInventory AllWeapons { get; private set; }
+    [SerializeField] private WeaponInventory AllWeaponsPrefab;
 
     private const string CURRENCY_KEY = "PlayerCurrency";
     private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
@@ -27,7 +27,6 @@ public class PlayerInventory : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            AllWeapons = GetComponent<WeaponInventory>();
             InitializeInventory();   
         }
         else
@@ -136,7 +135,25 @@ public class PlayerInventory : MonoBehaviour
 
     private WeaponData FindWeaponById(string weaponId)
     {
-        return AllWeapons.allWeapons.FirstOrDefault(w => w.weaponId == weaponId);
+        if (AllWeaponsPrefab == null)
+        {
+            Debug.LogError("AllWeapons is null in PlayerInventory");
+            return null;
+        }
+
+        if (AllWeaponsPrefab.allWeapons == null)
+        {
+            Debug.LogError("AllWeapons.allWeapons is null in PlayerInventory");
+            return null;
+        }
+
+        if (AllWeaponsPrefab.allWeapons.Count == 0)
+        {
+            Debug.LogWarning("AllWeapons.allWeapons is empty in PlayerInventory");
+            return null;
+        }
+
+        return AllWeaponsPrefab.allWeapons.FirstOrDefault(w => w != null && w.weaponId == weaponId);
     }
 
     public void ResetInventory()
