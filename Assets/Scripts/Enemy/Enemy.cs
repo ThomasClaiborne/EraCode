@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Enemy : MonoBehaviour, IDamage
 {
@@ -19,6 +20,9 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] float attackInterval = 1.0f;
     [SerializeField] float attackTimer = 0;
 
+    [SerializeField] private int currencyReward = 10;
+    [SerializeField] private GameObject currencyTextPrefab;
+    [SerializeField] private Transform currencyTextSpawnPoint;
 
     public Transform[] waypoints
     {
@@ -40,7 +44,6 @@ public class Enemy : MonoBehaviour, IDamage
     void Start()
     {
         currentHealth = maxHealth;
-
         currentState = EnemyState.Traveling;
     }
 
@@ -90,7 +93,6 @@ public class Enemy : MonoBehaviour, IDamage
                 if (wall != null)
                 {
                     wall.takeDamage(damageAmount, false); 
-                    Debug.Log("Enemy attacks the wall. Wall health decreasing...");
                 }
             }
             attackTimer = 0f;
@@ -127,9 +129,11 @@ public class Enemy : MonoBehaviour, IDamage
         {
             isDead = true;
             OnDeath.Invoke();
+            PlayerInventory.Instance.AddCurrency(currencyReward);
+            HUDManager.Instance.UpdateCurrencyText();
+            DisplayCurrencyReward();
             GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
             Destroy(effect, 0.5f);
-            Debug.Log("Enemy has died!");
         }
         Destroy(gameObject);
     }
@@ -147,6 +151,26 @@ public class Enemy : MonoBehaviour, IDamage
         model.material = tempColor;
 
         isFlashing = false;
+    }
+
+    void DisplayCurrencyReward()
+    {
+        if (currencyTextPrefab != null && currencyTextSpawnPoint != null)
+        {
+            GameObject currencyTextObject = Instantiate(currencyTextPrefab, currencyTextSpawnPoint.position, Quaternion.identity);
+            TextMeshPro currencyText = currencyTextObject.GetComponent<TextMeshPro>();
+            Color textColor = currencyTextPrefab.GetComponent<FloatingText>().Color;
+            if (currencyText != null)
+            {
+                currencyText.text = $"+${currencyReward}";
+                currencyText.color = textColor;
+            }   
+            else
+            {
+                Debug.LogError("Currency text prefab does not have a TextMeshPro component!");
+                Destroy(currencyTextObject);
+            }
+        }
     }
 
 

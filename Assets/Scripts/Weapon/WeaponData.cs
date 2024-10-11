@@ -39,6 +39,9 @@ public class WeaponData: MonoBehaviour
     public bool isRocketLauncher;
     public bool isPistol;
 
+    [Header("Shop Info")]
+    public int price;
+
     public override bool Equals(object obj)
     {
         return Equals(obj as WeaponData);

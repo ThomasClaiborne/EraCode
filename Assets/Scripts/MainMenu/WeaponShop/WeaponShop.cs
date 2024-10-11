@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System;
+using System.Collections;
 
 public class WeaponShop : MonoBehaviour
 {
@@ -12,15 +14,24 @@ public class WeaponShop : MonoBehaviour
     public TextMeshProUGUI weaponStatsText;
     public TextMeshProUGUI weaponTypeText;
     public TextMeshProUGUI weaponModeText;
+    public TextMeshProUGUI currencyText;
+
     public Button actionButton;
     public TextMeshProUGUI actionButtonText;
-    public Button slot2Button;
-    public Button slot3Button;
+    public Button optionButton1;
+    public Button optionButton2;
+    public TextMeshProUGUI optionButton1Text;
+    public TextMeshProUGUI optionButton2Text;
+
     public Color purchaseColor = Color.green;
-    public Color equipColor = Color.yellow;
+    public Color equipColor = Color.cyan;
     public Color equippedColor = Color.gray;
 
     private WeaponData selectedWeapon;
+    private enum ActionState { Purchase, Equip, Equipped, ConfirmPurchase, ConfirmEquip }
+    private ActionState currentState;
+
+    private Coroutine currentLerpCoroutine;
 
     private void Start()
     {
@@ -49,6 +60,8 @@ public class WeaponShop : MonoBehaviour
 
     private void UpdateUI()
     {
+        currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
+
         if (selectedWeapon != null)
         {
             weaponNameText.text = $"Name: {selectedWeapon.weaponName}";
@@ -65,38 +78,125 @@ public class WeaponShop : MonoBehaviour
             actionButton.gameObject.SetActive(true);
             if (!owned)
             {
-                actionButtonText.text = "Purchase";
-                actionButton.onClick.RemoveAllListeners();
-                actionButton.onClick.AddListener(PurchaseWeapon);
-                actionButton.GetComponent<Image>().color = purchaseColor;
+                SetActionButtonState(ActionState.Purchase, true);
             }
             else if (!equipped)
             {
-                actionButtonText.text = "Equip";
-                actionButton.onClick.RemoveAllListeners();
-                actionButton.onClick.AddListener(ShowEquipOptions);
-                actionButton.GetComponent<Image>().color = equipColor;
+                SetActionButtonState(ActionState.Equip, true);
             }
             else
             {
-                actionButtonText.text = "Equipped";
-                actionButton.onClick.RemoveAllListeners();
-                actionButton.GetComponent<Image>().color = equippedColor;
+                SetActionButtonState(ActionState.Equipped, false);
             }
-
-            slot2Button.gameObject.SetActive(false);
-            slot3Button.gameObject.SetActive(false);
         }
         else
         {
-            weaponNameText.text = "Select a weapon";
-            weaponStatsText.text = "";
-            weaponTypeText.text = "";
-            weaponModeText.text = "";
-            actionButton.gameObject.SetActive(false);
-            slot2Button.gameObject.SetActive(false);
-            slot3Button.gameObject.SetActive(false);
+            ClearWeaponInfo();
         }
+    }
+
+    private void ClearWeaponInfo()
+    {
+        weaponNameText.text = "Select a weapon";
+        weaponStatsText.text = "";
+        weaponTypeText.text = "";
+        weaponModeText.text = "";
+        actionButton.gameObject.SetActive(false);
+        HideOptionButtons();
+    }
+
+    private void SetActionButtonState(ActionState state, bool interactable)
+    {
+        currentState = state;
+        actionButton.interactable = interactable;
+
+        switch (state)
+        {
+            case ActionState.Purchase:
+                actionButtonText.text = $"Purchase ({selectedWeapon.price})";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(OnPurchaseClicked);
+                actionButton.GetComponent<Image>().color = interactable ? purchaseColor : Color.red;
+                break;
+            case ActionState.Equip:
+                actionButtonText.text = "Equip";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(OnEquipClicked);
+                actionButton.GetComponent<Image>().color = equipColor;
+                break;
+            case ActionState.Equipped:
+                actionButtonText.text = "Equipped";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.GetComponent<Image>().color = equippedColor;
+                break;
+            case ActionState.ConfirmPurchase:
+                actionButtonText.text = "Confirm Purchase?";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.GetComponent<Image>().color = Color.yellow;
+                break;
+            case ActionState.ConfirmEquip:
+                actionButtonText.text = "Cancel";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(CancelAction);
+                actionButton.GetComponent<Image>().color = Color.red;
+                break;
+        }
+
+        SetOptionButtonsState(state);
+    }
+
+    private void SetOptionButtonsState(ActionState state)
+    {
+        switch (state)
+        {
+            case ActionState.ConfirmPurchase:
+                ShowOptionButtons("Yes", "No", ConfirmPurchase, CancelAction, Color.green, Color.red);
+                break;
+            case ActionState.ConfirmEquip:
+                ShowOptionButtons("Slot 2", "Slot 3", () => EquipWeapon(1), () => EquipWeapon(2), equipColor, equipColor);
+                break;
+            default:
+                HideOptionButtons();
+                break;
+        }
+    }
+
+    private void ShowOptionButtons(string text1, string text2, UnityEngine.Events.UnityAction action1, UnityEngine.Events.UnityAction action2, Color color1, Color color2)
+    {
+        optionButton1.gameObject.SetActive(true);
+        optionButton2.gameObject.SetActive(true);
+        optionButton1Text.text = text1;
+        optionButton2Text.text = text2;
+        optionButton1.onClick.RemoveAllListeners();
+        optionButton2.onClick.RemoveAllListeners();
+        optionButton1.onClick.AddListener(action1);
+        optionButton2.onClick.AddListener(action2);
+        optionButton1.GetComponent<Image>().color = color1;
+        optionButton2.GetComponent<Image>().color = color2;
+    }
+
+    private void HideOptionButtons()
+    {
+        optionButton1.gameObject.SetActive(false);
+        optionButton2.gameObject.SetActive(false);
+    }
+
+    private void OnPurchaseClicked()
+    {
+        if (PlayerInventory.Instance.Currency >= selectedWeapon.price)
+        {
+            SetActionButtonState(ActionState.ConfirmPurchase, true);
+        }
+        else
+        {
+            Debug.Log("Not enough currency to purchase weapon.");
+            StartColorLerp(actionButtonText, Color.red, 0.3f);
+        }
+    }
+
+    private void OnEquipClicked()
+    {
+        SetActionButtonState(ActionState.ConfirmEquip, true);
     }
 
     private string GetWeaponType(WeaponData weapon)
@@ -121,32 +221,65 @@ public class WeaponShop : MonoBehaviour
         return PlayerInventory.Instance.EquippedWeapons[1] == weapon || PlayerInventory.Instance.EquippedWeapons[2] == weapon;
     }
 
-    private void PurchaseWeapon()
+    private void ConfirmPurchase()
     {
-        if (selectedWeapon != null && !PlayerInventory.Instance.OwnsWeapon(selectedWeapon))
+        if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.price))
         {
-            // Implement purchase logic (e.g., check currency, deduct cost)
             PlayerInventory.Instance.AddWeapon(selectedWeapon);
-            UpdateUI();
+            SetActionButtonState(ActionState.Equip, true);
         }
-    }
-
-    private void ShowEquipOptions()
-    {
-        slot2Button.gameObject.SetActive(true);
-        slot3Button.gameObject.SetActive(true);
-        slot2Button.onClick.RemoveAllListeners();
-        slot3Button.onClick.RemoveAllListeners();
-        slot2Button.onClick.AddListener(() => EquipWeapon(1));
-        slot3Button.onClick.AddListener(() => EquipWeapon(2));
+        else
+        {
+            Debug.Log("Not enough currency to purchase weapon.");
+            CancelAction();
+        }
+        UpdateUI();
     }
 
     private void EquipWeapon(int slot)
     {
-        if (selectedWeapon != null && PlayerInventory.Instance.OwnsWeapon(selectedWeapon))
+        PlayerInventory.Instance.EquipWeapon(selectedWeapon, slot);
+        UpdateUI();
+
+    }
+
+    private void CancelAction()
+    {
+        UpdateUI();
+    }
+
+    private void StartColorLerp(TextMeshProUGUI textElement, Color targetColor, float duration)
+    {
+        if (currentLerpCoroutine != null)
         {
-            PlayerInventory.Instance.EquipWeapon(selectedWeapon, slot);
-            UpdateUI();
+            StopCoroutine(currentLerpCoroutine);
         }
+        currentLerpCoroutine = StartCoroutine(LerpTextColor(textElement, targetColor, duration));
+    }
+
+    private IEnumerator LerpTextColor(TextMeshProUGUI textElement, Color targetColor, float duration)
+    {
+        Color originalColor = textElement.color;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            textElement.color = Color.Lerp(originalColor, targetColor, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        textElement.color = targetColor;
+
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            textElement.color = Color.Lerp(targetColor, originalColor, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        textElement.color = originalColor;
+
+        currentLerpCoroutine = null;
+        Debug.Log("Lerp complete");
     }
 }

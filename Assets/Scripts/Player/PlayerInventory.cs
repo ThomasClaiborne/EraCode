@@ -64,6 +64,13 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
+    public void AddLevelCompletionReward(int reward)
+    {
+        Currency += reward;
+        SaveInventory();
+        Debug.Log($"Level completed! Player earned {reward} currency. Total currency: {Currency}");
+    }
+
     public void AddWeapon(WeaponData weapon)
     {
         if (!OwnedWeapons.Contains(weapon))

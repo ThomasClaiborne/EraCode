@@ -19,6 +19,9 @@ public class HUDManager : MonoBehaviour
     public TextMeshProUGUI weaponAmmoText;
     public TextMeshProUGUI weaponReloading;
 
+    [Header("--Currency--")]
+    public TextMeshProUGUI currencyText;
+
     [Header("--Message--")]
     public TextMeshProUGUI messageText;
 
@@ -137,5 +140,10 @@ public class HUDManager : MonoBehaviour
         textElement.color = defaultAmmoTextColor;
 
         lerpCoroutines[textElement] = null;
+    }
+
+    public void UpdateCurrencyText()
+    {
+       currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
     }
 }
