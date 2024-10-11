@@ -44,6 +44,7 @@ public class HUDManager : MonoBehaviour
     void Start()
     {
         defaultAmmoTextColor = weaponAmmoText.color;
+        UpdateCurrencyText();
     }
 
     void Update()

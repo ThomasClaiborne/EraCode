@@ -7755,6 +7755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2127486619}
   - component: {fileID: 2127486618}
+  - component: {fileID: 2127486620}
   m_Layer: 0
   m_Name: '**PlayerInventory**'
   m_TagString: Untagged
@@ -7793,6 +7794,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2127486620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127486617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c66d8b1f54c917942b53bd148a1ff399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cheats: []
 --- !u!1001 &6314816777902226385
 PrefabInstance:
   m_ObjectHideFlags: 0

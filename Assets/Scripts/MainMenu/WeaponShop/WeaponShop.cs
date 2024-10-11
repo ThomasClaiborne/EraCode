@@ -58,7 +58,7 @@ public class WeaponShop : MonoBehaviour
         UpdateUI();
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
 

@@ -60,7 +60,7 @@ MonoBehaviour:
   holdRotation: {x: 0, y: 0, z: 0}
   damage: 1
   clipSize: 25
-  ammo: 1000
+  ammo: 938
   reloadTime: 1.5
   fireRate: 0.2
   bulletLifeSpan: 3
@@ -78,6 +78,7 @@ MonoBehaviour:
   isSniper: 0
   isRocketLauncher: 0
   isPistol: 0
+  price: 20
 --- !u!33 &1380327769316461846
 MeshFilter:
   m_ObjectHideFlags: 0
