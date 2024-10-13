@@ -3909,6 +3909,30 @@ MonoBehaviour:
       spawnerID: 0
       numberOfEnemies: 1
       enemyID: 0
+    - spawnTime: 1
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 0
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 1
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 2
+      numberOfEnemies: 1
+      enemyID: 0
+    - spawnTime: 1
+      spawnerID: 0
+      numberOfEnemies: 1
+      enemyID: 0
   - duration: 20
     spawnEvents:
     - spawnTime: 1
@@ -6399,6 +6423,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerWall
       objectReference: {fileID: 0}
+    - target: {fileID: 2133809555955600165, guid: ba3857e00026eef4a9f44a30d1b767fd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Environment
+      objectReference: {fileID: 0}
     - target: {fileID: 2666279703499375229, guid: ba3857e00026eef4a9f44a30d1b767fd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6449,10 +6478,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3822986575317438365, guid: ba3857e00026eef4a9f44a30d1b767fd,
+    - target: {fileID: 3189601609574856432, guid: ba3857e00026eef4a9f44a30d1b767fd,
         type: 3}
-      propertyPath: HP
-      value: 150
+      propertyPath: m_TagString
+      value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 4807662792233331718, guid: ba3857e00026eef4a9f44a30d1b767fd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 7322148085334741030, guid: ba3857e00026eef4a9f44a30d1b767fd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 8623608750264951467, guid: ba3857e00026eef4a9f44a30d1b767fd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Environment
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6561,6 +6605,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 5780103697036626725, guid: c1a77eff5d5f77e479aa3f8f4a05c7ce,
+        type: 3}
+      propertyPath: m_TagString
+      value: Environment
       objectReference: {fileID: 0}
     - target: {fileID: 8105918050672652975, guid: c1a77eff5d5f77e479aa3f8f4a05c7ce,
         type: 3}

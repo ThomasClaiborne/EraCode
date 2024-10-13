@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2651379160096161488}
   - component: {fileID: 863315485031032833}
   m_Layer: 0
-  m_Name: ShotgunBullet
+  m_Name: AssaultRifleBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9cc089f276d80aa4b88bc300d9e752dd, type: 2}
+  - {fileID: 2100000, guid: dc8039fe96b6d3240bd7944b59cc1c49, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -154,7 +154,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: 0
+      m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0

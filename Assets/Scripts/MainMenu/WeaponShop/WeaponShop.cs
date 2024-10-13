@@ -4,6 +4,7 @@ using TMPro;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class WeaponShop : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class WeaponShop : MonoBehaviour
     public TextMeshProUGUI weaponTypeText;
     public TextMeshProUGUI weaponModeText;
     public TextMeshProUGUI currencyText;
+    public TextMeshProUGUI ammoText;
 
     public Button actionButton;
     public TextMeshProUGUI actionButtonText;
@@ -22,20 +24,28 @@ public class WeaponShop : MonoBehaviour
     public Button optionButton2;
     public TextMeshProUGUI optionButton1Text;
     public TextMeshProUGUI optionButton2Text;
+    public Button buyAmmoButton;
+    public TextMeshProUGUI buyAmmoButtonText;
 
     public Color purchaseColor = Color.green;
     public Color equipColor = Color.cyan;
     public Color equippedColor = Color.gray;
+    public Color ammoButtonColor = Color.blue;
+
 
     private WeaponData selectedWeapon;
     private enum ActionState { Purchase, Equip, Equipped, ConfirmPurchase, ConfirmEquip }
     private ActionState currentState;
 
     private Coroutine currentLerpCoroutine;
+    private Color originalTextColor;
+    private bool isPointerOverAmmoButton = false;
+
 
     private void Start()
     {
         PopulateWeaponList();
+        SetupAmmoButtonHover();
         UpdateUI();
     }
 
@@ -43,13 +53,31 @@ public class WeaponShop : MonoBehaviour
     {
         foreach (var weapon in weaponInventory.allWeapons)
         {
-            GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
-            Button button = buttonObj.GetComponent<Button>();
-            TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+            if (weapon.name != "Pistol")
+            {
+                GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
+                Button button = buttonObj.GetComponent<Button>();
+                TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
 
-            buttonText.text = weapon.weaponName;
-            button.onClick.AddListener(() => SelectWeapon(weapon));
+                buttonText.text = weapon.weaponName;
+                button.onClick.AddListener(() => SelectWeapon(weapon)); 
+            }
         }
+    }
+
+    private void SetupAmmoButtonHover()
+    {
+        EventTrigger trigger = buyAmmoButton.gameObject.AddComponent<EventTrigger>();
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+        enterEntry.eventID = EventTriggerType.PointerEnter;
+        enterEntry.callback.AddListener((data) => { OnAmmoButtonHoverEnter(); });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+        exitEntry.eventID = EventTriggerType.PointerExit;
+        exitEntry.callback.AddListener((data) => { OnAmmoButtonHoverExit(); });
+        trigger.triggers.Add(exitEntry);
     }
 
     private void SelectWeapon(WeaponData weapon)
@@ -79,21 +107,65 @@ public class WeaponShop : MonoBehaviour
             if (!owned)
             {
                 SetActionButtonState(ActionState.Purchase, true);
+                ToggleAmmoButton(false);
             }
             else if (!equipped)
             {
                 SetActionButtonState(ActionState.Equip, true);
+                UpdateAmmoButton();
             }
             else
             {
                 SetActionButtonState(ActionState.Equipped, false);
+                UpdateAmmoButton();
             }
         }
         else
         {
             ClearWeaponInfo();
+            ToggleAmmoButton(false);
         }
     }
+
+    private void UpdateAmmoButton()
+    {
+        ToggleAmmoButton(true);
+        int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
+        buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
+        ammoText.text = $"Ammo: {currentAmmo}";
+        buyAmmoButton.onClick.RemoveAllListeners();
+        buyAmmoButton.onClick.AddListener(OnBuyAmmoClicked);
+        buyAmmoButton.GetComponent<Image>().color = ammoButtonColor;
+
+        if (isPointerOverAmmoButton)
+        {
+            buyAmmoButtonText.text = $"Price: ${selectedWeapon.ammoPrice}";
+        }
+        else
+        {
+            buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
+        }
+    }
+
+    private void ToggleAmmoButton(bool active)
+    {
+        buyAmmoButton.gameObject.SetActive(active);
+        ammoText.gameObject.SetActive(active);
+    }
+
+    private void OnAmmoButtonHoverEnter()
+    {
+        isPointerOverAmmoButton = true;
+        buyAmmoButtonText.text = $"Price: ${selectedWeapon.ammoPrice}";
+    }
+
+    private void OnAmmoButtonHoverExit()
+    {
+        isPointerOverAmmoButton = false;
+        buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
+    }
+
+
 
     private void ClearWeaponInfo()
     {
@@ -113,7 +185,7 @@ public class WeaponShop : MonoBehaviour
         switch (state)
         {
             case ActionState.Purchase:
-                actionButtonText.text = $"Purchase ({selectedWeapon.price})";
+                actionButtonText.text = $"Purchase ({selectedWeapon.weaponPrice})";
                 actionButton.onClick.RemoveAllListeners();
                 actionButton.onClick.AddListener(OnPurchaseClicked);
                 actionButton.GetComponent<Image>().color = interactable ? purchaseColor : Color.red;
@@ -183,7 +255,7 @@ public class WeaponShop : MonoBehaviour
 
     private void OnPurchaseClicked()
     {
-        if (PlayerInventory.Instance.Currency >= selectedWeapon.price)
+        if (PlayerInventory.Instance.Currency >= selectedWeapon.weaponPrice)
         {
             SetActionButtonState(ActionState.ConfirmPurchase, true);
         }
@@ -191,6 +263,21 @@ public class WeaponShop : MonoBehaviour
         {
             Debug.Log("Not enough currency to purchase weapon.");
             StartColorLerp(actionButtonText, Color.red, 0.3f);
+        }
+    }
+
+    private void OnBuyAmmoClicked()
+    {
+        if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.ammoPrice))
+        {
+            PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, selectedWeapon.clipSize);
+            UpdateUI();
+            OnAmmoButtonHoverEnter();
+        }
+        else
+        {
+            Debug.Log("Not enough currency to purchase ammo.");
+            StartColorLerp(buyAmmoButtonText, Color.red, 0.3f);
         }
     }
 
@@ -223,7 +310,7 @@ public class WeaponShop : MonoBehaviour
 
     private void ConfirmPurchase()
     {
-        if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.price))
+        if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.weaponPrice))
         {
             PlayerInventory.Instance.AddWeapon(selectedWeapon);
             SetActionButtonState(ActionState.Equip, true);
@@ -253,18 +340,23 @@ public class WeaponShop : MonoBehaviour
         if (currentLerpCoroutine != null)
         {
             StopCoroutine(currentLerpCoroutine);
+            textElement.color = originalTextColor;
+        }
+
+        if (originalTextColor == Color.clear)
+        {
+            originalTextColor = textElement.color;
         }
         currentLerpCoroutine = StartCoroutine(LerpTextColor(textElement, targetColor, duration));
     }
 
     private IEnumerator LerpTextColor(TextMeshProUGUI textElement, Color targetColor, float duration)
     {
-        Color originalColor = textElement.color;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
-            textElement.color = Color.Lerp(originalColor, targetColor, elapsedTime / duration);
+            textElement.color = Color.Lerp(originalTextColor, targetColor, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -273,13 +365,12 @@ public class WeaponShop : MonoBehaviour
         elapsedTime = 0f;
         while (elapsedTime < duration)
         {
-            textElement.color = Color.Lerp(targetColor, originalColor, elapsedTime / duration);
+            textElement.color = Color.Lerp(targetColor, originalTextColor, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        textElement.color = originalColor;
+        textElement.color = originalTextColor;
 
         currentLerpCoroutine = null;
-        Debug.Log("Lerp complete");
     }
 }

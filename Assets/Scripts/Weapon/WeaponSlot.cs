@@ -30,28 +30,31 @@ public class WeaponSlot : MonoBehaviour
     private void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchToSlot(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchToSlot(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchToSlot(2);
+        if (!GameManager.Instance.isPaused)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchToSlot(0);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchToSlot(1);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchToSlot(2);
 
-        if (currentWeapon.isAutomatic)
-        {
-            if (Input.GetMouseButton(0) && CanShoot())
+            if (currentWeapon.isAutomatic)
             {
-                Shoot();
+                if (Input.GetMouseButton(0) && CanShoot())
+                {
+                    Shoot();
+                }
             }
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0) && CanShoot())
+            else
             {
-                Shoot();
+                if (Input.GetMouseButtonDown(0) && CanShoot())
+                {
+                    Shoot();
+                }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.R) && CanReload())
-        {
-            reloadCoroutine = StartCoroutine(Reload());
+            if (Input.GetKeyDown(KeyCode.R) && CanReload())
+            {
+                reloadCoroutine = StartCoroutine(Reload());
+            } 
         }
     }
 
@@ -66,8 +69,14 @@ public class WeaponSlot : MonoBehaviour
 
     private bool CanReload()
     {
-        return !isReloading && currentClipSize < currentWeapon.clipSize &&
-               (currentWeapon.ammo > 0 || currentWeapon.isInfiniteAmmo);
+        if (isReloading || currentClipSize >= currentWeapon.clipSize)
+            return false;
+
+        if (currentWeapon.isInfiniteAmmo)
+            return true;
+
+        int totalAmmo = PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId);
+        return totalAmmo > 0;
     }
 
     private void Shoot()
@@ -110,24 +119,17 @@ public class WeaponSlot : MonoBehaviour
             bulletController.damageAmount = currentWeapon.damage;
             bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
 
+            bulletController.isPiercing = currentWeapon.isPiercing;
+            bulletController.piercingDamageReduction = currentWeapon.piercingDamageReduction;
+            bulletController.pierceLimit = currentWeapon.pierceLimit;
+            bulletController.isExplosive = currentWeapon.isExplosive;
+            bulletController.explosionRadius = currentWeapon.explosionRadius;
+            bulletController.explosionForce = currentWeapon.explosionForce;
+
             bullet.transform.forward = shootPoint.forward;
         }
         currentClipSize--;
-        // Visual and audio effects
-        //Instantiate(currentWeapon.muzzleFlash, currentWeapon.shootPoint.position, currentWeapon.shootPoint.rotation);
-        //if (currentWeapon.ejectBullet)
-        //{
-        //    Instantiate(currentWeapon.ejectBullet, currentWeapon.ejectPoint.position, currentWeapon.ejectPoint.rotation);
-        //}
-        //PlayRandomShotSound();
-
-        // Ammo management
-
         UpdateHUD();
-        // Apply recoil
-        //ApplyRecoil();
-
-        // Start cooldown
         StartCoroutine(ShootCooldown());
     }
 
@@ -142,8 +144,6 @@ public class WeaponSlot : MonoBehaviour
     private IEnumerator Reload()
     {
         isReloading = true;
-        // Play reload animation and audio
-        //PlayReloadAudio();
         reloadVisualsCoroutine = StartCoroutine(reloadingVisuals());
 
         yield return new WaitForSeconds(currentWeapon.reloadTime);
@@ -156,9 +156,19 @@ public class WeaponSlot : MonoBehaviour
         }
         else
         {
-            int ammoToReload = Mathf.Min(currentWeapon.clipSize - currentClipSize, currentWeapon.ammo);
-            currentClipSize += ammoToReload;
-            currentWeapon.ammo -= ammoToReload;
+            int availableAmmo = PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId);
+
+            if (availableAmmo > 0)
+            {
+                int ammoToReload = Mathf.Min(currentWeapon.clipSize - currentClipSize, availableAmmo);
+                currentClipSize += ammoToReload;
+                PlayerInventory.Instance.AddAmmo(currentWeapon.weaponId, -ammoToReload);
+            }
+            else
+            {
+                CanReload();
+                yield break;
+            }
         }
 
         isReloading = false;
@@ -275,7 +285,8 @@ public class WeaponSlot : MonoBehaviour
         if (currentWeapon)
         {
             HUDManager.Instance.weaponNameText.text = currentWeapon.weaponName;
-            HUDManager.Instance.weaponAmmoText.text = currentClipSize + " / " + (currentWeapon.isInfiniteAmmo ? "\u221E" : currentWeapon.ammo.ToString()); 
+            int totalAmmo = PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId);
+            HUDManager.Instance.weaponAmmoText.text = $"{currentClipSize} / {(currentWeapon.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString())}";
         }
     }
 

@@ -36,8 +36,6 @@ public class EnemySpawner : MonoBehaviour
         }
 
         enemyScript.OnDeath += HandleEnemyDeath;
-
-        Debug.Log("Enemy spawned and waypoints assigned.");
     }
 
     private void HandleEnemyDeath()

@@ -26,7 +26,6 @@ public class PlayerWall : MonoBehaviour, IDamage
         HUDManager.Instance.DecreaseHealth(amount, HP, HPMax);
         HUDManager.Instance.WallHPText.text = HP.ToString();
         StartCoroutine(flashMat());
-        Debug.Log("Wall took " + amount + " damage. Health left: " + HP);
 
         if (HP <= 0)
         {

@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124892512224627996}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.03, y: 0.14, z: 11.6}
   m_LocalScale: {x: 0.64, y: 0.64, z: 0.64}
   m_ConstrainProportionsScale: 1
@@ -51,7 +51,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffe178e5e533e0a429c8bd7ff5c48044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
   wallSegments:
   - {fileID: 8260988614196326961}
   - {fileID: 376535864506605860}
@@ -59,6 +58,7 @@ MonoBehaviour:
   - {fileID: 7837415455968702553}
   - {fileID: 505266553676484737}
   tempMat: {fileID: 2100000, guid: 4ec86c87c024026408326ab2ebda65bc, type: 2}
+  HP: 150
 --- !u!135 &3006818405920333351
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 1746847777625869674}
   m_Layer: 10
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: PlayerWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 5799680339956292209}
   m_Layer: 10
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: PlayerWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 4519527732621579492}
   m_Layer: 10
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: PlayerWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -436,7 +436,7 @@ GameObject:
   - component: {fileID: 3883744662562340247}
   m_Layer: 10
   m_Name: Wall (4)
-  m_TagString: Untagged
+  m_TagString: PlayerWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -541,7 +541,7 @@ GameObject:
   - component: {fileID: 6704751681672255633}
   m_Layer: 10
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: PlayerWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

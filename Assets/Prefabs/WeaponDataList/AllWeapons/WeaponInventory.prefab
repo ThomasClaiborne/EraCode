@@ -48,8 +48,11 @@ MonoBehaviour:
   - {fileID: 7889819940907188278, guid: 856c069f79f7b8848a9c3fafbb11ddf6, type: 3}
   - {fileID: 8912522260170000092, guid: cd35aced3695e9746b7c6f423b94705c, type: 3}
   - {fileID: 6644191309706524156, guid: b3b048dbd16e2b044910e8208374d52e, type: 3}
+  - {fileID: 8912522260170000092, guid: cb26e91ca320a534584c68bd6c8e69ab, type: 3}
+  - {fileID: 8912522260170000092, guid: 05e568a6ffa2fcd4ab80cb96908755b6, type: 3}
   assaultRifles: []
   submachineGuns: []
   shotguns: []
   snipers: []
   rocketLaunchers: []
+  pistols: []

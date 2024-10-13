@@ -24,8 +24,8 @@ public class CheatManager : MonoBehaviour
             new CheatKey
             {
                 key = KeyCode.G,
-                description = "Add 10 Currency",
-                cheatAction = () => AddCurrency(10)
+                description = "Add 50 Currency",
+                cheatAction = () => AddCurrency(50)
             },
             new CheatKey
             {

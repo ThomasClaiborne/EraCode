@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2651379160096161488}
   - component: {fileID: 863315485031032833}
   m_Layer: 0
-  m_Name: ShotgunBullet
+  m_Name: RocketLauncherBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,9 +32,10 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.4353104, y: 4.9318204, z: -0.886}
-  m_LocalScale: {x: 0.06, y: 0.06, z: 0.06}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_LocalScale: {x: 0.58, y: 0.64, z: 1.87}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8357204606594426973}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &605350342564129008
@@ -50,12 +51,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 863315485031032833}
-  speed: 35
+  speed: 15
   enemyHitEffect: {fileID: 1190131086089332, guid: c59abd500ef8eb846a546e3d7ec9d58e,
     type: 3}
   objectHitEffect: {fileID: 1180248314969840, guid: 101d62f0a3e4fef4eab61adb79c845df,
     type: 3}
-  explosionEffect: {fileID: 0}
+  explosionEffect: {fileID: 1809022330002312, guid: ed511b7776af6174e9b1255c7a81e59c,
+    type: 3}
 --- !u!96 &4617961572230079259
 TrailRenderer:
   serializedVersion: 3
@@ -64,7 +66,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341314025285115435}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -77,7 +79,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9cc089f276d80aa4b88bc300d9e752dd, type: 2}
+  - {fileID: 2100000, guid: d80d11de9dd9a6e41a41ece7bc680234, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -102,7 +104,7 @@ TrailRenderer:
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.3
+    widthMultiplier: 1.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -116,8 +118,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.9895833
-        value: 0
+        time: 1
+        value: 0.49532712
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -184,7 +186,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 341314025285115435}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -238,7 +240,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.5
+  m_Radius: 0.71
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &863315485031032833
 Rigidbody:
@@ -267,3 +269,75 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1001 &8355626769140672303
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4726037446305840934}
+    m_Modifications:
+    - target: {fileID: 1691231143420716, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_Name
+      value: FX_Smoke_Trail_Small_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1691231143420716, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.472
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 199425809991168326, guid: 0e8263b55ce10324ea322a63f7efc1f7,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0e8263b55ce10324ea322a63f7efc1f7, type: 3}
+--- !u!4 &8357204606594426973 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4476152522362738, guid: 0e8263b55ce10324ea322a63f7efc1f7,
+    type: 3}
+  m_PrefabInstance: {fileID: 8355626769140672303}
+  m_PrefabAsset: {fileID: 0}

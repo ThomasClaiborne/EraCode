@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Gun 1
+  m_Name: M_Pistol
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -114,9 +114,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.61858106, g: 0.031372547, b: 1, a: 1}
-    - _Color: {r: 0.618581, g: 0.031372547, b: 1, a: 1}
-    - _EmissionColor: {r: 1.3353577, g: 0.010471224, b: 2, a: 1}
+    - _BaseColor: {r: 0, g: 0.8497688, b: 0.9254902, a: 1}
+    - _Color: {r: 0, g: 0.8497688, b: 0.9254902, a: 1}
+    - _EmissionColor: {r: 0.009433985, g: 0.33033657, b: 2, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &4481162251110211958

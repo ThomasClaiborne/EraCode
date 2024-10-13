@@ -39,8 +39,17 @@ public class WeaponData: MonoBehaviour
     public bool isRocketLauncher;
     public bool isPistol;
 
+    [Header("Weapon Type Specifics")]
+    public bool isPiercing;
+    public float piercingDamageReduction;
+    public int pierceLimit;
+    public bool isExplosive;
+    public float explosionRadius;
+    public float explosionForce;
+
     [Header("Shop Info")]
-    public int price;
+    public int weaponPrice;
+    public int ammoPrice;
 
     public override bool Equals(object obj)
     {

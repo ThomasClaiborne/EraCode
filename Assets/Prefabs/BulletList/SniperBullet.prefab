@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2651379160096161488}
   - component: {fileID: 863315485031032833}
   m_Layer: 0
-  m_Name: AutomaticBullet
+  m_Name: SniperBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,11 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 863315485031032833}
-  speed: 35
+  speed: 60
   enemyHitEffect: {fileID: 1190131086089332, guid: c59abd500ef8eb846a546e3d7ec9d58e,
     type: 3}
   objectHitEffect: {fileID: 1180248314969840, guid: 101d62f0a3e4fef4eab61adb79c845df,
     type: 3}
+  explosionEffect: {fileID: 0}
 --- !u!96 &4617961572230079259
 TrailRenderer:
   serializedVersion: 3
@@ -76,7 +77,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dc8039fe96b6d3240bd7944b59cc1c49, type: 2}
+  - {fileID: 2100000, guid: 007d7aa38df8e6942aa403e76b13e00d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -97,11 +98,11 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.02
+  m_Time: 0.06
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.3
+    widthMultiplier: 0.5
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -115,8 +116,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.9895833
-        value: 0
+        time: 0.9935203
+        value: 0.1682243
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -153,7 +154,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -237,7 +238,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.7
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &863315485031032833
 Rigidbody:

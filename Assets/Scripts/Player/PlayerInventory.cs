@@ -17,9 +17,13 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private WeaponData playerPistol;
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
 
+    private Dictionary<string,int> weaponAmmo = new Dictionary<string, int>();
+
     private const string CURRENCY_KEY = "PlayerCurrency";
     private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
     private const string EQUIPPED_WEAPONS_KEY = "EquippedWeapons";
+    private const string WEAPON_AMMO_KEY = "WeaponAmmo";
+
 
     private void Awake()
     {
@@ -35,11 +39,40 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
+    public void AddAmmo(string weaponId, int amount)
+    {
+        if (!weaponAmmo.ContainsKey(weaponId))
+        {
+            WeaponData weapon = FindWeaponById(weaponId);
+            weaponAmmo[weaponId] = weapon != null ? weapon.ammo : 0;
+        }
+        weaponAmmo[weaponId] += amount;
+        SaveInventory();
+    }
+
+    public int GetAmmo(string weaponId)
+    {
+        if (!weaponAmmo.ContainsKey(weaponId))
+        {
+            WeaponData weapon = FindWeaponById(weaponId);
+            weaponAmmo[weaponId] = weapon != null ? weapon.ammo : 0;
+        }
+        return weaponAmmo[weaponId];
+    }
+
     private void InitializeInventory()
     {
         OwnedWeapons = new List<WeaponData>();
         _equippedWeapons = new WeaponData[3];
         LoadInventory();
+
+        foreach (var weapon in AllWeaponsPrefab.allWeapons)
+        {
+            if (!weaponAmmo.ContainsKey(weapon.weaponId))
+            {
+                weaponAmmo[weapon.weaponId] = weapon.ammo;
+            }
+        }
 
         if (_equippedWeapons[0] == null)
         {
@@ -105,6 +138,9 @@ public class PlayerInventory : MonoBehaviour
         string equippedWeaponsString = string.Join(",", EquippedWeapons.Select(w => w != null ? w.weaponId : "null"));
         PlayerPrefs.SetString(EQUIPPED_WEAPONS_KEY, equippedWeaponsString);
 
+        string ammoString = string.Join(",", weaponAmmo.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+        PlayerPrefs.SetString(WEAPON_AMMO_KEY, ammoString);
+
         PlayerPrefs.Save();
     }
 
@@ -138,6 +174,17 @@ public class PlayerInventory : MonoBehaviour
                 }
             }
         }
+
+        string ammoString = PlayerPrefs.GetString(WEAPON_AMMO_KEY, "");
+        if (!string.IsNullOrEmpty(ammoString))
+        {
+            weaponAmmo = ammoString.Split(',')
+                .Select(s => s.Split(':'))
+                .ToDictionary(
+                    kvp => kvp[0],
+                    kvp => int.Parse(kvp[1])
+                );
+        }
     }
 
     private WeaponData FindWeaponById(string weaponId)
@@ -168,11 +215,19 @@ public class PlayerInventory : MonoBehaviour
         Currency = 0;
         OwnedWeapons.Clear();
         EquippedWeapons = new WeaponData[3];
+        weaponAmmo.Clear();
+
+        foreach (var weapon in AllWeaponsPrefab.allWeapons)
+        {
+            weaponAmmo[weapon.weaponId] = weapon.ammo;
+        }
+
         EquipWeapon(playerPistol, 0);
 
         PlayerPrefs.DeleteKey(CURRENCY_KEY);
         PlayerPrefs.DeleteKey(OWNED_WEAPONS_KEY);
         PlayerPrefs.DeleteKey(EQUIPPED_WEAPONS_KEY);
+        PlayerPrefs.DeleteKey(WEAPON_AMMO_KEY);
         PlayerPrefs.Save();
 
         SaveInventory();
