@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviour
                     enemiesRemaining++;
                 }
             }
-
             yield return new WaitForSeconds(1f / interval.spawnRate);
         }
     }
