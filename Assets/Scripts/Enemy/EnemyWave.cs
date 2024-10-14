@@ -12,8 +12,12 @@ public class SpawnInterval
     public float startTime;
     public float endTime;
     public int enemyID;
-    public List<int> spawnerIDs;
+    public List<int> spawnerID;
     public float spawnRate;
+    public SpawnInterval()
+    {
+        spawnerID = new List<int>();
+    }
 }
 
 

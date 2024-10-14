@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
 
         while (currentWaveTime < interval.endTime)
         {
-            foreach (int spawnerID in interval.spawnerIDs)
+            foreach (int spawnerID in interval.spawnerID)
             {
                 if (spawnerID >= 0 && spawnerID < enemySpawners.Length)
                 {
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
                     enemiesRemaining++;
                 }
             }
-            yield return new WaitForSeconds(1f / interval.spawnRate);
+            yield return new WaitForSeconds(interval.spawnRate);
         }
     }
 

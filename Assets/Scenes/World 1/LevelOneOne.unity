@@ -3901,39 +3901,39 @@ MonoBehaviour:
     - startTime: 2
       endTime: 7
       enemyID: 0
-      spawnerIDs: 0000000002000000
-      spawnRate: 1
-  - duration: 20
+      spawnerID: 000000000100000002000000
+      spawnRate: 3
+  - duration: 30
     waveType: 1
     spawnIntervals:
-    - startTime: 12
-      endTime: 20
-      enemyID: 1
-      spawnerIDs: 0300000004000000
-      spawnRate: 1.5
     - startTime: 2
       endTime: 10
       enemyID: 0
-      spawnerIDs: 0000000002000000
-      spawnRate: 1
-  - duration: 20
+      spawnerID: 0000000002000000
+      spawnRate: 3
+    - startTime: 15
+      endTime: 22
+      enemyID: 1
+      spawnerID: 03000000
+      spawnRate: 5
+  - duration: 30
     waveType: 2
     spawnIntervals:
     - startTime: 2
       endTime: 10
       enemyID: 0
-      spawnerIDs: 0000000001000000
-      spawnRate: 1.5
-    - startTime: 4
+      spawnerID: 000000000100000002000000
+      spawnRate: 4
+    - startTime: 6
       endTime: 12
       enemyID: 1
-      spawnerIDs: 0100000002000000
-      spawnRate: 2
-    - startTime: 11
-      endTime: 15
+      spawnerID: 0300000004000000
+      spawnRate: 6
+    - startTime: 15
+      endTime: 20
       enemyID: 2
-      spawnerIDs: 0000000002000000
-      spawnRate: 3
+      spawnerID: 000000000100000002000000
+      spawnRate: 6
   waveCooldown: 3
   isPaused: 0
   isWallDestroyed: 0

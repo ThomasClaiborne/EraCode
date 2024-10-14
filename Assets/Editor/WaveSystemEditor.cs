@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,8 +7,9 @@ public class WaveSystemEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        serializedObject.Update();
 
+        DrawDefaultInspector();
         GameManager gameManager = (GameManager)target;
 
         EditorGUILayout.Space();
@@ -15,7 +17,7 @@ public class WaveSystemEditor : Editor
 
         if (GUILayout.Button("Add New Wave"))
         {
-            gameManager.enemyWaves.Add(new EnemyWave(60f)); // Default 60 second wave
+            gameManager.enemyWaves.Add(new EnemyWave(60f));
         }
 
         for (int i = 0; i < gameManager.enemyWaves.Count; i++)
@@ -43,15 +45,35 @@ public class WaveSystemEditor : Editor
                 interval.enemyID = EditorGUILayout.IntField("Enemy ID", interval.enemyID);
                 interval.spawnRate = EditorGUILayout.FloatField("Spawn Rate", interval.spawnRate);
 
-                SerializedProperty spawnerIDsProp = new SerializedObject(target).FindProperty($"enemyWaves.Array.data[{i}].spawnIntervals.Array.data[{j}].spawnerIDs");
-                EditorGUILayout.PropertyField(spawnerIDsProp, true);
+                if (interval.spawnerID == null)
+                {
+                    interval.spawnerID = new List<int>();
+                }
+
+                EditorGUILayout.LabelField("Spawner IDs", EditorStyles.boldLabel);
+
+                if (GUILayout.Button("Add Spawner ID"))
+                {
+                    interval.spawnerID.Add(0); // Add a default value
+                }
+
+                for (int k = 0; k < interval.spawnerID.Count; k++)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    interval.spawnerID[k] = EditorGUILayout.IntField($"Spawner ID {k}", interval.spawnerID[k]);
+                    if (GUILayout.Button("Remove", GUILayout.Width(60)))
+                    {
+                        interval.spawnerID.RemoveAt(k);
+                        k--;
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
 
                 if (GUILayout.Button("Remove Interval"))
                 {
                     wave.spawnIntervals.RemoveAt(j);
                     j--;
                 }
-
                 EditorGUILayout.EndVertical();
             }
 
@@ -60,7 +82,6 @@ public class WaveSystemEditor : Editor
                 gameManager.enemyWaves.RemoveAt(i);
                 i--;
             }
-
             EditorGUILayout.EndVertical();
         }
 
@@ -68,5 +89,7 @@ public class WaveSystemEditor : Editor
         {
             EditorUtility.SetDirty(gameManager);
         }
+
+        serializedObject.ApplyModifiedProperties();
     }
 }
