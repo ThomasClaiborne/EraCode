@@ -45,9 +45,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateWaveDisplay(string waveInfo)
+    public void UpdateWaveDisplay(string message, Color color)
     {
-        waveText.text = waveInfo;
+        waveText.text = message;
+        waveText.color = color;
         waveText.gameObject.SetActive(true);
     }
 

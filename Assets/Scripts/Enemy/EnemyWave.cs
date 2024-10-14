@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WaveType { Normal, Horde, Boss }
+
 
 [System.Serializable]
-public class SpawnEvent
+public class SpawnInterval
 {
-    public float spawnTime;
-    public int spawnerID;
-    public int numberOfEnemies;
+    public float startTime;
+    public float endTime;
     public int enemyID;
+    public List<int> spawnerIDs;
+    public float spawnRate;
 }
 
 
@@ -18,11 +21,12 @@ public class SpawnEvent
 public class EnemyWave
 {
     public float duration;
-    public List<SpawnEvent> spawnEvents;
+    public WaveType waveType = WaveType.Normal;
+    public List<SpawnInterval> spawnIntervals;
 
     public EnemyWave(float duration)
     {
         this.duration = duration;
-        spawnEvents = new List<SpawnEvent>();
+        spawnIntervals = new List<SpawnInterval>();
     }
 }

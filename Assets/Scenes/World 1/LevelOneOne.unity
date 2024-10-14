@@ -3896,119 +3896,44 @@ MonoBehaviour:
   enemySpawners: []
   enemyWaves:
   - duration: 10
-    spawnEvents:
-    - spawnTime: 1
-      spawnerID: 1
-      numberOfEnemies: 1
+    waveType: 0
+    spawnIntervals:
+    - startTime: 2
+      endTime: 7
       enemyID: 0
-    - spawnTime: 1
-      spawnerID: 2
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 1
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 2
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 1
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 2
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
-      enemyID: 0
+      spawnerIDs: 0000000002000000
+      spawnRate: 1
   - duration: 20
-    spawnEvents:
-    - spawnTime: 1
-      spawnerID: 2
-      numberOfEnemies: 1
+    waveType: 1
+    spawnIntervals:
+    - startTime: 12
+      endTime: 20
+      enemyID: 1
+      spawnerIDs: 0300000004000000
+      spawnRate: 1.5
+    - startTime: 2
+      endTime: 10
       enemyID: 0
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 2
-      spawnerID: 1
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 4
-      spawnerID: 3
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 0.5
-      spawnerID: 3
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 2
-      spawnerID: 4
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 0
-      spawnerID: 4
-      numberOfEnemies: 1
-      enemyID: 1
+      spawnerIDs: 0000000002000000
+      spawnRate: 1
   - duration: 20
-    spawnEvents:
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
+    waveType: 2
+    spawnIntervals:
+    - startTime: 2
+      endTime: 10
       enemyID: 0
-    - spawnTime: 1
-      spawnerID: 2
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 0
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 1
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 1
-      spawnerID: 1
-      numberOfEnemies: 1
-      enemyID: 0
-    - spawnTime: 4
-      spawnerID: 3
-      numberOfEnemies: 1
+      spawnerIDs: 0000000001000000
+      spawnRate: 1.5
+    - startTime: 4
+      endTime: 12
       enemyID: 1
-    - spawnTime: 0.5
-      spawnerID: 3
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 0.5
-      spawnerID: 4
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 0.5
-      spawnerID: 4
-      numberOfEnemies: 1
-      enemyID: 1
-    - spawnTime: 5
-      spawnerID: 0
-      numberOfEnemies: 1
+      spawnerIDs: 0100000002000000
+      spawnRate: 2
+    - startTime: 11
+      endTime: 15
       enemyID: 2
-    - spawnTime: 2
-      spawnerID: 2
-      numberOfEnemies: 1
-      enemyID: 2
+      spawnerIDs: 0000000002000000
+      spawnRate: 3
   waveCooldown: 3
   isPaused: 0
   isWallDestroyed: 0

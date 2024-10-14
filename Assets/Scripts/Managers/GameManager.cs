@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
     public bool isWallDestroyed;
 
     private int currentWaveIndex = 0;
+    private float currentWaveTime;
+    private List<Coroutine> activeSpawnCoroutines = new List<Coroutine>();
     private int enemiesRemaining;
     private bool isWaveInProgress;
 
@@ -87,44 +89,77 @@ public class GameManager : MonoBehaviour
 
     IEnumerator HandleWave(EnemyWave wave)
     {
-        yield return StartCoroutine(WaveCooldown());
+        yield return StartCoroutine(WaveCooldown(wave.waveType));
         isWaveInProgress = true;
+        currentWaveTime = 0f;
 
-        enemiesRemaining = wave.spawnEvents.Sum(e => e.numberOfEnemies);
-        foreach (var spawnEvent in wave.spawnEvents)
+        foreach (var interval in wave.spawnIntervals)
         {
-            float delay = spawnEvent.spawnTime;
-            yield return new WaitForSeconds(delay);
-
-            int spawnerID = spawnEvent.spawnerID;
-            int numberOfEnemies = spawnEvent.numberOfEnemies;
-
-            if (spawnerID >= 0 && spawnerID < enemySpawners.Length)
-            {
-                for (int i = 0; i < numberOfEnemies; i++)
-                {
-                    enemySpawners[spawnerID].SpawnEnemy(spawnEvent.enemyID);
-                }
-            }
+            activeSpawnCoroutines.Add(StartCoroutine(HandleSpawnInterval(interval)));
         }
 
-        while (enemiesRemaining > 0)
+        while (currentWaveTime < wave.duration || enemiesRemaining > 0)
         {
+            currentWaveTime += Time.deltaTime;
             yield return null;
         }
+
+        foreach (var coroutine in activeSpawnCoroutines)
+        {
+            if (coroutine != null)
+                StopCoroutine(coroutine);
+        }
+        activeSpawnCoroutines.Clear();
 
         isWaveInProgress = false;
         currentWaveIndex++;
         StartNextWave();
-        Debug.Log("Wave " + (currentWaveIndex + 1) + " completed!");
+        Debug.Log($"Wave {currentWaveIndex} completed!");
     }
 
-    IEnumerator WaveCooldown()
+    IEnumerator HandleSpawnInterval(SpawnInterval interval)
     {
-        if (currentWaveIndex < enemyWaves.Count - 1)
-            UIManager.Instance.UpdateWaveDisplay("Wave " + (currentWaveIndex + 1) + " incoming!");
-        else
-            UIManager.Instance.UpdateWaveDisplay("Final wave incoming!");
+        yield return new WaitForSeconds(interval.startTime);
+
+        while (currentWaveTime < interval.endTime)
+        {
+            foreach (int spawnerID in interval.spawnerIDs)
+            {
+                if (spawnerID >= 0 && spawnerID < enemySpawners.Length)
+                {
+                    enemySpawners[spawnerID].SpawnEnemy(interval.enemyID);
+                    enemiesRemaining++;
+                }
+            }
+
+            yield return new WaitForSeconds(1f / interval.spawnRate);
+        }
+    }
+
+    IEnumerator WaveCooldown(WaveType waveType)
+    {
+        string message;
+        Color messageColor;
+
+        switch (waveType)
+        {
+            case WaveType.Horde:
+                message = "Enemy Horde Incoming!";
+                messageColor = Color.red;
+                break;
+            case WaveType.Boss:
+                message = "Boss Incoming!!";
+                messageColor = Color.magenta;
+                break;
+            default:
+                message = currentWaveIndex < enemyWaves.Count - 1
+                    ? $"Wave {currentWaveIndex + 1} incoming!"
+                    : "Final wave incoming!";
+                messageColor = Color.white;
+                break;
+        }
+
+        UIManager.Instance.UpdateWaveDisplay(message, messageColor);
         yield return new WaitForSeconds(waveCooldown);
         UIManager.Instance.HideWaveDisplay();
     }
