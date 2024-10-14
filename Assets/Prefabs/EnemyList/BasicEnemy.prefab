@@ -393,9 +393,10 @@ GameObject:
   - component: {fileID: 5279846905046583478}
   - component: {fileID: 1182109037834543461}
   - component: {fileID: 6805085799496957267}
+  - component: {fileID: -9148120423667553482}
   m_Layer: 7
   m_Name: BasicEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -445,6 +446,11 @@ MonoBehaviour:
   currencyTextPrefab: {fileID: 8320317992734793302, guid: 5ef659ae6dec29c4dbf7d3e1d36f7caa,
     type: 3}
   currencyTextSpawnPoint: {fileID: 1111392839968467782}
+  neighborRadius: 2
+  separationWeight: 1.5
+  alignmentWeight: 1
+  cohesionWeight: 1
+  targetWeight: 1.2
 --- !u!33 &5279846905046583478
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -518,3 +524,30 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &-9148120423667553482
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6895881043396866661}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

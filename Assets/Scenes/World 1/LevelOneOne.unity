@@ -6408,6 +6408,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 3822986575317438365, guid: ba3857e00026eef4a9f44a30d1b767fd,
+        type: 3}
+      propertyPath: HP
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 4807662792233331718, guid: ba3857e00026eef4a9f44a30d1b767fd,
         type: 3}
       propertyPath: m_TagString

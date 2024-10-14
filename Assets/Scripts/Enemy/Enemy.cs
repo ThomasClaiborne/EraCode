@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] private GameObject currencyTextPrefab;
     [SerializeField] private Transform currencyTextSpawnPoint;
 
+    private Rigidbody rb;
+
     public Transform[] waypoints
     {
         get;
@@ -45,9 +47,14 @@ public class Enemy : MonoBehaviour, IDamage
     {
         currentHealth = maxHealth;
         currentState = EnemyState.Traveling;
+        rb = GetComponent<Rigidbody>();
+
+        rb.isKinematic = false;
+        rb.useGravity = false;
+        rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         switch (currentState)
         {
@@ -66,9 +73,16 @@ public class Enemy : MonoBehaviour, IDamage
 
         Transform targetWaypoint = waypoints[currentWaypointIndex];
         Vector3 direction = (targetWaypoint.position - transform.position).normalized;
-        transform.position += direction * speed * Time.deltaTime;
 
-        transform.LookAt(new Vector3(targetWaypoint.position.x, transform.position.y, targetWaypoint.position.z));
+        // Move using Rigidbody
+        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+
+        // Rotate to face movement direction
+        if (direction != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z), Vector3.up);
+            rb.MoveRotation(Quaternion.RotateTowards(transform.rotation, toRotation, 720 * Time.fixedDeltaTime));
+        }
 
         if (Vector3.Distance(transform.position, targetWaypoint.position) < 0.1f)
         {
@@ -77,6 +91,7 @@ public class Enemy : MonoBehaviour, IDamage
             if (currentWaypointIndex >= waypoints.Length)
             {
                 currentState = EnemyState.Attacking;
+                rb.isKinematic = true; // Stop moving when attacking
             }
         }
     }
