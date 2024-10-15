@@ -9,6 +9,13 @@ public class PlayerWall : MonoBehaviour, IDamage
     [Header("--Stats--")]
     public int HP;
 
+    [Header("--AttackPoints--")]
+    public Transform[] frontRowAttackPoints;
+    public Transform[] backRowAttackPoints;
+    [SerializeField] private float gizmoSize = 0.5f;
+    [SerializeField] private Color frontRowColor = Color.blue;
+    [SerializeField] private Color backRowColor = Color.red;
+
 
     int HPMax;
     Material tempColor;
@@ -70,5 +77,27 @@ public class PlayerWall : MonoBehaviour, IDamage
         GameManager.Instance.isWallDestroyed = true;
         Destroy(gameObject); 
         GameManager.Instance.LoseGame();
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = frontRowColor;
+        DrawAttackPointGizmos(frontRowAttackPoints);
+
+        Gizmos.color = backRowColor;
+        DrawAttackPointGizmos(backRowAttackPoints);
+    }
+
+    private void DrawAttackPointGizmos(Transform[] attackPoints)
+    {
+        if (attackPoints == null) return;
+
+        foreach (Transform point in attackPoints)
+        {
+            if (point != null)
+            {
+                Gizmos.DrawSphere(point.position, gizmoSize);
+            }
+        }
     }
 }

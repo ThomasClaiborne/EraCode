@@ -40,7 +40,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void HandleEnemyDeath()
     {
-        GameManager.Instance.OnEnemyDefeated();
+        LevelManager.Instance.OnEnemyDefeated();
     }
 
     private void OnDrawGizmos()

@@ -446,11 +446,6 @@ MonoBehaviour:
   currencyTextPrefab: {fileID: 8320317992734793302, guid: 5ef659ae6dec29c4dbf7d3e1d36f7caa,
     type: 3}
   currencyTextSpawnPoint: {fileID: 1111392839968467782}
-  neighborRadius: 2
-  separationWeight: 1.5
-  alignmentWeight: 1
-  cohesionWeight: 1
-  targetWeight: 1.2
 --- !u!33 &5279846905046583478
 MeshFilter:
   m_ObjectHideFlags: 0
