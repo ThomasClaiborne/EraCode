@@ -8,13 +8,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("References")]
+    [Header("--References--")]
     public GameObject player;
     public PlayerController playerController;
     public PlayerWall playerWall;
     public WeaponSlot weaponSlot;
 
-
+    [Header("--States--")]
     public bool isPaused;
     public bool isWallDestroyed;
 

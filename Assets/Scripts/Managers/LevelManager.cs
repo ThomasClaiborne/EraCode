@@ -7,10 +7,13 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
+    [Header("--EnemySpawners--")]
     public EnemySpawner[] enemySpawners;
-    public List<EnemyWave> enemyWaves;
 
+    [Header("--EnemyWaves--")]
+    public List<EnemyWave> enemyWaves;
     public float waveCooldown = 3f;
+
 
     private int currentWaveIndex = 0;
     private float currentWaveTime;
