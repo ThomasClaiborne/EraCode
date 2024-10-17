@@ -24,6 +24,7 @@ public class HUDManager : MonoBehaviour
 
     [Header("--Leveling--")]
     public Image xpBar;
+    public TextMeshProUGUI xpText;
     public TextMeshProUGUI levelText;
 
     [Header("--Message--")]
@@ -158,5 +159,6 @@ public class HUDManager : MonoBehaviour
         LevelSystem levelSystem = PlayerInventory.Instance.LevelSystem;
         xpBar.fillAmount = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
         levelText.text = $"Level: {levelSystem.Level}";
+        xpText.text = $"{levelSystem.Experience} / {levelSystem.ExperienceToNextLevel} XP";
     }
 }
