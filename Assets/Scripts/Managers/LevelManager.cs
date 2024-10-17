@@ -14,6 +14,9 @@ public class LevelManager : MonoBehaviour
     public List<EnemyWave> enemyWaves;
     public float waveCooldown = 3f;
 
+    [Header("--Level Rewards--")]
+    public int xpReward = 100;
+    public int currencyReward = 100;
 
     private int currentWaveIndex = 0;
     private float currentWaveTime;
@@ -175,6 +178,10 @@ public class LevelManager : MonoBehaviour
             Debug.Log("Victory! All waves and enemies cleared.");
             GameManager.Instance.WinGame();
         }
+    }
+    public (int xp, int currency) GetLevelRewards()
+    {
+        return (xpReward, currencyReward);
     }
 
     public void AddEnemyToWaitingList(Enemy enemy)

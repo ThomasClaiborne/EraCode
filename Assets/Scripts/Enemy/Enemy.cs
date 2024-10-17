@@ -8,19 +8,25 @@ public class Enemy : MonoBehaviour, IDamage
     private enum EnemyState { Traveling, MovingToAttackPoint, Attacking }
     private EnemyState currentState;
 
+    [Header("--Objects--")]
     [SerializeField] private Image healthBar;
     [SerializeField] private Image healthBarBackground;
     [SerializeField] Renderer model;
     [SerializeField] Material tempMat;
     [SerializeField] GameObject deathEffect;
 
+    [Header("--Stats--")]
     [SerializeField] int maxHealth = 100; 
     [SerializeField] float speed = 3f; 
     [SerializeField] int damageAmount = 20;
     [SerializeField] float attackInterval = 1.0f;
     [SerializeField] float attackTimer = 0;
 
+    [Header("--Rewards--")]
     [SerializeField] private int currencyReward = 10;
+    [SerializeField] private int experienceReward = 10;
+
+    [Header("--Currency Text--")]
     [SerializeField] private GameObject currencyTextPrefab;
     [SerializeField] private Transform currencyTextSpawnPoint;
 
@@ -237,7 +243,9 @@ public class Enemy : MonoBehaviour, IDamage
             isDead = true;
             OnDeath.Invoke();
             PlayerInventory.Instance.AddCurrency(currencyReward);
+            PlayerInventory.Instance.LevelSystem.AddExperience(experienceReward);
             HUDManager.Instance.UpdateCurrencyText();
+            HUDManager.Instance.UpdateLevelDisplay();
             DisplayCurrencyReward();
             GameObject effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
             Destroy(effect, 0.5f);

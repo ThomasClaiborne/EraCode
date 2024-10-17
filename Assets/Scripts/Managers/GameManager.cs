@@ -78,6 +78,10 @@ public class GameManager : MonoBehaviour
     {
         isPaused = true;
         Time.timeScale = 0;
+
+        var (xpReward, currencyReward) = LevelManager.Instance.GetLevelRewards();
+        PlayerInventory.Instance.AddLevelCompletionReward(xpReward, currencyReward);
+
         UIManager.Instance.ShowWinMenu();
     }
 

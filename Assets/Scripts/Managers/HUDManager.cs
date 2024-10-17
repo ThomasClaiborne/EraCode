@@ -22,6 +22,10 @@ public class HUDManager : MonoBehaviour
     [Header("--Currency--")]
     public TextMeshProUGUI currencyText;
 
+    [Header("--Leveling--")]
+    public Image xpBar;
+    public TextMeshProUGUI levelText;
+
     [Header("--Message--")]
     public TextMeshProUGUI messageText;
 
@@ -45,6 +49,7 @@ public class HUDManager : MonoBehaviour
     {
         defaultAmmoTextColor = weaponAmmoText.color;
         UpdateCurrencyText();
+        UpdateLevelDisplay();
     }
 
     void Update()
@@ -146,5 +151,12 @@ public class HUDManager : MonoBehaviour
     public void UpdateCurrencyText()
     {
        currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
+    }
+
+    public void UpdateLevelDisplay()
+    {
+        LevelSystem levelSystem = PlayerInventory.Instance.LevelSystem;
+        xpBar.fillAmount = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
+        levelText.text = $"Level: {levelSystem.Level}";
     }
 }

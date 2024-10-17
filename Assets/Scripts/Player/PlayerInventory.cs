@@ -6,6 +6,7 @@ public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance { get; private set; }
     public int Currency { get; private set; }
+    public LevelSystem LevelSystem { get; private set; }
     public List<WeaponData> OwnedWeapons { get; private set; }
     private WeaponData[] _equippedWeapons;
     public WeaponData[] EquippedWeapons
@@ -23,7 +24,9 @@ public class PlayerInventory : MonoBehaviour
     private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
     private const string EQUIPPED_WEAPONS_KEY = "EquippedWeapons";
     private const string WEAPON_AMMO_KEY = "WeaponAmmo";
-
+    private const string LEVEL_KEY = "PlayerLevel";
+    private const string EXPERIENCE_KEY = "PlayerExperience";
+    private const string STAT_POINTS_KEY = "PlayerStatPoints";
 
     private void Awake()
     {
@@ -97,11 +100,18 @@ public class PlayerInventory : MonoBehaviour
         return false;
     }
 
-    public void AddLevelCompletionReward(int reward)
+    public void AddLevelCompletionReward(int xpReward, int currencyReward)
     {
-        Currency += reward;
+        LevelSystem.AddExperience(xpReward);
+
+        Currency += currencyReward;
+
         SaveInventory();
-        Debug.Log($"Level completed! Player earned {reward} currency. Total currency: {Currency}");
+        HUDManager.Instance.UpdateLevelDisplay();
+        HUDManager.Instance.UpdateCurrencyText();
+
+        Debug.Log($"Level completed! Player earned {xpReward} XP and {currencyReward} Currency. " +
+                  $"Total XP: {LevelSystem.Experience}, Total Currency: {Currency}");
     }
 
     public void AddWeapon(WeaponData weapon)
@@ -140,6 +150,10 @@ public class PlayerInventory : MonoBehaviour
 
         string ammoString = string.Join(",", weaponAmmo.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
         PlayerPrefs.SetString(WEAPON_AMMO_KEY, ammoString);
+
+        PlayerPrefs.SetInt(LEVEL_KEY, LevelSystem.Level);
+        PlayerPrefs.SetInt(EXPERIENCE_KEY, LevelSystem.Experience);
+        PlayerPrefs.SetInt(STAT_POINTS_KEY, LevelSystem.StatPoints);
 
         PlayerPrefs.Save();
     }
@@ -185,6 +199,11 @@ public class PlayerInventory : MonoBehaviour
                     kvp => int.Parse(kvp[1])
                 );
         }
+
+        int savedLevel = PlayerPrefs.GetInt(LEVEL_KEY, 1);
+        int savedExperience = PlayerPrefs.GetInt(EXPERIENCE_KEY, 0);
+        int savedStatPoints = PlayerPrefs.GetInt(STAT_POINTS_KEY, 0);
+        LevelSystem = new LevelSystem(savedLevel, savedExperience, savedStatPoints);
     }
 
     private WeaponData FindWeaponById(string weaponId)
@@ -223,6 +242,11 @@ public class PlayerInventory : MonoBehaviour
         }
 
         EquipWeapon(playerPistol, 0);
+
+        LevelSystem = new LevelSystem();
+        PlayerPrefs.DeleteKey(LEVEL_KEY);
+        PlayerPrefs.DeleteKey(EXPERIENCE_KEY);
+        PlayerPrefs.DeleteKey(STAT_POINTS_KEY);
 
         PlayerPrefs.DeleteKey(CURRENCY_KEY);
         PlayerPrefs.DeleteKey(OWNED_WEAPONS_KEY);

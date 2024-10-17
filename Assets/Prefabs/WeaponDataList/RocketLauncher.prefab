@@ -114,7 +114,7 @@ MonoBehaviour:
   pierceLimit: 0
   isExplosive: 1
   explosionRadius: 3
-  explosionForce: 10
+  explosionForce: 30
   weaponPrice: 250
   ammoPrice: 50
 --- !u!33 &2451374843967493694
