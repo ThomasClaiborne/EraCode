@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour, IDamage
     [SerializeField] private Transform currencyTextSpawnPoint;
 
     private Transform targetAttackPoint;
-    private bool isMovingToAttackPoint = false;
+    //private bool isMovingToAttackPoint = false;
     private Transform player;
     private Rigidbody rb;
 
@@ -149,7 +149,7 @@ public class Enemy : MonoBehaviour, IDamage
         if (closestPoint != null)
         {
             targetAttackPoint = closestPoint;
-            isMovingToAttackPoint = true;
+            //isMovingToAttackPoint = true;
             closestPoint.gameObject.SetActive(false); // Mark the point as occupied
         }
         else

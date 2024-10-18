@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System.IO;
 
 public class WeaponShop : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class WeaponShop : MonoBehaviour
     public GameObject buttonPrefab;
     public Transform scrollViewContent;
     public TextMeshProUGUI weaponNameText;
+    public TextMeshProUGUI weaponLevelText;
     public TextMeshProUGUI weaponStatsText;
     public TextMeshProUGUI weaponTypeText;
     public TextMeshProUGUI weaponModeText;
@@ -27,6 +29,11 @@ public class WeaponShop : MonoBehaviour
     public Button buyAmmoButton;
     public TextMeshProUGUI buyAmmoButtonText;
 
+    public Button upgradeButton;
+    public TextMeshProUGUI upgradeButtonText;
+    public GameObject levelRequirementObject;
+    public TextMeshProUGUI levelRequirementText;
+
     public Color purchaseColor = Color.green;
     public Color equipColor = Color.cyan;
     public Color equippedColor = Color.gray;
@@ -40,12 +47,15 @@ public class WeaponShop : MonoBehaviour
     private Coroutine currentLerpCoroutine;
     private Color originalTextColor;
     private bool isPointerOverAmmoButton = false;
+    private bool isPointerOverUpgradeButton = false;
+
 
 
     private void Start()
     {
         PopulateWeaponList();
         SetupAmmoButtonHover();
+        SetupUpgradeButtonHover();
         UpdateUI();
     }
 
@@ -80,6 +90,21 @@ public class WeaponShop : MonoBehaviour
         trigger.triggers.Add(exitEntry);
     }
 
+    private void SetupUpgradeButtonHover()
+    {
+        EventTrigger trigger = upgradeButton.gameObject.AddComponent<EventTrigger>();
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry();
+        enterEntry.eventID = EventTriggerType.PointerEnter;
+        enterEntry.callback.AddListener((data) => { OnUpgradeButtonHoverEnter(); });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry();
+        exitEntry.eventID = EventTriggerType.PointerExit;
+        exitEntry.callback.AddListener((data) => { OnUpgradeButtonHoverExit(); });
+        trigger.triggers.Add(exitEntry);
+    }
+
     private void SelectWeapon(WeaponData weapon)
     {
         selectedWeapon = weapon;
@@ -93,38 +118,58 @@ public class WeaponShop : MonoBehaviour
         if (selectedWeapon != null)
         {
             weaponNameText.text = $"Name: {selectedWeapon.weaponName}";
-            weaponStatsText.text = $"Damage: {selectedWeapon.damage}\n" +
-                                   $"Fire Rate: {selectedWeapon.fireRate}\n" +
-                                   $"Clip Size: {selectedWeapon.clipSize}\n" +
-                                   $"Reload Time: {selectedWeapon.reloadTime}";
-            weaponTypeText.text = GetWeaponType(selectedWeapon);
-            weaponModeText.text = GetWeaponMode(selectedWeapon);
+            int currentLevel = PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId);
+            weaponLevelText.text = $"Level: {currentLevel}";
+
+            UpdateWeaponStats();
 
             bool owned = PlayerInventory.Instance.OwnsWeapon(selectedWeapon);
             bool equipped = IsWeaponEquipped(selectedWeapon);
+            bool meetsLevelRequirement = PlayerInventory.Instance.LevelSystem.Level >= selectedWeapon.requiredLevel;
 
             actionButton.gameObject.SetActive(true);
             if (!owned)
             {
                 SetActionButtonState(ActionState.Purchase, true);
                 ToggleAmmoButton(false);
+                ToggleUpgradeButton(false);
+                ShowLevelRequirement(!meetsLevelRequirement, selectedWeapon.requiredLevel);
             }
             else if (!equipped)
             {
                 SetActionButtonState(ActionState.Equip, true);
                 UpdateAmmoButton();
+                UpdateUpgradeButton();
+                ShowLevelRequirement(false, 0);
             }
             else
             {
                 SetActionButtonState(ActionState.Equipped, false);
                 UpdateAmmoButton();
+                UpdateUpgradeButton();
+                ShowLevelRequirement(false, 0);
             }
         }
         else
         {
             ClearWeaponInfo();
             ToggleAmmoButton(false);
+            ToggleUpgradeButton(false);
+            ShowLevelRequirement(false, 0);
         }
+    }
+
+    private void UpdateWeaponStats()
+    {
+        int damage = PlayerInventory.Instance.GetWeaponDamage(selectedWeapon.weaponId);
+        float fireRate = PlayerInventory.Instance.GetWeaponFireRate(selectedWeapon.weaponId);
+        int clipSize = PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId);
+        float reloadTime = PlayerInventory.Instance.GetWeaponReloadTime(selectedWeapon.weaponId);
+
+        weaponStatsText.text = $"Damage: {damage}\n" +
+                               $"Fire Rate: {fireRate:F2}\n" +
+                               $"Clip Size: {clipSize}\n" +
+                               $"Reload Time: {reloadTime:F2}";
     }
 
     private void UpdateAmmoButton()
@@ -143,7 +188,7 @@ public class WeaponShop : MonoBehaviour
         }
         else
         {
-            buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
+            buyAmmoButtonText.text = $"Buy Ammo +{PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId)}";
         }
     }
 
@@ -162,10 +207,81 @@ public class WeaponShop : MonoBehaviour
     private void OnAmmoButtonHoverExit()
     {
         isPointerOverAmmoButton = false;
-        buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
+        buyAmmoButtonText.text = $"Buy Ammo +{PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId)}";
     }
 
+    private void UpdateUpgradeButton()
+    {
+        ToggleUpgradeButton(true);
+        int upgradeCost = PlayerInventory.Instance.GetWeaponUpgradeCost(selectedWeapon.weaponId);
+        upgradeButtonText.text = $"Upgrade to level ({PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId) + 1})";
+        upgradeButton.onClick.RemoveAllListeners();
+        upgradeButton.onClick.AddListener(OnUpgradeClicked);
+        upgradeButton.interactable = selectedWeapon.currentLevel < selectedWeapon.maxLevel;
 
+        if(isPointerOverUpgradeButton)
+        {
+            OnUpgradeButtonHoverEnter();
+        }
+    }
+
+        private void ToggleUpgradeButton(bool active)
+    {
+        upgradeButton.gameObject.SetActive(active);
+    }
+
+    private void OnUpgradeClicked()
+    {
+        int upgradeCost = PlayerInventory.Instance.GetWeaponUpgradeCost(selectedWeapon.weaponId);
+        if (PlayerInventory.Instance.SpendCurrency(upgradeCost))
+        {
+            PlayerInventory.Instance.UpgradeWeapon(selectedWeapon.weaponId);
+            //selectedWeapon.UpgradeWeapon();
+            UpdateUI();
+        }
+        else
+        {
+            Debug.Log("Not enough currency to upgrade weapon.");
+            StartColorLerp(upgradeButtonText, Color.red, 0.3f);
+        }
+    }
+
+    private void OnUpgradeButtonHoverEnter()
+    {
+        isPointerOverUpgradeButton = true;
+
+        int currentDamage = PlayerInventory.Instance.GetWeaponDamage(selectedWeapon.weaponId);
+        float currentFireRate = PlayerInventory.Instance.GetWeaponFireRate(selectedWeapon.weaponId);
+        int currentClipSize = PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId);
+        float currentReloadTime = PlayerInventory.Instance.GetWeaponReloadTime(selectedWeapon.weaponId);
+
+        weaponStatsText.text = $"Damage: {currentDamage} -> {selectedWeapon.GetNextLevelDamage()}\n" +
+                               $"Fire Rate: {currentFireRate:F2} -> {selectedWeapon.GetNextLevelFireRate():F2}\n" +
+                               $"Clip Size: {currentClipSize} -> {selectedWeapon.GetNextLevelClipSize()}\n" +
+                               $"Reload Time: {currentReloadTime:F2} -> {selectedWeapon.GetNextLevelReloadTime():F2}";
+
+        upgradeButtonText.text = $"Price: ${PlayerInventory.Instance.GetWeaponUpgradeCost(selectedWeapon.weaponId)}";
+    }
+
+    private void OnUpgradeButtonHoverExit()
+    {
+        isPointerOverUpgradeButton = false;
+
+        UpdateWeaponStats();
+        upgradeButtonText.text = $"Upgrade to level ({PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId) + 1})";
+    }
+
+    private void ShowLevelRequirement(bool show, int requiredLevel)
+    {
+        levelRequirementObject.SetActive(show);
+        if (show)
+        {
+            levelRequirementText.text = $"Need to be Level {requiredLevel} to purchase";
+            actionButton.interactable = false;
+            actionButton.GetComponent<Image>().color = Color.gray;
+        }
+
+    }
 
     private void ClearWeaponInfo()
     {
@@ -270,7 +386,7 @@ public class WeaponShop : MonoBehaviour
     {
         if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.ammoPrice))
         {
-            PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, selectedWeapon.clipSize);
+            PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId));
             UpdateUI();
             OnAmmoButtonHoverEnter();
         }

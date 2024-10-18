@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Sniper
+  m_EditorClassIdentifier: 
+  weaponName: Sniper
+  weaponId: 3
+  bulletPrefab: {fileID: 341314025285115435, guid: ed3d37e6998653d4ebd424fc27fb6d3d,
+    type: 3}
+  weaponModel: {fileID: 415217281429136081, guid: cb26e91ca320a534584c68bd6c8e69ab,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: 0, y: 0, z: 0}
+  holdRotation: {x: 0, y: 0, z: 0}
+  damage: 3
+  clipSize: 5
+  ammo: 50
+  reloadTime: 1.2
+  fireRate: 2
+  bulletLifeSpan: 0
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  shotAudioClips: []
+  reloadAudioClips: []
+  isAutomatic: 0
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 0
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 1
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 1
+  piercingDamageReduction: 0.3
+  pierceLimit: 3
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 250
+  ammoPrice: 25
+  upgradeCost: 100
+  requiredLevel: 1
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.1
+  fireRateUpgradeMultiplier: 0.98
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.1

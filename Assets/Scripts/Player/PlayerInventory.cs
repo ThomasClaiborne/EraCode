@@ -19,11 +19,14 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
 
     private Dictionary<string,int> weaponAmmo = new Dictionary<string, int>();
+    private Dictionary<string, int> weaponLevels = new Dictionary<string, int>();
+
 
     private const string CURRENCY_KEY = "PlayerCurrency";
     private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
     private const string EQUIPPED_WEAPONS_KEY = "EquippedWeapons";
     private const string WEAPON_AMMO_KEY = "WeaponAmmo";
+    private const string WEAPON_LEVELS_KEY = "WeaponLevels";
     private const string LEVEL_KEY = "PlayerLevel";
     private const string EXPERIENCE_KEY = "PlayerExperience";
     private const string STAT_POINTS_KEY = "PlayerStatPoints";
@@ -137,6 +140,56 @@ public class PlayerInventory : MonoBehaviour
             SaveInventory();
         }
     }
+    public void UpgradeWeapon(string weaponId)
+    {
+        if (!weaponLevels.ContainsKey(weaponId))
+        {
+            weaponLevels[weaponId] = 1;
+        }
+        weaponLevels[weaponId]++;
+
+        SaveInventory();
+    }
+
+    public int GetWeaponLevel(string weaponId)
+    {
+        return weaponLevels.TryGetValue(weaponId, out int level) ? level : 1;
+    }
+
+    public int GetWeaponDamage(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetCurrentLevelDamage(level) : 0;
+    }
+
+    public float GetWeaponFireRate(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetCurrentLevelFireRate(level) : 0f;
+    }
+
+    public float GetWeaponReloadTime(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetCurrentLevelReloadTime(level) : 0f;
+    }
+
+    public int GetWeaponClipSize(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetCurrentLevelClipSize(level) : 0;
+    }
+
+    public int GetWeaponUpgradeCost(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetUpgradeCost(level) : 0;
+    }
 
     public void SaveInventory()
     {
@@ -150,6 +203,9 @@ public class PlayerInventory : MonoBehaviour
 
         string ammoString = string.Join(",", weaponAmmo.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
         PlayerPrefs.SetString(WEAPON_AMMO_KEY, ammoString);
+
+        string weaponLevelsString = string.Join(",", weaponLevels.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+        PlayerPrefs.SetString(WEAPON_LEVELS_KEY, weaponLevelsString);
 
         PlayerPrefs.SetInt(LEVEL_KEY, LevelSystem.Level);
         PlayerPrefs.SetInt(EXPERIENCE_KEY, LevelSystem.Experience);
@@ -200,6 +256,17 @@ public class PlayerInventory : MonoBehaviour
                 );
         }
 
+        string weaponLevelsString = PlayerPrefs.GetString(WEAPON_LEVELS_KEY, "");
+        if (!string.IsNullOrEmpty(weaponLevelsString))
+        {
+            weaponLevels = weaponLevelsString.Split(',')
+                .Select(s => s.Split(':'))
+                .ToDictionary(
+                    kvp => kvp[0],
+                    kvp => int.Parse(kvp[1])
+                );
+        }
+
         int savedLevel = PlayerPrefs.GetInt(LEVEL_KEY, 1);
         int savedExperience = PlayerPrefs.GetInt(EXPERIENCE_KEY, 0);
         int savedStatPoints = PlayerPrefs.GetInt(STAT_POINTS_KEY, 0);
@@ -208,21 +275,9 @@ public class PlayerInventory : MonoBehaviour
 
     private WeaponData FindWeaponById(string weaponId)
     {
-        if (AllWeaponsPrefab == null)
+        if (AllWeaponsPrefab == null || AllWeaponsPrefab.allWeapons == null || AllWeaponsPrefab.allWeapons.Count == 0)
         {
-            Debug.LogError("AllWeapons is null in PlayerInventory");
-            return null;
-        }
-
-        if (AllWeaponsPrefab.allWeapons == null)
-        {
-            Debug.LogError("AllWeapons.allWeapons is null in PlayerInventory");
-            return null;
-        }
-
-        if (AllWeaponsPrefab.allWeapons.Count == 0)
-        {
-            Debug.LogWarning("AllWeapons.allWeapons is empty in PlayerInventory");
+            Debug.LogError("Issue with AllWeaponsPrefab in PlayerInventory");
             return null;
         }
 
@@ -235,10 +290,13 @@ public class PlayerInventory : MonoBehaviour
         OwnedWeapons.Clear();
         EquippedWeapons = new WeaponData[3];
         weaponAmmo.Clear();
+        weaponLevels.Clear();
+
 
         foreach (var weapon in AllWeaponsPrefab.allWeapons)
         {
             weaponAmmo[weapon.weaponId] = weapon.ammo;
+            weaponLevels[weapon.weaponId] = 1;
         }
 
         EquipWeapon(playerPistol, 0);
@@ -252,6 +310,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.DeleteKey(OWNED_WEAPONS_KEY);
         PlayerPrefs.DeleteKey(EQUIPPED_WEAPONS_KEY);
         PlayerPrefs.DeleteKey(WEAPON_AMMO_KEY);
+        PlayerPrefs.DeleteKey(WEAPON_LEVELS_KEY);
         PlayerPrefs.Save();
 
         SaveInventory();

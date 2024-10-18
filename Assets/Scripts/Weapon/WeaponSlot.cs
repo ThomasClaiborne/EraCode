@@ -243,13 +243,25 @@ public class WeaponSlot : MonoBehaviour
 
         if (currentWeapon != null) ammoCountPerWeapon[currentWeapon] = currentClipSize;
 
-        currentWeapon = newWeapon;
-        currentClipSize = ammoCountPerWeapon.ContainsKey(currentWeapon) ?
-                          ammoCountPerWeapon[currentWeapon] : currentWeapon.clipSize;
+        currentWeapon = ScriptableObject.Instantiate(newWeapon);
+
+        if (ammoCountPerWeapon.TryGetValue(currentWeapon, out int savedClipSize))
+        {
+            currentClipSize = savedClipSize;
+        }
+        else
+        {
+            currentClipSize = PlayerInventory.Instance.GetWeaponClipSize(newWeapon.weaponId);
+        }
 
         currentWeaponObject = Instantiate(currentWeapon.weaponModel, weaponHolder);
         currentWeaponObject.transform.localPosition = currentWeapon.holdPosition;
         currentWeaponObject.transform.localRotation = Quaternion.Euler(currentWeapon.holdRotation);
+
+        currentWeapon.damage = PlayerInventory.Instance.GetWeaponDamage(newWeapon.weaponId);
+        currentWeapon.fireRate = PlayerInventory.Instance.GetWeaponFireRate(newWeapon.weaponId);
+        currentWeapon.reloadTime = PlayerInventory.Instance.GetWeaponReloadTime(newWeapon.weaponId);
+        currentWeapon.clipSize = PlayerInventory.Instance.GetWeaponClipSize(newWeapon.weaponId);
 
         UpdateHUD();
     }
@@ -257,7 +269,8 @@ public class WeaponSlot : MonoBehaviour
     public void AddWeaponToSlot(WeaponData weapon, int slotIndex)
     {
         if (slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
-        weaponSlots[slotIndex] = weapon;
+        weaponSlots[slotIndex] = ScriptableObject.Instantiate(weapon);
+        Debug.Log("Weapon name after Scriptable: " + weaponSlots[slotIndex].weaponName);
         UpdateHUD();
     }
 

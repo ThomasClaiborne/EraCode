@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Assault Rifle
+  m_EditorClassIdentifier: 
+  weaponName: Assault Rifle
+  weaponId: 1
+  bulletPrefab: {fileID: 341314025285115435, guid: 36f859d9f9e4b65488f92a787c3ba4d1,
+    type: 3}
+  weaponModel: {fileID: 274476813455423757, guid: 856c069f79f7b8848a9c3fafbb11ddf6,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: 0, y: 0, z: 0}
+  holdRotation: {x: 0, y: 0, z: 0}
+  damage: 1
+  clipSize: 25
+  ammo: 100
+  reloadTime: 1
+  fireRate: 0.25
+  bulletLifeSpan: 3
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  shotAudioClips: []
+  reloadAudioClips: []
+  isAutomatic: 1
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 1
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 0
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 0
+  piercingDamageReduction: 0
+  pierceLimit: 0
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 200
+  ammoPrice: 10
+  upgradeCost: 100
+  requiredLevel: 2
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.1
+  fireRateUpgradeMultiplier: 0.95
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.1

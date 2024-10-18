@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3555106407089375827}
-  - component: {fileID: 7889819940907188278}
   - component: {fileID: 1380327769316461846}
   - component: {fileID: 7435714745324951272}
   - component: {fileID: 6532612714267532440}
@@ -36,50 +35,6 @@ Transform:
   - {fileID: 5465674046220742172}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &7889819940907188278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 274476813455423757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponName: Assault Rifle
-  weaponId: 0
-  bulletPrefab: {fileID: 341314025285115435, guid: 36f859d9f9e4b65488f92a787c3ba4d1,
-    type: 3}
-  weaponModel: {fileID: 274476813455423757}
-  muzzleFlash: {fileID: 0}
-  ejectBullet: {fileID: 0}
-  ejectPoint: {fileID: 0}
-  holdPosition: {x: 0, y: 0, z: 0}
-  holdRotation: {x: 0, y: 0, z: 0}
-  damage: 1
-  clipSize: 25
-  ammo: 100
-  reloadTime: 1.5
-  fireRate: 0.2
-  bulletLifeSpan: 3
-  maxSpreadAngle: 0
-  bulletCount: 1
-  recoil: 0
-  shotAudioClips: []
-  reloadAudioClips: []
-  isAutomatic: 1
-  isBurst: 0
-  isInfiniteAmmo: 0
-  isAssaultRifle: 1
-  isSubmachineGun: 0
-  isShotgun: 0
-  isSniper: 0
-  isRocketLauncher: 0
-  isPistol: 0
-  weaponPrice: 200
-  ammoPrice: 10
 --- !u!33 &1380327769316461846
 MeshFilter:
   m_ObjectHideFlags: 0

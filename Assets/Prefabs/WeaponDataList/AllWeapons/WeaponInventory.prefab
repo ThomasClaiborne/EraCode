@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allWeapons:
-  - {fileID: 7889819940907188278, guid: 856c069f79f7b8848a9c3fafbb11ddf6, type: 3}
-  - {fileID: 8912522260170000092, guid: cd35aced3695e9746b7c6f423b94705c, type: 3}
-  - {fileID: 6644191309706524156, guid: b3b048dbd16e2b044910e8208374d52e, type: 3}
-  - {fileID: 8912522260170000092, guid: cb26e91ca320a534584c68bd6c8e69ab, type: 3}
-  - {fileID: 8912522260170000092, guid: 05e568a6ffa2fcd4ab80cb96908755b6, type: 3}
+  - {fileID: 11400000, guid: 28de307f1d83fed4a87e6614d29eccac, type: 2}
+  - {fileID: 11400000, guid: 19da4e1f1585a344d9a21c096adb2fc1, type: 2}
+  - {fileID: 11400000, guid: 9b95a15346038c14a90d575e122e3b54, type: 2}
+  - {fileID: 11400000, guid: e248711b6fbd98e4982fa1bd5b8f3bcb, type: 2}
+  - {fileID: 11400000, guid: 93c4950fd30a745419a2e70d25452ec8, type: 2}
   assaultRifles: []
   submachineGuns: []
   shotguns: []

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Shotgun
+  m_EditorClassIdentifier: 
+  weaponName: Shotgun
+  weaponId: 2
+  bulletPrefab: {fileID: 341314025285115435, guid: 1697f8b3a88f48746a8c8f6b2448b3ae,
+    type: 3}
+  weaponModel: {fileID: 8158466449422175889, guid: b3b048dbd16e2b044910e8208374d52e,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: 0, y: 0, z: 0}
+  holdRotation: {x: 0, y: 0, z: 0}
+  damage: 3
+  clipSize: 6
+  ammo: 30
+  reloadTime: 1.25
+  fireRate: 1
+  bulletLifeSpan: 0.2
+  maxSpreadAngle: 10
+  bulletCount: 3
+  recoil: 0
+  shotAudioClips: []
+  reloadAudioClips: []
+  isAutomatic: 0
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 0
+  isSubmachineGun: 0
+  isShotgun: 1
+  isSniper: 0
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 0
+  piercingDamageReduction: 0
+  pierceLimit: 0
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 300
+  ammoPrice: 50
+  upgradeCost: 100
+  requiredLevel: 1
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.1
+  fireRateUpgradeMultiplier: 0.98
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.1

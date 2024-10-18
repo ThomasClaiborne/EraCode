@@ -40,12 +40,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7611369030491361422}
-  - component: {fileID: 8912522260170000092}
   - component: {fileID: 2451374843967493694}
   - component: {fileID: 6017411025258395628}
   - component: {fileID: 1942604277351307963}
   m_Layer: 6
-  m_Name: Pistol
+  m_Name: Sniper
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,48 +66,6 @@ Transform:
   - {fileID: 3554969792516043533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &8912522260170000092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 415217281429136081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponName: Pistol
-  weaponId: 1
-  bulletPrefab: {fileID: 341314025285115435, guid: 0e6a9f4953d5df4499cc3b7b9e7127d9,
-    type: 3}
-  weaponModel: {fileID: 415217281429136081}
-  muzzleFlash: {fileID: 0}
-  ejectBullet: {fileID: 0}
-  ejectPoint: {fileID: 0}
-  holdPosition: {x: 0, y: 0, z: 0}
-  holdRotation: {x: 0, y: 0, z: 0}
-  damage: 1
-  clipSize: 10
-  ammo: 0
-  reloadTime: 1
-  fireRate: 0.4
-  bulletLifeSpan: 3
-  maxSpreadAngle: 0
-  bulletCount: 1
-  recoil: 0
-  shotAudioClips: []
-  reloadAudioClips: []
-  isAutomatic: 0
-  isBurst: 0
-  isInfiniteAmmo: 1
-  isAssaultRifle: 0
-  isSubmachineGun: 0
-  isShotgun: 0
-  isSniper: 0
-  isRocketLauncher: 0
-  isPistol: 1
 --- !u!33 &2451374843967493694
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -137,7 +94,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: db45817a232e7df4c83bf8e3eaa3ef25, type: 2}
+  - {fileID: 2100000, guid: 007d7aa38df8e6942aa403e76b13e00d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

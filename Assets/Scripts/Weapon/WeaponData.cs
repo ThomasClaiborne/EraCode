@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponData: MonoBehaviour
+[CreateAssetMenu(fileName = "New Weapon", menuName = "Weapons/Weapon Data")]
+public class WeaponData: ScriptableObject
 {
     [Header("Weapon Info")]
     public string weaponName;
@@ -21,7 +22,7 @@ public class WeaponData: MonoBehaviour
     public float fireRate;
     public float bulletLifeSpan;
     public float maxSpreadAngle;
-    public int bulletCount;
+    public int bulletCount = 1;
     public float recoil;
     public List<string> shotAudioClips;
     public List<string> reloadAudioClips;
@@ -30,6 +31,7 @@ public class WeaponData: MonoBehaviour
     public bool isAutomatic;
     public bool isBurst;
     public bool isInfiniteAmmo;
+
 
     [Header("Weapon Type")]
     public bool isAssaultRifle;
@@ -50,6 +52,58 @@ public class WeaponData: MonoBehaviour
     [Header("Shop Info")]
     public int weaponPrice;
     public int ammoPrice;
+    public int upgradeCost = 100;
+
+    [Header("Leveling and Upgrades")]
+    public int requiredLevel = 1;
+    public int currentLevel = 1;
+    public int maxLevel = 10;
+    public float upgradeCostMultiplier = 1.5f;
+
+    [Header("Upgrade Multipliers")]
+    public float damageUpgradeMultiplier = 1.1f;
+    public float fireRateUpgradeMultiplier = 0.95f;
+    public float reloadTimeUpgradeMultiplier = 0.95f;
+    public float clipSizeUpgradeMultiplier = 1.1f;
+
+    public int GetCurrentLevelDamage(int level) => Mathf.RoundToInt(damage * Mathf.Pow(damageUpgradeMultiplier, level - 1));
+    public float GetCurrentLevelFireRate(int level) => fireRate * Mathf.Pow(fireRateUpgradeMultiplier, level - 1);
+    public float GetCurrentLevelReloadTime(int level) => reloadTime * Mathf.Pow(reloadTimeUpgradeMultiplier, level - 1);
+    public int GetCurrentLevelClipSize(int level) => Mathf.RoundToInt(clipSize * Mathf.Pow(clipSizeUpgradeMultiplier, level - 1));
+
+    public int GetNextLevelDamage() => Mathf.RoundToInt(damage * Mathf.Pow(damageUpgradeMultiplier, currentLevel));
+    public float GetNextLevelFireRate() => fireRate * Mathf.Pow(fireRateUpgradeMultiplier, currentLevel);
+    public float GetNextLevelReloadTime() => reloadTime * Mathf.Pow(reloadTimeUpgradeMultiplier, currentLevel);
+    public int GetNextLevelClipSize() => Mathf.RoundToInt(clipSize * Mathf.Pow(clipSizeUpgradeMultiplier, currentLevel));
+
+    public int GetUpgradeCost(int level) => Mathf.RoundToInt(upgradeCost * Mathf.Pow(upgradeCostMultiplier, level - 1));
+
+    public void UpgradeWeapon()
+    {
+        if (currentLevel >= maxLevel) return;
+
+        currentLevel++;
+
+        damage = Mathf.RoundToInt(damage * damageUpgradeMultiplier);
+        fireRate *= fireRateUpgradeMultiplier;
+        reloadTime *= reloadTimeUpgradeMultiplier;
+        clipSize = Mathf.RoundToInt(clipSize * clipSizeUpgradeMultiplier);
+    }
+
+    public bool CanUpgrade()
+    {
+        return currentLevel < maxLevel;
+    }
+
+    public (int damage, float fireRate, float reloadTime, int clipSize) GetNextLevelStats()
+    {
+        return (
+            Mathf.RoundToInt(damage * damageUpgradeMultiplier),
+            fireRate * fireRateUpgradeMultiplier,
+            reloadTime * reloadTimeUpgradeMultiplier,
+            Mathf.RoundToInt(clipSize * clipSizeUpgradeMultiplier)
+        );
+    }
 
     public override bool Equals(object obj)
     {

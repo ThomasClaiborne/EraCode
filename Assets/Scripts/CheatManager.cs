@@ -32,6 +32,12 @@ public class CheatManager : MonoBehaviour
                 key = KeyCode.H,
                 description = "Reset Player Stats",
                 cheatAction = ResetPlayerStats
+            },
+            new CheatKey
+            {
+                key = KeyCode.J,
+                description = "Add 100 Experience",
+                cheatAction = () => AddExperience(100)
             }
             // Add more cheats here as needed
         };
@@ -46,6 +52,28 @@ public class CheatManager : MonoBehaviour
                 cheat.cheatAction?.Invoke();
                 Debug.Log($"Cheat activated: {cheat.description}");
             }
+        }
+    }
+
+    private void AddExperience(int amount)
+    {
+        if (PlayerInventory.Instance != null)
+        {
+            PlayerInventory.Instance.LevelSystem.AddExperience(100);
+            WeaponShop weaponShop = FindObjectOfType<WeaponShop>();
+            if (weaponShop != null)
+            {
+                weaponShop.UpdateUI();
+            }
+            if (HUDManager.Instance != null)
+            {
+                HUDManager.Instance.UpdateLevelDisplay();
+            }
+            Debug.Log($"Added {amount} currency. New total: {PlayerInventory.Instance.Currency}");
+        }
+        else
+        {
+            Debug.LogError("PlayerInventory instance not found!");
         }
     }
 
