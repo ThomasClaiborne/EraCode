@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 760421726795407583}
   - component: {fileID: 7327378674917762507}
   - component: {fileID: 1051769275039963603}
+  - component: {fileID: 7492529289630284325}
   - component: {fileID: 7560125581460551415}
   - component: {fileID: 6460327041685170326}
   - component: {fileID: 4697564819878153087}
@@ -71,13 +72,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 6275678782174767050}
-  defaultWeapon: {fileID: 8912522260170000092, guid: cd35aced3695e9746b7c6f423b94705c,
-    type: 3}
   weaponSlots:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   currentSlotIndex: 0
+--- !u!114 &7492529289630284325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044901089673303028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a9049e6d3b9364b998f03d34315087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &7560125581460551415
 MeshFilter:
   m_ObjectHideFlags: 0

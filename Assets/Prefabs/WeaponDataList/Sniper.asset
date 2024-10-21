@@ -52,7 +52,7 @@ MonoBehaviour:
   weaponPrice: 250
   ammoPrice: 25
   upgradeCost: 100
-  requiredLevel: 1
+  requiredLevel: 5
   currentLevel: 1
   maxLevel: 10
   upgradeCostMultiplier: 1.5

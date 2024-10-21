@@ -65,6 +65,13 @@ public class CheatManager : MonoBehaviour
             {
                 weaponShop.UpdateUI();
             }
+
+            MainMenuPlayer mainMenuPlayer = FindObjectOfType<MainMenuPlayer>();
+            if (mainMenuPlayer != null)
+            {
+                mainMenuPlayer.UpdateXPDisplay();
+            }
+
             if (HUDManager.Instance != null)
             {
                 HUDManager.Instance.UpdateLevelDisplay();

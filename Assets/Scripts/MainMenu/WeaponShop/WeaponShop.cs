@@ -255,10 +255,10 @@ public class WeaponShop : MonoBehaviour
         int currentClipSize = PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId);
         float currentReloadTime = PlayerInventory.Instance.GetWeaponReloadTime(selectedWeapon.weaponId);
 
-        weaponStatsText.text = $"Damage: {currentDamage} -> {selectedWeapon.GetNextLevelDamage()}\n" +
-                               $"Fire Rate: {currentFireRate:F2} -> {selectedWeapon.GetNextLevelFireRate():F2}\n" +
-                               $"Clip Size: {currentClipSize} -> {selectedWeapon.GetNextLevelClipSize()}\n" +
-                               $"Reload Time: {currentReloadTime:F2} -> {selectedWeapon.GetNextLevelReloadTime():F2}";
+        weaponStatsText.text = $"Damage: {currentDamage} -> {PlayerInventory.Instance.GetNextLevelWeaponDamage(selectedWeapon.weaponId)}\n" +
+                               $"Fire Rate: {currentFireRate:F2} -> {PlayerInventory.Instance.GetNextLevelWeaponFireRate(selectedWeapon.weaponId) :F2}\n" +
+                               $"Clip Size: {currentClipSize} -> {PlayerInventory.Instance.GetNextLevelWeaponClipSize(selectedWeapon.weaponId)}\n" +
+                               $"Reload Time: {currentReloadTime:F2} -> {PlayerInventory.Instance.GetNextLevelWeaponReloadTime(selectedWeapon.weaponId):F2}";
 
         upgradeButtonText.text = $"Price: ${PlayerInventory.Instance.GetWeaponUpgradeCost(selectedWeapon.weaponId)}";
     }

@@ -13,8 +13,9 @@ public class GameManager : MonoBehaviour
     public PlayerController playerController;
     public PlayerWall playerWall;
     public WeaponSlot weaponSlot;
+    public AbilitySlot abilitySlot;
 
-    [Header("--States--")]
+[Header("--States--")]
     public bool isPaused;
     public bool isWallDestroyed;
 
@@ -32,7 +33,8 @@ public class GameManager : MonoBehaviour
         playerController = player.GetComponent<PlayerController>();
         weaponSlot = player.GetComponent<WeaponSlot>();
         playerWall = GameObject.FindWithTag("PlayerWall").GetComponent<PlayerWall>();
-
+        abilitySlot = player.GetComponent<AbilitySlot>();
+        SyncEquippedAbilities();
         SyncEquippedWeapons();
     }
     void Start()
@@ -52,12 +54,43 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < PlayerInventory.Instance.EquippedWeapons.Length; i++)
             {
                 WeaponData weapon = PlayerInventory.Instance.EquippedWeapons[i];
-                weaponSlot.AddWeaponToSlot(weapon, i);
+                if (weapon != null)
+                    weaponSlot.AddWeaponToSlot(weapon, i);
             }
         }
         else
         {
             Debug.LogError("PlayerInventory or WeaponSlot is null in GameManager");
+        }
+    }
+
+    private void SyncEquippedAbilities()
+    {
+        if (PlayerInventory.Instance != null && abilitySlot != null)
+        {
+            for (int i = 0; i < PlayerInventory.Instance.equippedAbilities.Length; i++)
+            {
+                Ability ability = PlayerInventory.Instance.equippedAbilities[i];
+                if (ability != null)
+                {
+                    // Create a new instance of the ability
+                    Ability newAbility = Instantiate(ability);
+                    abilitySlot.EquipAbility(newAbility, i);
+                }
+            }
+
+            foreach (var passiveAbility in PlayerInventory.Instance.passiveAbilities)
+            {
+                if (passiveAbility != null)
+                {
+                    Ability newPassiveAbility = Instantiate(passiveAbility);
+                    abilitySlot.AddPassiveAbility(newPassiveAbility);
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("PlayerInventory or AbilitySlot is null in GameManager");
         }
     }
 

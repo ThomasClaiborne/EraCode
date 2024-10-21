@@ -71,10 +71,10 @@ public class WeaponData: ScriptableObject
     public float GetCurrentLevelReloadTime(int level) => reloadTime * Mathf.Pow(reloadTimeUpgradeMultiplier, level - 1);
     public int GetCurrentLevelClipSize(int level) => Mathf.RoundToInt(clipSize * Mathf.Pow(clipSizeUpgradeMultiplier, level - 1));
 
-    public int GetNextLevelDamage() => Mathf.RoundToInt(damage * Mathf.Pow(damageUpgradeMultiplier, currentLevel));
-    public float GetNextLevelFireRate() => fireRate * Mathf.Pow(fireRateUpgradeMultiplier, currentLevel);
-    public float GetNextLevelReloadTime() => reloadTime * Mathf.Pow(reloadTimeUpgradeMultiplier, currentLevel);
-    public int GetNextLevelClipSize() => Mathf.RoundToInt(clipSize * Mathf.Pow(clipSizeUpgradeMultiplier, currentLevel));
+    public int GetNextLevelDamage(int level) => Mathf.RoundToInt(damage * Mathf.Pow(damageUpgradeMultiplier, level));
+    public float GetNextLevelFireRate(int level) => fireRate * Mathf.Pow(fireRateUpgradeMultiplier, level);
+    public float GetNextLevelReloadTime(int level) => reloadTime * Mathf.Pow(reloadTimeUpgradeMultiplier, level);
+    public int GetNextLevelClipSize(int level) => Mathf.RoundToInt(clipSize * Mathf.Pow(clipSizeUpgradeMultiplier, level));
 
     public int GetUpgradeCost(int level) => Mathf.RoundToInt(upgradeCost * Mathf.Pow(upgradeCostMultiplier, level - 1));
 

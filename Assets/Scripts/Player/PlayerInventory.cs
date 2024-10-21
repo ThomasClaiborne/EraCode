@@ -15,6 +15,9 @@ public class PlayerInventory : MonoBehaviour
         private set { _equippedWeapons = value; }
     }
 
+    public Ability[] equippedAbilities;
+    public List<Ability> passiveAbilities;
+
     [SerializeField] private WeaponData playerPistol;
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
 
@@ -69,7 +72,9 @@ public class PlayerInventory : MonoBehaviour
     private void InitializeInventory()
     {
         OwnedWeapons = new List<WeaponData>();
+        passiveAbilities = new List<Ability>();
         _equippedWeapons = new WeaponData[3];
+        equippedAbilities = new Ability[3];
         LoadInventory();
 
         foreach (var weapon in AllWeaponsPrefab.allWeapons)
@@ -151,6 +156,22 @@ public class PlayerInventory : MonoBehaviour
         SaveInventory();
     }
 
+    public void EquipAbility(Ability ability, int slot)
+    {
+        if (slot >= 0 && slot < equippedAbilities.Length)
+        {
+            equippedAbilities[slot] = ability;
+        }
+    }
+
+    public void AddPassiveAbility(Ability ability)
+    {
+        if (!passiveAbilities.Contains(ability))
+        {
+            passiveAbilities.Add(ability);
+        }
+    }
+
     public int GetWeaponLevel(string weaponId)
     {
         return weaponLevels.TryGetValue(weaponId, out int level) ? level : 1;
@@ -182,6 +203,34 @@ public class PlayerInventory : MonoBehaviour
         WeaponData weapon = FindWeaponById(weaponId);
         int level = GetWeaponLevel(weaponId);
         return weapon != null ? weapon.GetCurrentLevelClipSize(level) : 0;
+    }
+
+    public int GetNextLevelWeaponDamage(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetNextLevelDamage(level) : 0;
+    }
+
+    public float GetNextLevelWeaponFireRate(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetNextLevelFireRate(level) : 0f;
+    }
+
+    public float GetNextLevelWeaponReloadTime(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetNextLevelReloadTime(level) : 0f;
+    }
+
+    public int GetNextLevelWeaponClipSize(string weaponId)
+    {
+        WeaponData weapon = FindWeaponById(weaponId);
+        int level = GetWeaponLevel(weaponId);
+        return weapon != null ? weapon.GetNextLevelClipSize(level) : 0;
     }
 
     public int GetWeaponUpgradeCost(string weaponId)
@@ -284,6 +333,15 @@ public class PlayerInventory : MonoBehaviour
         return AllWeaponsPrefab.allWeapons.FirstOrDefault(w => w != null && w.weaponId == weaponId);
     }
 
+    private void UICheck()
+    {
+        MainMenuPlayer mainMenuPlayer = FindObjectOfType<MainMenuPlayer>();
+        if (mainMenuPlayer != null)
+        {
+            mainMenuPlayer.UpdateXPDisplay();
+        }
+    }
+
     public void ResetInventory()
     {
         Currency = 0;
@@ -314,5 +372,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.Save();
 
         SaveInventory();
+
+        UICheck();
     }
 }

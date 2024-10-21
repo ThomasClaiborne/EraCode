@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16be83bf2ca67324ba4ad975a2ffcb8d, type: 3}
+  m_Name: Lightning Strike 2
+  m_EditorClassIdentifier: 
+  abilityName: Lightning Strike
+  description: Call upon the gods
+  isPassive: 0
+  requiresTargetArea: 1
+  cooldownTime: 2
+  currentCooldown: 0
+  icon: {fileID: 0}
+  damage: 100
+  damageRadius: 5
+  delayBeforeDamage: 0
+  strikeCount: 1
+  strikesDelay: 0.5
+  strikeRadius: 5
+  lightningStrikePrefab: {fileID: 1454807473737458, guid: 6108438f5e38d0b4b8fed06af6b74254,
+    type: 3}
+  targetingIndicatorPrefab: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758,
+    type: 3}
+  impactEffectPrefab: {fileID: 1450638143650814, guid: 9fe1ddc0da27cb44ebeeb8c2befa68bd,
+    type: 3}

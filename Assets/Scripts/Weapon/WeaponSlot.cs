@@ -60,6 +60,9 @@ public class WeaponSlot : MonoBehaviour
 
     private bool CanShoot()
     {
+        if(GameManager.Instance.abilitySlot.selectingAbilityIndex != -1) return false;
+
+
         if (currentClipSize <= 0)
             HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
 
@@ -269,8 +272,9 @@ public class WeaponSlot : MonoBehaviour
     public void AddWeaponToSlot(WeaponData weapon, int slotIndex)
     {
         if (slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
+
         weaponSlots[slotIndex] = ScriptableObject.Instantiate(weapon);
-        Debug.Log("Weapon name after Scriptable: " + weaponSlots[slotIndex].weaponName);
+        Debug.Log("Weapon name after Scriptable: " + ScriptableObject.Instantiate(weapon).name);
         UpdateHUD();
     }
 
