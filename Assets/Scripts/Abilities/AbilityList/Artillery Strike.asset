@@ -17,15 +17,16 @@ MonoBehaviour:
   isPassive: 0
   requiresTargetArea: 1
   cooldownTime: 2
-  currentCooldown: 0
+  currentCooldown: 2
   icon: {fileID: 0}
   damage: 100
   damageRadius: 3
   delayBeforeDamage: 0
-  strikeCount: 3
+  strikeCount: 1
   strikesDelay: 0.5
-  strikeRadius: 2
-  strikePrefab: {fileID: 0}
+  strikeRadius: 0.3
+  strikePrefab: {fileID: 1352952055292810, guid: d8628f56ce986894a9be0c0fc92627bd,
+    type: 3}
   targetingIndicatorPrefab: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758,
     type: 3}
   impactEffectPrefab: {fileID: 1450638143650814, guid: 9fe1ddc0da27cb44ebeeb8c2befa68bd,
