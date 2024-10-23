@@ -18,7 +18,7 @@ public class MainMenuController : MonoBehaviour
     public GameObject gameMenu;
     public GameObject levelSelectMenu;
     public GameObject weaponShopMenu;
-    public GameObject upgradesMenu;
+    public GameObject skillTreeMenu;
     public GameObject settingsMenu;
 
     private void Start()
@@ -33,7 +33,7 @@ public class MainMenuController : MonoBehaviour
         menus.Add(new MenuInfo { name = "GameMenu", menuObject = gameMenu });
         menus.Add(new MenuInfo { name = "LevelSelectMenu", menuObject = levelSelectMenu });
         menus.Add(new MenuInfo { name = "WeaponShopMenu", menuObject = weaponShopMenu });
-        menus.Add(new MenuInfo { name = "UpgradesMenu", menuObject = upgradesMenu });
+        menus.Add(new MenuInfo { name = "SkillTreeMenu", menuObject = skillTreeMenu });
         menus.Add(new MenuInfo { name = "SettingsMenu", menuObject = settingsMenu });
     }
 

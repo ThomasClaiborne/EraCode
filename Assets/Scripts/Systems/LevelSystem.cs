@@ -5,7 +5,7 @@ public class LevelSystem
     public int Level { get; private set; }
     public int Experience { get; private set; }
     public int ExperienceToNextLevel { get; private set; }
-    public int StatPoints { get; private set; }
+    public int SkillPoints { get; private set; }
 
     private const int BaseExperience = 100;
     private const float ExperienceMultiplier = 1.5f;
@@ -14,7 +14,7 @@ public class LevelSystem
     {
         Level = level;
         Experience = experience;
-        StatPoints = statPoints;
+        SkillPoints = statPoints;
         CalculateNextLevelExperience();
     }
 
@@ -31,8 +31,18 @@ public class LevelSystem
     {
         Experience -= ExperienceToNextLevel;
         Level++;
-        StatPoints++;
+        SkillPoints++;
         CalculateNextLevelExperience();
+    }
+
+    public bool SpendSkillPoints(int amount)
+    {
+        if (SkillPoints >= amount)
+        {
+            SkillPoints -= amount;
+            return true;
+        }
+        return false;
     }
 
     private void CalculateNextLevelExperience()

@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16be83bf2ca67324ba4ad975a2ffcb8d, type: 3}
-  m_Name: Lightning Strike 2
+  m_Name: Triple Lightning Strike
   m_EditorClassIdentifier: 
-  abilityName: Lightning Strike
-  description: Call upon the gods
+  abilityName: Triple Lightning Strike
+  description: Triple Lightning Strike!
   isPassive: 0
   requiresTargetArea: 1
   cooldownTime: 2
   currentCooldown: 0
   icon: {fileID: 0}
+  abilityID: 1
   damage: 100
   damageRadius: 3
   delayBeforeDamage: 0
-  strikeCount: 5
+  strikeCount: 3
   strikesDelay: 0.5
-  strikeRadius: 3
+  strikeRadius: 1
   strikePrefab: {fileID: 1454807473737458, guid: 6108438f5e38d0b4b8fed06af6b74254,
     type: 3}
   targetingIndicatorPrefab: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758,

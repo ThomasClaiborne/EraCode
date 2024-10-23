@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8511362823509035232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8812652740646657510}
+  - component: {fileID: 4151637880562637454}
+  m_Layer: 0
+  m_Name: SkillTreeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8812652740646657510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8511362823509035232}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3696594, y: 0.54803807, z: 2.6622949}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4151637880562637454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8511362823509035232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb98c4ee2f0488343a3a795c941ab1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillPaths:
+  - pathName: Offensive
+    nodes:
+    - nodeID: 0
+      ability: {fileID: 11400000, guid: a1105dc463ab7d94d86bfc822a34e851, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs: []
+    - nodeID: 1
+      ability: {fileID: 11400000, guid: ddd30ed27c85af04f87d9fc359e18848, type: 2}
+      skillPointCost: 2
+      requiredNodeIDs:
+      - 0
+    - nodeID: 2
+      ability: {fileID: 11400000, guid: 47233bbaf80c88b4eb79bc95f97082d4, type: 2}
+      skillPointCost: 2
+      requiredNodeIDs:
+      - 0
+      - 1
+    - nodeID: 3
+      ability: {fileID: 11400000, guid: e90bd1fe4d9fc3047a787fa2a2a87957, type: 2}
+      skillPointCost: 3
+      requiredNodeIDs:
+      - 0
+      - 1
+      - 2
+  - pathName: Defensive
+    nodes:
+    - nodeID: 4
+      ability: {fileID: 11400000, guid: a266057c9879f364998c9bbb2f462aa4, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs: []
+    - nodeID: 5
+      ability: {fileID: 11400000, guid: 2921df572224d914d8fc2f10d0255ed6, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs:
+      - 4
+    - nodeID: 6
+      ability: {fileID: 11400000, guid: 3b1f557dd9b1dc44da66ce17c5741797, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs:
+      - 4
+      - 5
+  - pathName: Utility
+    nodes:
+    - nodeID: 7
+      ability: {fileID: 11400000, guid: 880eb7b7863f58c4b8ff79d1f55f678c, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs: []
+    - nodeID: 8
+      ability: {fileID: 11400000, guid: acae22f430c5af441b3117d43b3fc91e, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs:
+      - 7
+    - nodeID: 9
+      ability: {fileID: 11400000, guid: 9f80486f118a14644a670c137ec6e09b, type: 2}
+      skillPointCost: 1
+      requiredNodeIDs:
+      - 7
+      - 8
+  abilityInventory: {fileID: 8440620045434013295, guid: 1e576ac0d23f7b240a256e466a4ba071,
+    type: 3}

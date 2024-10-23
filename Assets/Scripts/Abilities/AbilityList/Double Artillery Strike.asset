@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16be83bf2ca67324ba4ad975a2ffcb8d, type: 3}
-  m_Name: Artillery Strike
+  m_Name: Double Artillery Strike
   m_EditorClassIdentifier: 
-  abilityName: Artillery Strike
-  description: Send in a bomb strike to clear the area!
+  abilityName: Double Artillery Strike
+  description: Send in two bomb strikes to clear the area!
   isPassive: 0
   requiresTargetArea: 1
   cooldownTime: 2
@@ -23,9 +23,9 @@ MonoBehaviour:
   damage: 100
   damageRadius: 3
   delayBeforeDamage: 0
-  strikeCount: 1
-  strikesDelay: 0.5
-  strikeRadius: 0.3
+  strikeCount: 2
+  strikesDelay: 1
+  strikeRadius: 0.8
   strikePrefab: {fileID: 1352952055292810, guid: d8628f56ce986894a9be0c0fc92627bd,
     type: 3}
   targetingIndicatorPrefab: {fileID: 1242912157399330, guid: 6066b7833d493734a9af353bbd046758,

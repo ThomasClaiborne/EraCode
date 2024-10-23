@@ -18,6 +18,9 @@ public class PlayerInventory : MonoBehaviour
     public Ability[] equippedAbilities;
     public List<Ability> passiveAbilities;
 
+    public List<string> unlockedAbilityIDs = new List<string>();
+    public Dictionary<string, string> chosenPathsByCategory = new Dictionary<string, string>();
+
     [SerializeField] private WeaponData playerPistol;
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
 
@@ -120,6 +123,28 @@ public class PlayerInventory : MonoBehaviour
 
         Debug.Log($"Level completed! Player earned {xpReward} XP and {currencyReward} Currency. " +
                   $"Total XP: {LevelSystem.Experience}, Total Currency: {Currency}");
+    }
+
+    public bool IsAbilityUnlocked(string nodeID)
+    {
+        return unlockedAbilityIDs.Contains(nodeID);
+    }
+
+    public void UnlockAbility(string nodeID, Ability ability)
+    {
+        if (!unlockedAbilityIDs.Contains(nodeID))
+        {
+            unlockedAbilityIDs.Add(nodeID);
+            if (ability.isPassive)
+            {
+                AddPassiveAbility(ability);
+            }
+        }
+    }
+
+    public void SetChosenPath(string category, string pathName)
+    {
+        chosenPathsByCategory[category] = pathName;
     }
 
     public void AddWeapon(WeaponData weapon)
@@ -258,7 +283,7 @@ public class PlayerInventory : MonoBehaviour
 
         PlayerPrefs.SetInt(LEVEL_KEY, LevelSystem.Level);
         PlayerPrefs.SetInt(EXPERIENCE_KEY, LevelSystem.Experience);
-        PlayerPrefs.SetInt(STAT_POINTS_KEY, LevelSystem.StatPoints);
+        PlayerPrefs.SetInt(STAT_POINTS_KEY, LevelSystem.SkillPoints);
 
         PlayerPrefs.Save();
     }

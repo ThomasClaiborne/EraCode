@@ -12,6 +12,8 @@ public abstract class Ability : ScriptableObject
     public float currentCooldown;
     public Sprite icon;
 
+    public string abilityID;
+
     protected PlayerController playerController;
     protected AbilitySlot abilitySlot;
 
