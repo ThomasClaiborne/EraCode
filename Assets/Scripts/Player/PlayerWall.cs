@@ -23,15 +23,15 @@ public class PlayerWall : MonoBehaviour, IDamage
     void Start()
     {
         HPMax = HP;
-        HUDManager.Instance.WallHPText.text = HP.ToString();
         tempColor = wallSegments[0].GetComponent<MeshRenderer>().material;
+
+        HUDManager.Instance.InitializeWallHealth(HPMax);
     }
 
     public void takeDamage(int amount, bool headshot)
     {
         HP -= amount;
-        HUDManager.Instance.DecreaseHealth(amount, HP, HPMax);
-        HUDManager.Instance.WallHPText.text = HP.ToString();
+        HUDManager.Instance.UpdateWallHealth(HP,HPMax);
         StartCoroutine(flashMat());
 
         if (HP <= 0)
@@ -47,15 +47,9 @@ public class PlayerWall : MonoBehaviour, IDamage
         {
             HP = HPMax;
         }
-        HUDManager.Instance.IncreaseHealth(amount, HP, HPMax);
-        HUDManager.Instance.WallHPText.text = HP.ToString();
-        Debug.Log("Wall healed for " + amount + " health. Health left: " + HP);
-    }
+        HUDManager.Instance.UpdateWallHealth(HP,HPMax);
 
-    void UpdateHPBar()
-    {
-        float fillAmount = (float)HP / HPMax;
-        HUDManager.Instance.wallHPBar.fillAmount = fillAmount;
+        Debug.Log("Wall healed for " + amount + " health. Health left: " + HP);
     }
 
     IEnumerator flashMat()
@@ -73,7 +67,6 @@ public class PlayerWall : MonoBehaviour, IDamage
 
     void DestroyWall()
     {
-        Debug.Log("Wall has been destroyed!");
         GameManager.Instance.isWallDestroyed = true;
         Destroy(gameObject); 
         GameManager.Instance.LoseGame();

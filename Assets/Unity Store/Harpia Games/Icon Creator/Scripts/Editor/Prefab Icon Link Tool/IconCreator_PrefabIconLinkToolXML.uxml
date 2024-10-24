@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:ScrollView horizontal-scroller-visibility="Hidden">
+        <ui:Label tabindex="-1" text="Prefab Icon Link Tool" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; -unity-font-style: bold; font-size: 18px; margin-bottom: 10px;" />
+        <ui:Foldout text="About the tool" value="false" style="background-color: rgba(255, 255, 255, 0.2); flex-grow: 1;">
+            <ui:Label tabindex="-1" text="Easily track the icons you&apos;ve already created.&#10;&#10;First, set your specific prefab and icons folders. The tool will then locate any prefabs lacking an icon based on their file names.  The tool uses searches for images files that its name start with the corresponding prefab name.&#10;&#10;After comparing both folders and their files, the Comparison Tool provides a list of all prefabs currently missing an icon. It&apos;s a great way to ensure no prefab is left without its corresponding icon.&#10;" display-tooltip-when-elided="true" style="white-space: normal;" />
+        </ui:Foldout>
+        <ui:Label tabindex="-1" text="Folders" display-tooltip-when-elided="true" style="-unity-font-style: bold; margin-top: 10px;" />
+        <ui:VisualElement name="prefabs-folder-section" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; margin-top: 15px; width: 100%; align-self: center;">
+            <ui:Label tabindex="-1" text="Root Folder" display-tooltip-when-elided="true" name="root-folder-label" style="-unity-text-align: middle-left; flex-grow: 1; white-space: normal;" />
+            <ui:Button text="Find..." display-tooltip-when-elided="true" name="find-root-folder" />
+        </ui:VisualElement>
+        <ui:VisualElement name="icons-folder-section" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; width: 100%; align-self: center; margin-top: 10px;">
+            <ui:Label tabindex="-1" text="Icons Folder" display-tooltip-when-elided="true" name="destination-folder-label" style="-unity-text-align: middle-left; flex-grow: 1; white-space: normal;" />
+            <ui:Button text="Find..." display-tooltip-when-elided="true" name="find-destination-folder" />
+        </ui:VisualElement>
+        <ui:Button text="Compare and Link" display-tooltip-when-elided="true" name="compare-button" style="margin-top: 15px;" />
+        <ui:VisualElement name="comparison-result" style="background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start;">
+            <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="result-label" style="-unity-text-align: middle-left; flex-grow: 1; white-space: normal;" />
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row-reverse;">
+                <ui:Button text="Diselect All" display-tooltip-when-elided="true" name="select-none" />
+                <ui:Button text="Select all" display-tooltip-when-elided="true" name="select-all" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:ScrollView name="search-result" style="flex-grow: 1;" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-between; margin-top: 15px;">
+            <ui:Toggle label="Copy Prefab&apos;s Folder structure" name="copy-folder-structure" tooltip="If checked, the new icons will be following the prefabs root folder structure. This may create new folder in your project." style="-unity-text-align: middle-left;" />
+            <ui:Button text="Create Icons" display-tooltip-when-elided="true" name="create-icons" style="height: 50px;" />
+        </ui:VisualElement>
+    </ui:ScrollView>
+</ui:UXML>

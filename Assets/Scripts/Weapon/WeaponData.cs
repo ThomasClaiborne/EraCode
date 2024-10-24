@@ -8,11 +8,19 @@ public class WeaponData: ScriptableObject
     [Header("Weapon Info")]
     public string weaponName;
     public string weaponId;
+
+    [Header("UI Elements")]
+    public Sprite actionBarIcon;
+    public Sprite weaponIcon;
+
+    [Header("Weapon Prefabs")]
     public GameObject bulletPrefab;
     public GameObject weaponModel;
     public GameObject muzzleFlash;
     public GameObject ejectBullet;
     public Transform ejectPoint;
+
+    [Header("Weapon Stats")]
     public Vector3 holdPosition;
     public Vector3 holdRotation;
     public int damage;

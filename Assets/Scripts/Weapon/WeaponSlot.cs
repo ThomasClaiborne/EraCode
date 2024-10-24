@@ -18,13 +18,12 @@ public class WeaponSlot : MonoBehaviour
     private bool isReloading = false;
     private Dictionary<WeaponData, int> ammoCountPerWeapon = new Dictionary<WeaponData, int>();
     private Coroutine reloadCoroutine;
-    private Coroutine reloadVisualsCoroutine;
 
     private void Start()
     {
-        //weaponSlots[0] = defaultWeapon;
         SwitchToSlot(0);
-        UpdateHUD();
+
+        HUDManager.Instance.PopulateActionBar(weaponSlots);
     }
 
     private void Update()
@@ -63,8 +62,8 @@ public class WeaponSlot : MonoBehaviour
         if(GameManager.Instance.abilitySlot.selectingAbilityIndex != -1) return false;
 
 
-        if (currentClipSize <= 0)
-            HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
+        //if (currentClipSize <= 0)
+            //HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
 
         return canShoot && !isReloading && currentClipSize > 0 &&
                (currentWeapon.isAutomatic || (!currentWeapon.isAutomatic && !isShooting));
@@ -132,7 +131,7 @@ public class WeaponSlot : MonoBehaviour
             bullet.transform.forward = shootPoint.forward;
         }
         currentClipSize--;
-        UpdateHUD();
+        HUDManager.Instance.ConsumeBullet();
         StartCoroutine(ShootCooldown());
     }
 
@@ -147,7 +146,7 @@ public class WeaponSlot : MonoBehaviour
     private IEnumerator Reload()
     {
         isReloading = true;
-        reloadVisualsCoroutine = StartCoroutine(reloadingVisuals());
+        HUDManager.Instance.StartReloadIndicator(currentWeapon.reloadTime);
 
         yield return new WaitForSeconds(currentWeapon.reloadTime);
 
@@ -175,20 +174,8 @@ public class WeaponSlot : MonoBehaviour
         }
 
         isReloading = false;
-        UpdateHUD();
-    }
-
-    IEnumerator reloadingVisuals()
-    {
-        HUDManager.Instance.weaponReloading.text = "Reloading";
-        yield return new WaitForSeconds(currentWeapon.reloadTime / 4);
-        HUDManager.Instance.weaponReloading.text = "Reloading.";
-        yield return new WaitForSeconds(currentWeapon.reloadTime / 4);
-        HUDManager.Instance.weaponReloading.text = "Reloading..";
-        yield return new WaitForSeconds(currentWeapon.reloadTime / 4);
-        HUDManager.Instance.weaponReloading.text = "Reloading...";
-        yield return new WaitForSeconds(currentWeapon.reloadTime / 4);
-        HUDManager.Instance.weaponReloading.text = "";
+        UpdateAmmoDisplay();
+        HUDManager.Instance.ResetAllBullets();
     }
 
     private void CancelReload()
@@ -201,12 +188,7 @@ public class WeaponSlot : MonoBehaviour
                 StopCoroutine(reloadCoroutine);
                 reloadCoroutine = null;
             }
-            if (reloadVisualsCoroutine != null)
-            {
-                StopCoroutine(reloadVisualsCoroutine);
-                reloadVisualsCoroutine = null;
-            }
-            HUDManager.Instance.weaponReloading.text = "";
+            HUDManager.Instance.CancelReloadIndicator();
         }
     }
 
@@ -221,9 +203,10 @@ public class WeaponSlot : MonoBehaviour
         }
 
         CancelReload();
-
         currentSlotIndex = slotIndex;
         EquipWeapon(weaponSlots[slotIndex]);
+
+        HUDManager.Instance.HighlightSlot(slotIndex);
     }
 
     private void ShowEmptySlotMessage(int slotIndex)
@@ -266,7 +249,7 @@ public class WeaponSlot : MonoBehaviour
         currentWeapon.reloadTime = PlayerInventory.Instance.GetWeaponReloadTime(newWeapon.weaponId);
         currentWeapon.clipSize = PlayerInventory.Instance.GetWeaponClipSize(newWeapon.weaponId);
 
-        UpdateHUD();
+        HUDManager.Instance.UpdateCurrentWeapon(currentWeapon, currentClipSize, PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId));
     }
 
     public void AddWeaponToSlot(WeaponData weapon, int slotIndex)
@@ -274,8 +257,6 @@ public class WeaponSlot : MonoBehaviour
         if (slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
 
         weaponSlots[slotIndex] = ScriptableObject.Instantiate(weapon);
-        Debug.Log("Weapon name after Scriptable: " + ScriptableObject.Instantiate(weapon).name);
-        UpdateHUD();
     }
 
     private void PlayRandomShotSound()
@@ -297,13 +278,12 @@ public class WeaponSlot : MonoBehaviour
         // Apply recoil effect based on currentWeapon.recoil
     }
 
-    private void UpdateHUD()
+    private void UpdateAmmoDisplay()
     {
         if (currentWeapon)
         {
-            HUDManager.Instance.weaponNameText.text = currentWeapon.weaponName;
             int totalAmmo = PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId);
-            HUDManager.Instance.weaponAmmoText.text = $"{currentClipSize} / {(currentWeapon.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString())}";
+            HUDManager.Instance.ammoCountText.text = currentWeapon.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString();
         }
     }
 

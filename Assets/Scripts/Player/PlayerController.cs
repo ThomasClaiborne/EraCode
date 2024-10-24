@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform bulletSpawnPoint; 
 
     private Quaternion initialRotation;
+    private Vector3 lastValidDirection;
     void Start()
     {
         initialRotation = transform.rotation;
@@ -20,11 +21,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         RotateTowardsMouse();
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Shoot();
-        //}
     }
 
     void RotateTowardsMouse()
@@ -35,29 +31,27 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
         {
             Vector3 targetPoint = hit.point;
-
             Vector3 direction = (targetPoint - transform.position).normalized;
-
             direction.y = 0;
 
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            float angleToTarget = Vector3.SignedAngle(initialRotation * Vector3.forward, direction, Vector3.up);
 
-            float angleDifference = Quaternion.Angle(initialRotation, targetRotation);
-
-            if (angleDifference <= maxRotationAngle)
+            // Clamp the rotation angle
+            if (Mathf.Abs(angleToTarget) <= maxRotationAngle)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                lastValidDirection = direction;
             }
             else
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, initialRotation, Time.deltaTime * rotationSpeed);
+                // Clamp the direction to the maximum allowed angle
+                float clampedAngle = Mathf.Sign(angleToTarget) * maxRotationAngle;
+                lastValidDirection = Quaternion.Euler(0, clampedAngle, 0) * (initialRotation * Vector3.forward);
             }
-        }
-    }
 
-    void Shoot()
-    {
-        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
+            // Rotate towards the last valid direction
+            Quaternion targetRotation = Quaternion.LookRotation(lastValidDirection, Vector3.up);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+        }
     }
 }
 

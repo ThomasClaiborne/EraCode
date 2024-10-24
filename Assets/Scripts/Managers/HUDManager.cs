@@ -8,24 +8,41 @@ public class HUDManager : MonoBehaviour
 {
     public static HUDManager Instance;
 
-    [Header("--Wall--")]
-    public TextMeshProUGUI WallHPText;
-    public Image wallHPBar;
-    public Image wallHPBarAnimate;
-    public Image wallHPBarBackground;
+    [Header("--Action Bar--")]
+    [SerializeField] private GameObject[] actionBarSlots = new GameObject[5];
+    [SerializeField] private Animator levelUpAnimator;
+    [SerializeField] private Sprite emptySlotSprite;
+    [SerializeField] private Sprite disabledSlotSprite;
 
-    [Header("--Weapon--")]
-    public TextMeshProUGUI weaponNameText;
-    public TextMeshProUGUI weaponAmmoText;
-    public TextMeshProUGUI weaponReloading;
+    private Image[] slotIcons;
+    private Animator[] slotAnimators;
+
+    [Header("--Wall--")]
+    [SerializeField] private Slider wallHealthSlider;
+    //[SerializeField] private TextMeshProUGUI wallHealthText;
+
+    [Header("--Current Weapon--")]
+    [SerializeField] private GameObject currentWeaponDisplay;
+    [SerializeField] private Transform ammoListContainer;
+    [SerializeField] private GameObject toggleBulletPrefab;
+    [SerializeField] private Image weaponIconImage;
+    [SerializeField] private TextMeshProUGUI weaponNameText;
+    [SerializeField] public TextMeshProUGUI ammoCountText;
+
+    private List<Toggle> currentToggleBullets = new List<Toggle>();
+
+    [Header("--Reload Indicator--")]
+    [SerializeField] private GameObject reloadIndicatorObject;
+    [SerializeField] private Slider reloadSlider;
+    private Coroutine reloadCoroutine;
 
     [Header("--Currency--")]
     public TextMeshProUGUI currencyText;
 
-    [Header("--Leveling--")]
-    public Image xpBar;
-    public TextMeshProUGUI xpText;
-    public TextMeshProUGUI levelText;
+    [Header("--XP--")]
+    [SerializeField] private Slider XPBarSlider;
+    public TextMeshProUGUI XPText;
+    public TextMeshProUGUI LevelText;
 
     [Header("--Message--")]
     public TextMeshProUGUI messageText;
@@ -45,10 +62,11 @@ public class HUDManager : MonoBehaviour
         }
 
         Instance = this;
+
+        InitializeActionBarArrays();
     }
     void Start()
     {
-        defaultAmmoTextColor = weaponAmmoText.color;
         UpdateCurrencyText();
         UpdateLevelDisplay();
     }
@@ -58,56 +76,183 @@ public class HUDManager : MonoBehaviour
         
     }
 
-    public void DecreaseHealth(float damageAmount, float currentHealth, float maxHealth)
+    private void InitializeActionBarArrays()
     {
-        float newFillAmount = (currentHealth - damageAmount) / maxHealth;
+        slotIcons = new Image[actionBarSlots.Length];
+        slotAnimators = new Animator[actionBarSlots.Length];
 
-        newFillAmount = Mathf.Clamp(newFillAmount, 0, 1);
-
-        wallHPBar.fillAmount = newFillAmount; 
-
-        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
-        currentCoroutine = StartCoroutine(AnimateDelayBarDown());
-    }
-
-    public void IncreaseHealth(float healAmount, float currentHealth, float maxHealth)
-    {
-        float newFillAmount = (currentHealth + healAmount) / maxHealth;
-
-        newFillAmount = Mathf.Clamp(newFillAmount, 0, 1);
-
-        wallHPBarAnimate.fillAmount = newFillAmount;
-
-        if (currentCoroutine != null) StopCoroutine(currentCoroutine);
-        currentCoroutine = StartCoroutine(AnimateBarUp());
-    }
-
-    private IEnumerator AnimateDelayBarDown()
-    {
-        wallHPBarAnimate.color = Color.red;
-
-        while (wallHPBarAnimate.fillAmount > wallHPBar.fillAmount)
+        for (int i = 0; i < actionBarSlots.Length; i++)
         {
-            wallHPBarAnimate.fillAmount = Mathf.Lerp(wallHPBarAnimate.fillAmount, wallHPBar.fillAmount, Time.deltaTime * lerpSpeed);
+            // Get the Icon component under Mask/Item
+            slotIcons[i] = actionBarSlots[i].transform
+                .Find("MASK/Item/Icon").GetComponent<Image>();
+
+            // Get the Animator component
+            slotAnimators[i] = actionBarSlots[i].GetComponent<Animator>();
+
+        }
+    }
+
+    public void PopulateActionBar(WeaponData[] equippedWeapons)
+    {
+        for (int i = 0; i < actionBarSlots.Length; i++)
+        {
+            if (i < equippedWeapons.Length && equippedWeapons[i] != null)
+            {
+                slotIcons[i].sprite = equippedWeapons[i].actionBarIcon;
+                slotAnimators[i].SetTrigger("Normal");
+            }
+            else
+            {
+                slotIcons[i].sprite = emptySlotSprite;
+                slotAnimators[i].SetTrigger("Normal");
+            }
+        }
+    }
+
+    public void HighlightSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < slotAnimators.Length)
+        {
+            for (int i = 0; i < slotAnimators.Length; i++)
+            {
+                slotAnimators[i].SetTrigger("Normal");
+            }
+            slotAnimators[slotIndex].SetTrigger("Pressed");
+        }
+    }
+
+    public void DisableSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < slotAnimators.Length)
+        {
+            slotAnimators[slotIndex].SetTrigger("Disabled");
+            // slotIcons[slotIndex].sprite = disabledSlotSprite;
+        }
+    }
+
+    public void PlayLevelUpAnimation()
+    {
+        if (levelUpAnimator != null)
+        {
+            levelUpAnimator.SetTrigger("LevelUp");
+        }
+    }
+
+    public void InitializeWallHealth(int maxHealth)
+    {
+        wallHealthSlider.value = 1f;
+        //UpdateWallHealthText(maxHealth);
+    }
+
+    public void UpdateWallHealth(int currentHealth, int maxHealth)
+    {
+        float normalizedHealth = (float)currentHealth / maxHealth;
+        wallHealthSlider.value = normalizedHealth;
+        //UpdateWallHealthText(currentHealth);
+    }
+
+    private void UpdateWallHealthText(int health)
+    {
+        //wallHealthText.text = health.ToString();
+    }
+
+    public void UpdateCurrentWeapon(WeaponData weaponData, int currentClipSize, int totalAmmo)
+    {
+        if (weaponData == null) return;
+
+        // Update weapon info
+        weaponIconImage.sprite = weaponData.weaponIcon;
+        weaponNameText.text = weaponData.weaponName;
+        ammoCountText.text = weaponData.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString();
+
+        // Clear existing toggle bullets
+        ClearToggleBullets();
+
+        // Create new toggle bullets based on weapon's clip size
+        for (int i = 0; i < PlayerInventory.Instance.GetWeaponClipSize(weaponData.weaponId); i++)
+        {
+            GameObject toggleBullet = Instantiate(toggleBulletPrefab, ammoListContainer);
+            Toggle toggle = toggleBullet.GetComponent<Toggle>();
+            currentToggleBullets.Add(toggle);
+
+            // Set initial state based on currentClipSize
+            toggle.isOn = i < currentClipSize;
+        }
+    }
+
+    public void ResetAllBullets()
+    {
+        foreach (Toggle toggle in currentToggleBullets)
+        {
+            toggle.isOn = true;
+        }
+    }
+
+    private void ClearToggleBullets()
+    {
+        foreach (Toggle toggle in currentToggleBullets)
+        {
+            if (toggle != null)
+            {
+                Destroy(toggle.gameObject);
+            }
+        }
+        currentToggleBullets.Clear();
+    }
+
+    public void ConsumeBullet()
+    {
+        for (int i = currentToggleBullets.Count - 1; i >= 0; i--)
+        {
+            if (currentToggleBullets[i].isOn)
+            {
+                currentToggleBullets[i].isOn = false;
+                break;
+            }
+        }
+    }
+
+    public void StartReloadIndicator(float reloadTime)
+    {
+        if (reloadCoroutine != null)
+        {
+            StopCoroutine(reloadCoroutine);
+        }
+
+        reloadIndicatorObject.SetActive(true);
+        reloadSlider.value = 0f;
+        reloadCoroutine = StartCoroutine(AnimateReloadIndicator(reloadTime));
+    }
+
+    public void CancelReloadIndicator()
+    {
+        if (reloadCoroutine != null)
+        {
+            StopCoroutine(reloadCoroutine);
+            reloadCoroutine = null;
+        }
+
+        reloadIndicatorObject.SetActive(false);
+        reloadSlider.value = 0f;
+    }
+
+    private IEnumerator AnimateReloadIndicator(float duration)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            reloadSlider.value = elapsedTime / duration;
             yield return null;
         }
 
-        wallHPBarAnimate.fillAmount = wallHPBar.fillAmount; 
-        wallHPBarAnimate.color = wallHPBar.color; 
-    }
+        reloadSlider.value = 1f;
+        yield return new WaitForSeconds(0.1f); // Short delay before hiding
+        reloadIndicatorObject.SetActive(false);
 
-    private IEnumerator AnimateBarUp()
-    {
-        wallHPBarAnimate.color = Color.white; 
-
-        while (wallHPBar.fillAmount < wallHPBarAnimate.fillAmount)
-        {
-            wallHPBar.fillAmount = Mathf.Lerp(wallHPBar.fillAmount, wallHPBarAnimate.fillAmount, Time.deltaTime * lerpSpeed);
-            yield return null;
-        }
-
-        wallHPBar.fillAmount = wallHPBarAnimate.fillAmount;
-        wallHPBarAnimate.color = wallHPBar.color;
+        reloadCoroutine = null;
     }
 
     public void TriggerTextLerp(TextMeshProUGUI textElement, Color targetColor, float duration)
@@ -151,14 +296,14 @@ public class HUDManager : MonoBehaviour
 
     public void UpdateCurrencyText()
     {
-       currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
+       currencyText.text = PlayerInventory.Instance.Currency.ToString();
     }
 
     public void UpdateLevelDisplay()
     {
         LevelSystem levelSystem = PlayerInventory.Instance.LevelSystem;
-        xpBar.fillAmount = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
-        levelText.text = $"Level: {levelSystem.Level}";
-        xpText.text = $"{levelSystem.Experience} / {levelSystem.ExperienceToNextLevel} XP";
+        XPBarSlider.value = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
+        LevelText.text = levelSystem.Level.ToString();
+        XPText.text = $"{levelSystem.Experience} / {levelSystem.ExperienceToNextLevel}";
     }
 }

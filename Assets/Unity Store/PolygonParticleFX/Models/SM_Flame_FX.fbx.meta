@@ -3,7 +3,7 @@ guid: 860f45db46c9a3e4a9bc3a4d3c5dc882
 timeCreated: 1562903100
 licenseType: Store
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
     400000: //RootNode
@@ -33,7 +33,6 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    extraUserProperties: []
     clipAnimations: []
     isReadable: 0
   meshes:
@@ -41,16 +40,13 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 0
     importBlendShapes: 0
-    importCameras: 0
-    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
-    weldVertices: 0
+    weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -60,7 +56,6 @@ ModelImporter:
     normalSmoothAngle: 5
     normalImportMode: 1
     tangentImportMode: 3
-    normalCalculationMode: 0
   importAnimation: 0
   copyAvatar: 0
   humanDescription:

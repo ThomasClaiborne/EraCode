@@ -1,0 +1,143 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:ScrollView name="button-guide-lines">
+        <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; padding-bottom: 40px;">
+            <ui:VisualElement name="top" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-between; padding-left: 11px; padding-right: 11px; padding-top: 11px; padding-bottom: 11px;">
+                <ui:Button text="Documentation" display-tooltip-when-elided="true" name="button-open-documentation" style="font-size: 14px; -unity-font-style: normal; -unity-text-align: middle-center;" />
+                <ui:Label text="&lt;b&gt;Icon Creator&lt;/b&gt;" display-tooltip-when-elided="true" picking-mode="Ignore" style="-unity-text-align: upper-center; font-size: 16px; -unity-font-style: bold;" />
+                <ui:Button text="Open Icons Folder" display-tooltip-when-elided="true" name="button-open-folder" style="font-size: 14px; -unity-font-style: bold;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="selected-game-object" style="flex-direction: row; align-items: stretch; justify-content: space-around; padding-left: 15px; padding-right: 15px; border-bottom-width: 15px;">
+                <ui:Label text="Game object name here" display-tooltip-when-elided="true" name="label-current-item" style="-unity-text-align: middle-center; white-space: nowrap; flex-grow: 1; margin-bottom: 15px;" />
+            </ui:VisualElement>
+            <ui:VisualElement picking-mode="Ignore" name="render-texture-section" style="align-items: center;">
+                <ui:VisualElement name="bg" picking-mode="Ignore" style="-unity-background-scale-mode: scale-and-crop; height: 512px; width: 512px; flex-direction: row; background-color: rgba(255, 255, 255, 0); -unity-background-image-tint-color: rgba(255, 255, 255, 0);">
+                    <ui:Toggle label="Show Guide Lines" name="show-grid-toggle" tooltip="oggle to show or hide the grid overlay. Useful for aligning objects or getting a sense of scale." value="false" style="position: absolute; top: -23px; left: 0; width: 141px;" />
+                    <uie:ColorField value="RGBA(0.000, 1.000, 1.000, 1.000)" show-alpha="true" show-eye-dropper="true" hdr="false" name="camera-bg-color" tooltip="Camera Background Color" style="position: absolute; top: -23px; right: -5px; transform-origin: right bottom; width: 60px; flex-direction: row; justify-content: space-between; align-items: stretch; height: 17px;" />
+                    <uie:ColorField value="#F1F1F1FF" name="input-ambient-light" tooltip="Ambient Color" style="width: 60px; position: absolute; top: -23px; height: 17px; right: 65px;" />
+                    <uie:ColorField value="RGBA(0.000, 1.000, 1.000, 1.000)" show-alpha="true" show-eye-dropper="true" hdr="false" name="grid-color" tooltip="Guide Lines Color" style="position: absolute; top: -23px; transform-origin: right bottom; width: 61px; flex-direction: row; justify-content: space-between; align-items: stretch; height: 17px; left: 150px;" />
+                    <ui:Slider picking-mode="Ignore" value="42" high-value="100" name="slider-fov" show-input-field="true" tooltip="The Camera&apos;s Field Of View" direction="Vertical" style="flex-grow: 1; left: -59px; position: absolute; height: 104%; align-items: stretch; justify-content: space-between; align-self: flex-end; flex-direction: column;">
+                        <ui:Button text="Auto Fov" display-tooltip-when-elided="false" enable-rich-text="false" name="button-update-fov" style="width: 80px; left: -40px;" />
+                    </ui:Slider>
+                </ui:VisualElement>
+                <ui:VisualElement name="transparent-background" picking-mode="Ignore" style="background-image: url(&apos;project://database/Assets/Harpia%20Games/Icon%20Creator/Scripts/Editor/Transparent%20background%20Icon%20Creator.png?fileID=2800000&amp;guid=425e7aa16084c42418a72535b5ad91e0&amp;type=3#Transparent background Icon Creator&apos;); -unity-background-scale-mode: stretch-to-fill; height: 512px; width: 512px; flex-direction: row; position: absolute;" />
+                <ui:VisualElement name="render-texture" style="height: 512px; -unity-background-scale-mode: scale-to-fit; position: absolute; border-left-color: rgb(243, 255, 0); border-right-color: rgb(243, 255, 0); border-top-color: rgb(243, 255, 0); border-bottom-color: rgb(243, 255, 0); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; width: 512px;">
+                    <ui:VisualElement name="flash" picking-mode="Ignore" style="flex-grow: 1; background-color: rgb(255, 255, 255); position: absolute; width: 100%; height: 100%;" />
+                    <ui:VisualElement name="guide-lines" picking-mode="Ignore" style="position: relative; width: 100%; height: 234%; flex-direction: column; align-items: stretch; justify-content: space-between;">
+                        <ui:VisualElement picking-mode="Ignore" name="vertical" style="width: 100%; height: 508px; position: absolute; top: 2px; align-items: center; flex-direction: row; justify-content: space-around;">
+                            <ui:VisualElement name="line-vertical-2" picking-mode="Ignore" style="width: 1px; background-color: rgba(0, 0, 0, 0.78); height: 100%; position: relative;" />
+                            <ui:VisualElement name="line-vertical-1" picking-mode="Ignore" style="width: 1px; background-color: rgba(0, 0, 0, 0.78); height: 100%; position: relative;" />
+                            <ui:VisualElement name="line-vertical-1" picking-mode="Ignore" style="width: 1px; background-color: rgba(0, 0, 0, 0.78); height: 100%; position: relative;" />
+                        </ui:VisualElement>
+                        <ui:VisualElement picking-mode="Ignore" name="horizontal" style="width: 100%; height: 100%; position: absolute; top: 0; flex-direction: column; align-items: center; justify-content: space-around;">
+                            <ui:VisualElement picking-mode="Ignore" name="horizontal-line-2" style="position: relative; width: 100%; height: 1px; -unity-background-image-tint-color: rgba(0, 0, 0, 0.78); background-color: rgba(0, 0, 0, 0.78);" />
+                            <ui:VisualElement picking-mode="Ignore" name="horizontal-line-2" style="position: relative; width: 100%; height: 1px; -unity-background-image-tint-color: rgba(0, 0, 0, 0.78); background-color: rgba(0, 0, 0, 0.78);" />
+                            <ui:VisualElement picking-mode="Ignore" name="horizontal-line-2" style="position: relative; width: 100%; height: 1px; -unity-background-image-tint-color: rgba(0, 0, 0, 0.78); background-color: rgba(0, 0, 0, 0.78);" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="directional-lights-section" picking-mode="Ignore" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; right: -161px; height: 510px; width: 151px; flex-direction: row; top: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label text="Icon created" display-tooltip-when-elided="true" name="check-label" style="position: relative; -unity-text-align: upper-center;" />
+            <ui:VisualElement style="align-items: center; justify-content: space-around; flex-direction: column-reverse; margin-top: 5px;">
+                <ui:ProgressBar value="920" title="1 / 15" high-value="60" name="progress-index-counter" style="max-width: 512px; width: 400px;" />
+            </ui:VisualElement>
+            <ui:VisualElement name="main-buttons" style="flex-direction: row; justify-content: center; margin-top: 5px;">
+                <ui:Button text="← Previous" display-tooltip-when-elided="true" name="previous-button" enable-rich-text="false" style="width: 100px;" />
+                <ui:Button text="Create Icon" display-tooltip-when-elided="false" name="create-icon-button" enable-rich-text="false" style="width: 150px; -unity-font-style: bold;" />
+                <ui:Button text="Next →" display-tooltip-when-elided="true" name="next-button" enable-rich-text="false" style="width: 100px;" />
+            </ui:VisualElement>
+            <ui:Foldout text="&lt;b&gt;Current Game Object&lt;/b&gt;" name="foldout-current-gameobject" style="margin-top: 10px;">
+                <ui:VisualElement name="icon-creator">
+                    <ui:Toggle label="Automatically Update FOV" value="true" name="toggle-fov" tooltip="If enabled, the camera&apos;s Field of View (FOV) will automatically adjust to fit the target object within the view." style="height: 16px;" />
+                    <ui:Toggle label="Automatically Go To Next Object" value="true" name="toggle-go-next" tooltip="If checked, It will go to the next object when a Icon is created" />
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <uie:Vector3Field label="Object Rotation" name="object-rotation" tooltip="The current object rotation" style="flex-grow: 1;" />
+                        <ui:Button text="Reset X Z" display-tooltip-when-elided="true" name="reset-rot-x-z" tooltip="Makes the rotatino on X and Z axis equals 0" />
+                        <ui:Button text="Apply to All" display-tooltip-when-elided="true" name="apply-rotation-to-all" tooltip="Apply this rotation to all the objects in the list" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;Animations&lt;/b&gt;" name="foldout-animations" style="margin-top: 10px;">
+                <ui:VisualElement name="animations-section">
+                    <ui:VisualElement name="animation-section-play-mode">
+                        <ui:VisualElement style="flex-direction: row;">
+                            <ui:DropdownField label="Animator" index="0" name="dropdown-animator" tooltip="The current object animator" style="flex-grow: 1;" />
+                            <ui:Button text="Animator Settings" display-tooltip-when-elided="true" name="button-animator" />
+                        </ui:VisualElement>
+                        <ui:DropdownField label="Animation" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="dropdown-animations" tooltip="The current animation playing" />
+                        <ui:Slider picking-mode="Ignore" label="Animation Time" value="0" high-value="1" show-input-field="true" name="slider-animation-time" tooltip="The current animation&apos;s time" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;Particles System&lt;/b&gt;" name="foldout-particles" style="margin-top: 10px;" />
+            <ui:Foldout text="&lt;b&gt;Camera Settings&lt;/b&gt;" name="foldout-camera-settings" style="margin-top: 15px;">
+                <ui:VisualElement name="camera-section">
+                    <ui:VisualElement name="camera-settings" tooltip="Field of View (FOV) for the camera. Determines the extent of the observable world. Higher values result in a wider view, lower values in a more narrow view." style="flex-direction: row; justify-content: space-between; align-items: stretch;">
+                        <ui:VisualElement style="flex-direction: row;" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="VisualElement" style="flex-direction: row; justify-content: space-between;">
+                        <ui:Toggle label="Transparent Background" name="toggle-transparent" value="true" tooltip="Remember that this option does not work with Post Processing or JPG File Format" />
+                        <ui:Button text="Camera Settings" display-tooltip-when-elided="false" enable-rich-text="false" name="button-open-camera-settings" style="width: 190px;" />
+                    </ui:VisualElement>
+                    <ui:DropdownField label="Look At" index="-1" choices="System.Collections.Generic.List`1[System.String]" name="dropdown-look-at" tooltip="Where should the camera look at?" />
+                    <uie:ObjectField label="Look At Transform" type="UnityEngine.Transform, UnityEngine.CoreModule" name="field-look-at-transform" tooltip="The transoform for the camera look at" />
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;File&lt;/b&gt;" name="foldout-file" style="margin-top: 10px;">
+                <ui:VisualElement name="file-section">
+                    <ui:VisualElement name="path-section" tooltip="Your new icon path" style="flex-direction: row; justify-content: space-between;">
+                        <ui:Label text="Path" display-tooltip-when-elided="true" name="path-label" style="-unity-text-align: middle-left;" />
+                        <ui:VisualElement style="flex-direction: row;">
+                            <ui:Button text="Find..." display-tooltip-when-elided="true" name="button-find-folder" />
+                            <ui:Button text="Show" display-tooltip-when-elided="true" name="button-show-folder" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <uie:Vector2IntField label="Icon Resolution (Pixels)" name="resolution-input" tooltip="Your new icon resolution" />
+                    <ui:VisualElement name="file-name-section" style="flex-direction: row;">
+                        <ui:TextField picking-mode="Ignore" label="File Name" value="filler text" name="input-filename" tooltip="Your new icon file name" style="flex-grow: 1;" />
+                        <ui:Label text="." display-tooltip-when-elided="true" style="-unity-text-align: middle-left;" />
+                        <uie:EnumField value=".png" name="file-format-field" />
+                        <ui:Button text="Auto Name" display-tooltip-when-elided="true" name="button-autoname" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="VisualElement" />
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;Canvas - Background &amp; Foreground" name="foldout-canvas" style="margin-top: 10px;">
+                <ui:VisualElement name="canvas-section" style="margin-top: 15px;">
+                    <uie:ObjectField label="Background Canvas" name="background-canvas" tooltip="Canvas used to render the  UI background elements of the icon." />
+                    <uie:ObjectField label="Foreground Canvas" name="foreground-canvas" tooltip="Canvas used to render the  UI foreground elements of the icon." />
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;Lighting &amp; Rendering&lt;/b&gt;" name="foldout-light" style="margin-top: 10px;">
+                <ui:VisualElement name="light-section" style="align-items: stretch;">
+                    <ui:VisualElement style="align-items: center; flex-direction: row; justify-content: space-between; margin-top: 5px; flex-wrap: wrap;">
+                        <ui:Button text="Light Explorer ☀" display-tooltip-when-elided="true" name="button-open-light" style="white-space: nowrap; -unity-text-align: middle-center; width: 110px;" />
+                        <ui:Button text="Lighting Settings ☀" display-tooltip-when-elided="true" name="button-open-lighting" style="white-space: nowrap; -unity-text-align: middle-center; width: 120px;" />
+                        <ui:Button text="Graphics Settings" display-tooltip-when-elided="true" name="button-open-graphics" tooltip="Project/Graphics" style="white-space: nowrap; -unity-text-align: middle-center; width: 120px;" />
+                        <ui:Button text="Quality Settings" display-tooltip-when-elided="true" name="button-open-quality" tooltip="Project/Quality" style="white-space: nowrap; -unity-text-align: middle-center; width: 110px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:Foldout>
+            <ui:Foldout text="&lt;b&gt;Renderers &amp; Materials&lt;/b&gt;" name="foldout-renderers" style="margin-top: 10px;" />
+            <ui:VisualElement name="buttons-settings" style="margin-top: 15px; align-items: stretch;">
+                <ui:VisualElement style="align-items: center; flex-direction: row; justify-content: center; margin-top: 5px; flex-wrap: wrap;">
+                    <ui:Button text="Render Texture Settings " display-tooltip-when-elided="true" name="button-render-texture" style="white-space: nowrap; -unity-text-align: middle-center; width: 190px;" />
+                    <ui:Button text="Current GameObject Settings" display-tooltip-when-elided="true" name="button-show-gameobject" style="width: 190px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Foldout text="Advanced Options" name="advanced-options">
+                <ui:DropdownField label="Render Texture Format" name="render-texture-format" tooltip="The render texture format. Note that some formats does not support transparency" />
+                <ui:DropdownField label="PNG Format" name="png-format" tooltip="The generated PNG file format." />
+                <ui:Slider picking-mode="Ignore" label="Zoom Speed&#x9;" value="0.14" high-value="0.5" low-value="0.01" show-input-field="true" name="zoom-speed" tooltip="The mouse scroll zoom speed." />
+                <ui:Slider picking-mode="Ignore" label="Rotation Speed" value="42" high-value="2" show-input-field="true" name="rotation-speed" tooltip="The object rotation speed when rotating it with the mouse" />
+                <ui:SliderInt picking-mode="Ignore" label="JPG Quality" value="100" high-value="100" show-input-field="true" name="jpg-quality" tooltip="The JPG file quality, Higher values means more details and therefore bigger file size" />
+                <uie:Vector3Field label="Spawn Position" x="9999" y="9999" z="-9999" name="spawn-pos" style="display: none;" />
+                <uie:Vector3Field label="Offeset Direction" name="offset-direction" y="-0.5" z="1" style="display: none;" />
+                <uie:FloatField label="Distance From Camera" value="10" name="distance-from-camera" style="display: none;" />
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end;">
+                    <ui:Button text="Reset to Defaults" display-tooltip-when-elided="true" name="reset-advanced" />
+                </ui:VisualElement>
+            </ui:Foldout>
+        </ui:VisualElement>
+    </ui:ScrollView>
+</ui:UXML>

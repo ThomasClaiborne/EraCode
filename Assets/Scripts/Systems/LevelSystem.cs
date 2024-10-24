@@ -33,6 +33,12 @@ public class LevelSystem
         Level++;
         SkillPoints++;
         CalculateNextLevelExperience();
+
+        if (HUDManager.Instance != null)
+        {
+            HUDManager.Instance.PlayLevelUpAnimation();
+            //HUDManager.Instance.UpdateXPBar(Experience, ExperienceToNextLevel, Level);
+        }
     }
 
     public bool SpendSkillPoints(int amount)
