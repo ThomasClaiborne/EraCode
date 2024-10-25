@@ -35,6 +35,9 @@ public class Enemy : MonoBehaviour, IDamage
     private Transform player;
     private Rigidbody rb;
 
+    private EnemyAnimationController animationController;
+
+
     public Transform[] waypoints
     {
         get;
@@ -48,6 +51,7 @@ public class Enemy : MonoBehaviour, IDamage
 
     private int currentHealth;
     private bool isFlashing;
+    public bool isMoving;
     private bool isDead; 
 
     private
@@ -63,6 +67,12 @@ public class Enemy : MonoBehaviour, IDamage
         rb.isKinematic = false;
         rb.useGravity = false;
         rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
+
+        animationController = GetComponentInChildren<EnemyAnimationController>();
+        if (animationController == null)
+        {
+            Debug.LogError("EnemyAnimationController not found!");
+        }
     }
 
     void FixedUpdate()
@@ -84,12 +94,14 @@ public class Enemy : MonoBehaviour, IDamage
 
     void MoveAlongPath()
     {
+        
         if (waypoints.Length == 0) return;
 
         Transform targetWaypoint = waypoints[currentWaypointIndex];
         Vector3 direction = (targetWaypoint.position - transform.position).normalized;
 
         rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+        isMoving = true;
 
         if (direction != Vector3.zero)
         {
@@ -169,6 +181,7 @@ public class Enemy : MonoBehaviour, IDamage
 
         Vector3 direction = (targetAttackPoint.position - transform.position).normalized;
         rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+        isMoving = true;
 
         float distanceToTarget = Vector3.Distance(transform.position, targetAttackPoint.position);
 
@@ -196,19 +209,25 @@ public class Enemy : MonoBehaviour, IDamage
 
     void AttackWall()
     {
+        isMoving = false;
         attackTimer += Time.deltaTime;
 
         if (attackTimer >= attackInterval)
         {
-            if (!GameManager.Instance.isWallDestroyed)
-            {
-                IDamage wall = GameManager.Instance.playerWall.GetComponent<IDamage>();
-                if (wall != null)
-                {
-                    wall.takeDamage(damageAmount, false); 
-                }
-            }
+            animationController.TriggerAttack();
             attackTimer = 0f;
+        }
+    }
+
+    public void OnAttackAnimationHit()
+    {
+        if (!GameManager.Instance.isWallDestroyed)
+        {
+            IDamage wall = GameManager.Instance.playerWall.GetComponent<IDamage>();
+            if (wall != null)
+            {
+                wall.takeDamage(damageAmount, false);
+            }
         }
     }
 
