@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class WeaponSlot : MonoBehaviour
 {
+
+    public event System.Action<WeaponData> OnWeaponChanged;
+    public event System.Action OnWeaponFired;
+
     [SerializeField] private Transform weaponHolder; 
     //[SerializeField] private WeaponData defaultWeapon;
     [SerializeField] private WeaponData[] weaponSlots = new WeaponData[3]; 
@@ -18,6 +22,8 @@ public class WeaponSlot : MonoBehaviour
     private bool isReloading = false;
     private Dictionary<WeaponData, int> ammoCountPerWeapon = new Dictionary<WeaponData, int>();
     private Coroutine reloadCoroutine;
+
+    public WeaponData CurrentWeapon => currentWeapon;
 
     private void Start()
     {
@@ -84,6 +90,7 @@ public class WeaponSlot : MonoBehaviour
     private void Shoot()
     {
         isShooting = true;
+        OnWeaponFired?.Invoke();
 
         Transform shootPoint = currentWeaponObject.transform.Find("ShootPoint");
 
@@ -115,7 +122,7 @@ public class WeaponSlot : MonoBehaviour
         }
         else
         {
-            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, shootPoint.rotation);
+            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, GameManager.Instance.player.transform.rotation);
             BulletController bulletController = bullet.GetComponent<BulletController>();
 
             bulletController.damageAmount = currentWeapon.damage;
@@ -128,7 +135,7 @@ public class WeaponSlot : MonoBehaviour
             bulletController.explosionRadius = currentWeapon.explosionRadius;
             bulletController.explosionForce = currentWeapon.explosionForce;
 
-            bullet.transform.forward = shootPoint.forward;
+            bullet.transform.forward = GameManager.Instance.player.transform.forward;
         }
         currentClipSize--;
         HUDManager.Instance.ConsumeBullet();
@@ -230,6 +237,7 @@ public class WeaponSlot : MonoBehaviour
         if (currentWeapon != null) ammoCountPerWeapon[currentWeapon] = currentClipSize;
 
         currentWeapon = ScriptableObject.Instantiate(newWeapon);
+        OnWeaponChanged?.Invoke(currentWeapon);
 
         if (ammoCountPerWeapon.TryGetValue(currentWeapon, out int savedClipSize))
         {

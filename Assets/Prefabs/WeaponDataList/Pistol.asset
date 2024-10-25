@@ -23,8 +23,8 @@ MonoBehaviour:
   muzzleFlash: {fileID: 0}
   ejectBullet: {fileID: 0}
   ejectPoint: {fileID: 0}
-  holdPosition: {x: 0, y: 0, z: 0}
-  holdRotation: {x: 0, y: 0, z: 0}
+  holdPosition: {x: 0.031, y: 0, z: 0}
+  holdRotation: {x: -20.4, y: 74.1, z: -102}
   damage: 1
   clipSize: 10
   ammo: 0
