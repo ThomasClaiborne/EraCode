@@ -32,8 +32,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image glowImage;
     [SerializeField] private GameObject continueButton;
     [SerializeField] private Animator missionStatusAnimator;
-    [SerializeField] private Color winColor = new Color(0, 1, 0, 1); // Green
-    [SerializeField] private Color loseColor = new Color(1, 0, 0, 1); // Red
+    [SerializeField] private Color winColor = new Color(0, 1, 0, 1);
+    [SerializeField] private Color loseColor = new Color(1, 0, 0, 1); 
+
+    [Header("Mission Result")]
+    [SerializeField] private GameObject missionResultObject;
+    [SerializeField] private Image missionResultBackground;
+    [SerializeField] private TextMeshProUGUI playerKillCountText;
+    [SerializeField] private TextMeshProUGUI synthiumCountText;
+    [SerializeField] private Animator missionResultAnimator;
 
     private GameObject activeMenu;
     private Coroutine deactivateCoroutine;
@@ -52,9 +59,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         if (missionStatusObject != null)
-        {
             missionStatusObject.SetActive(false);
-        }
+        if (missionResultObject != null)
+            missionResultObject.SetActive(false);
     }
 
     void Update()
@@ -171,7 +178,7 @@ public class UIManager : MonoBehaviour
     }
     private IEnumerator DeactivateMissionStatus()
     {
-        yield return new WaitForSeconds(1f); // Wait for out animation
+        yield return new WaitForSecondsRealtime(1f); // Wait for out animation
         missionStatusObject.SetActive(false);
     }
 
@@ -211,11 +218,44 @@ public class UIManager : MonoBehaviour
     public void OnContinueButtonPressed()
     {
         HideMissionStatus();
+        StartCoroutine(ShowMissionResultDelayed());
+    }
+
+    private IEnumerator ShowMissionResultDelayed()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        ShowMissionResult();
+    }
+
+    private void ShowMissionResult()
+    {
+        // Get stats from LevelManager
+        int kills = LevelManager.Instance.PlayerKills;
+        int synthium = LevelManager.Instance.SynthiumEarned;
+        bool isWin = !GameManager.Instance.isWallDestroyed;
+
+        // Set up the UI
+        if (missionResultBackground != null)
+            missionResultBackground.color = isWin ? winColor : loseColor;
+
+        if (playerKillCountText != null)
+            playerKillCountText.text = kills.ToString();
+
+        if (synthiumCountText != null)
+            synthiumCountText.text = synthium.ToString();
+
+        // Show and animate
+        missionResultObject.SetActive(true);
+        Debug.Log("Showing mission result");
+        if (missionResultAnimator != null)
+        {
+            missionResultAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            missionResultAnimator.SetBool("Active", true);
+        }
     }
 
     public void HideActiveMenu()
     {
-        Debug.Log("Hiding active menu");
         if (activeMenu != null)
         {
             Animator animator = activeMenu.GetComponent<Animator>();

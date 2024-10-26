@@ -262,6 +262,8 @@ public class Enemy : MonoBehaviour, IDamage
             isDead = true;
             OnDeath.Invoke();
             PlayerInventory.Instance.AddCurrency(currencyReward);
+            LevelManager.Instance.AddSynthium(currencyReward);
+
             PlayerInventory.Instance.LevelSystem.AddExperience(experienceReward);
             HUDManager.Instance.UpdateCurrencyText();
             HUDManager.Instance.UpdateLevelDisplay();

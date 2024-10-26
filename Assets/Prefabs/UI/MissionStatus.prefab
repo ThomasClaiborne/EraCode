@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11792451, g: 0.7224534, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
@@ -509,7 +509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6691667018097331050
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1401,7 +1401,7 @@ PrefabInstance:
     - target: {fileID: 7757097932501777955, guid: 76d7039548cbca54f837a727f21fd714,
         type: 3}
       propertyPath: m_Name
-      value: MenuButton
+      value: ContinueButton
       objectReference: {fileID: 0}
     - target: {fileID: 9071889228480164186, guid: 76d7039548cbca54f837a727f21fd714,
         type: 3}

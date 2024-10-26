@@ -21,6 +21,9 @@ public class LevelManager : MonoBehaviour
     public int xpReward = 100;
     public int currencyReward = 100;
 
+    public int PlayerKills { get; private set; }
+    public int SynthiumEarned { get; private set; }
+
     private int currentWaveIndex = 0;
     private float currentWaveTime;
     private List<Coroutine> activeSpawnCoroutines = new List<Coroutine>();
@@ -44,6 +47,8 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         StartNextWave();
+        PlayerKills = 0;
+        SynthiumEarned = 0;
     }
 
     void InitializeEnemySpawners()
@@ -166,11 +171,17 @@ public class LevelManager : MonoBehaviour
 
     public void OnEnemyDefeated()
     {
+        PlayerKills++;
         enemiesRemaining--;
         if (enemiesRemaining <= 0 && !isWaveInProgress && currentWaveIndex >= enemyWaves.Count)
         {
             CheckForWinCondition();
         }
+    }
+
+    public void AddSynthium(int amount)
+    {
+        SynthiumEarned += amount;
     }
 
     private void CheckForWinCondition()
