@@ -2,18 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
 
     public static UIManager Instance;
 
+    [Header("Pause Menu")]
     [SerializeField] GameObject menuPause;
+
+    [Header("Win Menu")]
     [SerializeField] GameObject menuWin;
+
+    [Header("Lose Menu")]
     [SerializeField] GameObject menuLose;
-    [SerializeField] private TextMeshProUGUI waveText;
+
+    [Header("Message System")]
+    [SerializeField] private GameObject messageEventPrefab;
+    [SerializeField] private Transform messagePoint;
+    [SerializeField] private float messageDuration = 0.5f;
+
+    [Header("Mission Status")]
+    [SerializeField] private GameObject missionStatusObject;
+    [SerializeField] private TextMeshProUGUI missionStatusLabel;
+    [SerializeField] private TextMeshProUGUI missionNameLabel;
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image vignetteImage;
+    [SerializeField] private Image glowImage;
+    [SerializeField] private GameObject continueButton;
+    [SerializeField] private Animator missionStatusAnimator;
+    [SerializeField] private Color winColor = new Color(0, 1, 0, 1); // Green
+    [SerializeField] private Color loseColor = new Color(1, 0, 0, 1); // Red
 
     private GameObject activeMenu;
+    private Coroutine deactivateCoroutine;
+    private GameObject currentMissionStatus;
 
     private void Awake()
     {
@@ -27,7 +51,10 @@ public class UIManager : MonoBehaviour
     }
     void Start()
     {
-        
+        if (missionStatusObject != null)
+        {
+            missionStatusObject.SetActive(false);
+        }
     }
 
     void Update()
@@ -45,46 +72,211 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateWaveDisplay(string message, Color color)
+    public void ShowMessage(string message, Color messageColor, float duration)
     {
-        waveText.text = message;
-        waveText.color = color;
-        waveText.gameObject.SetActive(true);
+        StartCoroutine(HandleMessageDisplay(message, messageColor, duration));
     }
 
-    public void HideWaveDisplay()
+    private IEnumerator HandleMessageDisplay(string message, Color messageColor, float duration)
     {
-        waveText.gameObject.SetActive(false); 
+        GameObject messageObj = Instantiate(messageEventPrefab, messagePoint);
+
+        TextMeshProUGUI messageText = messageObj.GetComponentInChildren<TextMeshProUGUI>();
+        Animator animator = messageObj.GetComponent<Animator>();
+
+        if (messageText != null)
+        {
+            messageText.text = message;
+            messageText.color = messageColor;
+        }
+        else
+        {
+            Debug.LogError("TextMeshProUGUI component not found in message prefab!");
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        if (animator != null)
+        {
+            animator.SetBool("Active", false);
+
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            float outroLength = stateInfo.length;
+
+            yield return new WaitForSeconds(outroLength + messageDuration);
+            Destroy(messageObj);
+        }
+        else
+        {
+            Debug.LogError("Animator component not found in message prefab!");
+            Destroy(messageObj);
+        }
+    }
+
+    public void UpdateWaveDisplay(string message, Color color)
+    {
+        ShowMessage(message, color, 3f);
+    }
+
+    public void ShowMissionStatus(bool isWin)
+    {
+        string levelName = LevelManager.Instance.LevelName;
+        string status = isWin ? "MISSION COMPLETE" : "MISSION FAILED";
+        Color statusColor = isWin ? winColor : loseColor;
+
+        CreateMissionStatus(statusColor, status, levelName);
+    }
+
+    private void CreateMissionStatus(Color color, string status, string missionName)
+    {
+        if (missionStatusLabel != null)
+            missionStatusLabel.text = status;
+
+        if (missionNameLabel != null)
+            missionNameLabel.text = missionName;
+
+        if (backgroundImage != null)
+            backgroundImage.color = color;
+
+        if (vignetteImage != null)
+            vignetteImage.color = color;
+
+        if (glowImage != null)
+            glowImage.color = color;
+
+        missionStatusObject.SetActive(true);
+        if (missionStatusAnimator != null)
+        {
+            missionStatusAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            missionStatusAnimator.SetBool("Active", true);
+        }
+
+    }
+
+    public void HideMissionStatus()
+    {
+        if (missionStatusObject != null && missionStatusObject.activeSelf)
+        {
+            if (missionStatusAnimator != null)
+            {
+                missionStatusAnimator.SetBool("Active", false);
+                continueButton.SetActive(false);
+                StartCoroutine(DeactivateMissionStatus());
+            }
+            else
+            {
+                missionStatusObject.SetActive(false);
+            }
+        }
+    }
+    private IEnumerator DeactivateMissionStatus()
+    {
+        yield return new WaitForSeconds(1f); // Wait for out animation
+        missionStatusObject.SetActive(false);
     }
 
     public void ShowPauseMenu()
     {
+        if (deactivateCoroutine != null)
+        {
+            StopCoroutine(deactivateCoroutine);
+            deactivateCoroutine = null;
+        }
+
         SetActiveMenu(menuPause);
+
+        if (activeMenu != null)
+        {
+            Animator animator = activeMenu.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+                animator.SetBool("Active", true);
+            }
+        }
     }
 
     public void ShowWinMenu()
     {
-        SetActiveMenu(menuWin);
+        ShowMissionStatus(true);
+        //SetActiveMenu(menuWin);
     }
 
     public void ShowLoseMenu()
     {
-        SetActiveMenu(menuLose);
+        ShowMissionStatus(false);
+        //SetActiveMenu(menuLose);
+    }
+
+    public void OnContinueButtonPressed()
+    {
+        HideMissionStatus();
     }
 
     public void HideActiveMenu()
     {
+        Debug.Log("Hiding active menu");
         if (activeMenu != null)
         {
-            activeMenu.SetActive(false);
+            Animator animator = activeMenu.GetComponent<Animator>();
+            if (animator != null)
+            {
+                animator.SetBool("Active", false);
+                deactivateCoroutine = StartCoroutine(DeactivateMenu(activeMenu));
+            }
+            else
+            {
+                activeMenu.SetActive(false);
+                activeMenu = null;
+            }
+        }
+    }
+
+    private IEnumerator DeactivateMenu(GameObject menu)
+    {
+        yield return new WaitForSeconds(1f);
+        if (menu == activeMenu)
+        {
+            menu.SetActive(false);
             activeMenu = null;
         }
+
+        deactivateCoroutine = null;
     }
 
     private void SetActiveMenu(GameObject menu)
     {
-        HideActiveMenu();
+        if (deactivateCoroutine != null)
+        {
+            StopCoroutine(deactivateCoroutine);
+            deactivateCoroutine = null;
+        }
+
+        if (activeMenu == menu)
+            return;
+
+        if (activeMenu != null)
+        {
+            Animator currentAnimator = activeMenu.GetComponent<Animator>();
+            if (currentAnimator != null)
+            {
+                currentAnimator.SetBool("Active", false);
+                deactivateCoroutine = StartCoroutine(DeactivateMenu(activeMenu));
+
+            }
+            else
+            {
+                activeMenu.SetActive(false);
+            }
+        }
+
         activeMenu = menu;
         activeMenu.SetActive(true);
+        Animator newAnimator = activeMenu.GetComponent<Animator>();
+        if (newAnimator != null)
+        {
+            newAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            newAnimator.SetBool("Active", true);
+        }
     }
 }

@@ -7,6 +7,9 @@ public class LevelManager : MonoBehaviour
 {
     public static LevelManager Instance { get; private set; }
 
+    [Header("--Level Info--")]
+    public string LevelName;
+
     [Header("--EnemySpawners--")]
     public EnemySpawner[] enemySpawners;
 
@@ -159,7 +162,6 @@ public class LevelManager : MonoBehaviour
 
         UIManager.Instance.UpdateWaveDisplay(message, messageColor);
         yield return new WaitForSeconds(waveCooldown);
-        UIManager.Instance.HideWaveDisplay();
     }
 
     public void OnEnemyDefeated()
