@@ -119,7 +119,7 @@ public class PlayerInventory : MonoBehaviour
 
         SaveInventory();
         HUDManager.Instance.UpdateLevelDisplay();
-        HUDManager.Instance.UpdateCurrencyText();
+        HUDManager.Instance.UpdateSynthiumText();
 
         Debug.Log($"Level completed! Player earned {xpReward} XP and {currencyReward} Currency. " +
                   $"Total XP: {LevelSystem.Experience}, Total Currency: {Currency}");

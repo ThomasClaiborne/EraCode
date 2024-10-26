@@ -67,7 +67,7 @@ public class HUDManager : MonoBehaviour
     }
     void Start()
     {
-        UpdateCurrencyText();
+        UpdateSynthiumText();
         UpdateLevelDisplay();
     }
 
@@ -161,22 +161,32 @@ public class HUDManager : MonoBehaviour
     {
         if (weaponData == null) return;
 
-        // Update weapon info
         weaponIconImage.sprite = weaponData.weaponIcon;
         weaponNameText.text = weaponData.weaponName;
         ammoCountText.text = weaponData.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString();
 
-        // Clear existing toggle bullets
         ClearToggleBullets();
 
-        // Create new toggle bullets based on weapon's clip size
-        for (int i = 0; i < PlayerInventory.Instance.GetWeaponClipSize(weaponData.weaponId); i++)
+        int clipSize = PlayerInventory.Instance.GetWeaponClipSize(weaponData.weaponId);
+        HorizontalLayoutGroup layoutGroup = ammoListContainer.GetComponent<HorizontalLayoutGroup>();
+
+        if (clipSize > 20)
+        {
+            float reductionFactor = (clipSize - 20) * 0.5f;
+            layoutGroup.spacing = Mathf.Max(3f, 5f - reductionFactor); 
+        }
+        else
+        {
+            layoutGroup.spacing = 5f;
+        }
+
+        for (int i = 0; i < clipSize; i++)
         {
             GameObject toggleBullet = Instantiate(toggleBulletPrefab, ammoListContainer);
+
             Toggle toggle = toggleBullet.GetComponent<Toggle>();
             currentToggleBullets.Add(toggle);
 
-            // Set initial state based on currentClipSize
             toggle.isOn = i < currentClipSize;
         }
     }
@@ -294,7 +304,7 @@ public class HUDManager : MonoBehaviour
         lerpCoroutines[textElement] = null;
     }
 
-    public void UpdateCurrencyText()
+    public void UpdateSynthiumText()
     {
        currencyText.text = PlayerInventory.Instance.Currency.ToString();
     }

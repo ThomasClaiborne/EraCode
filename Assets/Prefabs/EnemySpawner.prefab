@@ -46,11 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 6895881043396866661, guid: 63426422f764960439e7e54e449917a2, type: 3}
-  - {fileID: 6895881043396866661, guid: 7c7ecfe2b2b56bb428998281de7ccd0b, type: 3}
-  - {fileID: 3425876859788388868, guid: 5673880e89f03d245b40581ae6c12c7a, type: 3}
+  waypoints: []
   waypointGizmoColor: {r: 0, g: 0, b: 0, a: 0}
   waypointGizmoSize: 0.5
-  waypoints: []
   spawnInterval: 5
   numberofEnemies: 0
   spawnerID: 0

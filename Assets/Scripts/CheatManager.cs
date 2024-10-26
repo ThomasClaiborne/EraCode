@@ -24,8 +24,8 @@ public class CheatManager : MonoBehaviour
             new CheatKey
             {
                 key = KeyCode.G,
-                description = "Add 50 Currency",
-                cheatAction = () => AddCurrency(50)
+                description = "Add 5000 Currency",
+                cheatAction = () => AddCurrency(5000)
             },
             new CheatKey
             {
@@ -96,7 +96,7 @@ public class CheatManager : MonoBehaviour
             }
             if (HUDManager.Instance != null)
             {
-                HUDManager.Instance.UpdateCurrencyText();
+                HUDManager.Instance.UpdateSynthiumText();
             }
             Debug.Log($"Added {amount} currency. New total: {PlayerInventory.Instance.Currency}");
         }

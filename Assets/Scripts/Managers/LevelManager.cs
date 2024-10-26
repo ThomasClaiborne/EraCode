@@ -30,7 +30,7 @@ public class LevelManager : MonoBehaviour
     private int enemiesRemaining;
     private bool isWaveInProgress;
 
-    private List<Enemy> waitingEnemies = new List<Enemy>();
+    private List<BaseEnemy> waitingEnemies = new List<BaseEnemy>();
 
     private void Awake()
     {
@@ -197,7 +197,7 @@ public class LevelManager : MonoBehaviour
         return (xpReward, currencyReward);
     }
 
-    public void AddEnemyToWaitingList(Enemy enemy)
+    public void AddEnemyToWaitingList(BaseEnemy enemy)
     {
         waitingEnemies.Add(enemy);
     }
@@ -206,9 +206,9 @@ public class LevelManager : MonoBehaviour
     {
         if (waitingEnemies.Count > 0)
         {
-            Enemy nextEnemy = waitingEnemies[0];
+            BaseEnemy nextEnemy = waitingEnemies[0];
             waitingEnemies.RemoveAt(0);
-            nextEnemy.FindAttackPoint();
+            //nextEnemy.FindAttackPoint();
         }
     }
 

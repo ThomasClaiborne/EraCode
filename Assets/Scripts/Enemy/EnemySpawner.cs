@@ -8,12 +8,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] GameObject[] enemyPrefabs;
 
     [Header("Waypoints")]
+    public Transform[] waypoints;
     [SerializeField] Color waypointGizmoColor;
     [SerializeField] float waypointGizmoSize = 0.5f;
 
     private float spawnTimer;
 
-    public Transform[] waypoints;
     public float spawnInterval = 5f; 
     public int numberofEnemies;
     public int spawnerID;
@@ -27,15 +27,35 @@ public class EnemySpawner : MonoBehaviour
             return; // Handle invalid ID
         }
 
-        GameObject newEnemy = Instantiate(enemyPrefabs[enemyID], transform.position, transform.rotation);
-        Enemy enemyScript = newEnemy.GetComponent<Enemy>();
+        GameObject enemyObject = Instantiate(enemyPrefabs[enemyID], transform.position, transform.rotation);
 
-        if (waypoints != null && waypoints.Length > 0)
+        BaseEnemy enemy = enemyObject.GetComponent<BaseEnemy>();
+
+        if (enemy == null)
         {
-            enemyScript.waypoints = waypoints;
+            Debug.LogError($"Spawned enemy {enemyObject.name} doesn't have a BaseEnemy component!");
+            Destroy(enemyObject);
+            return;
         }
 
-        enemyScript.OnDeath += HandleEnemyDeath;
+        // Set up the enemy
+        InitializeEnemy(enemy);
+    }
+
+    private void InitializeEnemy(BaseEnemy enemy)
+    {
+        // Set waypoints
+        if (waypoints != null && waypoints.Length > 0)
+        {
+            enemy.SetWaypoints(waypoints);
+        }
+        else
+        {
+            Debug.LogWarning($"No waypoints set for spawner {spawnerID}!");
+        }
+
+        // Subscribe to death event
+        enemy.OnDeath += HandleEnemyDeath;
     }
 
     private void HandleEnemyDeath()

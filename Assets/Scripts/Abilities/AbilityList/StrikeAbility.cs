@@ -104,7 +104,7 @@ public class StrikeAbility : Ability
         Collider[] hitColliders = Physics.OverlapSphere(targetPosition, damageRadius);
         foreach (var hitCollider in hitColliders)
         {
-            Enemy enemy = hitCollider.GetComponent<Enemy>();
+            BaseEnemy enemy = hitCollider.GetComponent<BaseEnemy>();
             if (enemy != null)
             {
                 enemy.takeDamage((int)damage, false);
