@@ -102,44 +102,54 @@ public class WeaponSlot : MonoBehaviour
 
         if (currentWeapon.isShotgun && currentWeapon.bulletCount > 1)
         {
-            float totalSpreadAngle = currentWeapon.maxSpreadAngle * 2; 
-            float angleStep = totalSpreadAngle / (currentWeapon.bulletCount - 1);
-
-            for (int i = 0; i < currentWeapon.bulletCount; i++)
-            {
-                GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, shootPoint.rotation);
-                BulletController bulletController = bullet.GetComponent<BulletController>();
-
-                bulletController.damageAmount = currentWeapon.damage;
-                bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
-
-                float spreadAngle = -currentWeapon.maxSpreadAngle + (i * angleStep);
-                Quaternion spreadRotation = Quaternion.Euler(0, spreadAngle, 0);
-
-                Vector3 spreadDirection = spreadRotation * shootPoint.forward;
-                bullet.transform.forward = spreadDirection;
-            }
+            SpreadShot(shootPoint);
         }
         else
         {
-            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, GameManager.Instance.player.transform.rotation);
+            RegularShot(shootPoint);
+        }
+        currentClipSize--;
+        HUDManager.Instance.ConsumeBullet();
+        StartCoroutine(ShootCooldown());
+    }
+
+    private void RegularShot(Transform shootPoint)
+    {
+        GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, GameManager.Instance.player.transform.rotation);
+        BulletController bulletController = bullet.GetComponent<BulletController>();
+
+        bulletController.damageAmount = currentWeapon.damage;
+        bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
+
+        bulletController.isPiercing = currentWeapon.isPiercing;
+        bulletController.piercingDamageReduction = currentWeapon.piercingDamageReduction;
+        bulletController.pierceLimit = currentWeapon.pierceLimit;
+        bulletController.isExplosive = currentWeapon.isExplosive;
+        bulletController.explosionRadius = currentWeapon.explosionRadius;
+        bulletController.explosionForce = currentWeapon.explosionForce;
+
+        bullet.transform.forward = GameManager.Instance.player.transform.forward;
+    }
+
+    private void SpreadShot(Transform shootPoint)
+    {
+        float totalSpreadAngle = currentWeapon.maxSpreadAngle * 2;
+        float angleStep = totalSpreadAngle / (currentWeapon.bulletCount - 1);
+
+        for (int i = 0; i < currentWeapon.bulletCount; i++)
+        {
+            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, shootPoint.rotation);
             BulletController bulletController = bullet.GetComponent<BulletController>();
 
             bulletController.damageAmount = currentWeapon.damage;
             bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
 
-            bulletController.isPiercing = currentWeapon.isPiercing;
-            bulletController.piercingDamageReduction = currentWeapon.piercingDamageReduction;
-            bulletController.pierceLimit = currentWeapon.pierceLimit;
-            bulletController.isExplosive = currentWeapon.isExplosive;
-            bulletController.explosionRadius = currentWeapon.explosionRadius;
-            bulletController.explosionForce = currentWeapon.explosionForce;
+            float spreadAngle = -currentWeapon.maxSpreadAngle + (i * angleStep);
+            Quaternion spreadRotation = Quaternion.Euler(0, spreadAngle, 0);
 
-            bullet.transform.forward = GameManager.Instance.player.transform.forward;
+            Vector3 spreadDirection = spreadRotation * shootPoint.forward;
+            bullet.transform.forward = spreadDirection;
         }
-        currentClipSize--;
-        HUDManager.Instance.ConsumeBullet();
-        StartCoroutine(ShootCooldown());
     }
 
     private IEnumerator ShootCooldown()

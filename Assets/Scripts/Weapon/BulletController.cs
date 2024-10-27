@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    //rigid body to move bullet in space
-    [SerializeField] Rigidbody rb;
-
-    //attributes
-    [SerializeField] int speed;
-    [SerializeField] private GameObject enemyHitEffect;
+    [Header("Bullet Properties")]
+    //[SerializeField] Rigidbody rb;
+    //[SerializeField] int speed;
     [SerializeField] private GameObject objectHitEffect;
     [SerializeField] private GameObject explosionEffect;
 
+    [Header("Asset Components")]
+    private HS_ProjectileMover projectileMover;
+    private ParticleSystem projectilePS;
 
     public float timeToDestroy { get; set; }
     public int damageAmount { get; set; }
@@ -27,8 +27,16 @@ public class BulletController : MonoBehaviour
 
     void Start()
     {
-        rb.velocity = transform.forward * speed;
+        //rb.velocity = transform.forward * speed;
         Destroy(gameObject, timeToDestroy);
+
+        //projectileMover = GetComponent<HS_ProjectileMover>();
+        //projectilePS = GetComponentInChildren<ParticleSystem>();
+
+        //if (projectileMover != null)
+        //{
+        //    projectileMover.speed = speed;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -48,7 +56,7 @@ public class BulletController : MonoBehaviour
 
         if (!isPiercing || pierceCount >= pierceLimit || other.CompareTag("Obstacle")) // Limit piercing to 3 enemies
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 
@@ -59,8 +67,6 @@ public class BulletController : MonoBehaviour
         {
             int currentDamage = Mathf.RoundToInt(damageAmount * Mathf.Pow(1 - piercingDamageReduction, pierceCount));
             dmg.takeDamage(currentDamage, false);
-            GameObject effect = Instantiate(enemyHitEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 0.5f);
             pierceCount++;
         }
         else
@@ -102,7 +108,7 @@ public class BulletController : MonoBehaviour
         }
 
         Destroy(effect, scaleFactor);
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
 
 }

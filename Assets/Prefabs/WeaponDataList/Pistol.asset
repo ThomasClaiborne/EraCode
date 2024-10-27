@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponId: 0
   actionBarIcon: {fileID: 21300000, guid: eb4e45bf6bc3ac14eaf0260563590842, type: 3}
   weaponIcon: {fileID: 21300000, guid: fa3f16c9c15a47c47a31a20676119065, type: 3}
-  bulletPrefab: {fileID: 341314025285115435, guid: 0e6a9f4953d5df4499cc3b7b9e7127d9,
+  bulletPrefab: {fileID: 2564351690349903172, guid: cd2947ccce8f8d24a97c22e77e56980d,
     type: 3}
   weaponModel: {fileID: 6370846778614894864, guid: 65723f0c9f83ff04fb3ab60df1244446,
     type: 3}
