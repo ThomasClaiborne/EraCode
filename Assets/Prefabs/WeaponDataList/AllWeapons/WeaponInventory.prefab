@@ -50,6 +50,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9b95a15346038c14a90d575e122e3b54, type: 2}
   - {fileID: 11400000, guid: e248711b6fbd98e4982fa1bd5b8f3bcb, type: 2}
   - {fileID: 11400000, guid: 93c4950fd30a745419a2e70d25452ec8, type: 2}
+  - {fileID: 11400000, guid: 85d9642c1c4b43f45bafcaa9cf63f997, type: 2}
   assaultRifles: []
   submachineGuns: []
   shotguns: []

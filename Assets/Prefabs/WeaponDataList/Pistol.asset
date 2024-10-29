@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Pistol
   weaponId: 0
-  actionBarIcon: {fileID: 21300000, guid: eb4e45bf6bc3ac14eaf0260563590842, type: 3}
-  weaponIcon: {fileID: 21300000, guid: fa3f16c9c15a47c47a31a20676119065, type: 3}
+  actionBarIcon: {fileID: 21300000, guid: 1df7f0cf6d1d6e640841dfa23eb8158d, type: 3}
+  weaponIcon: {fileID: 21300000, guid: 6af6edd3b2995bb459d8aafcc6e253a2, type: 3}
   bulletPrefab: {fileID: 2564351690349903172, guid: cd2947ccce8f8d24a97c22e77e56980d,
     type: 3}
-  weaponModel: {fileID: 6370846778614894864, guid: 65723f0c9f83ff04fb3ab60df1244446,
+  weaponModel: {fileID: 5034595334177913840, guid: 206f7340287cdcc4ba278e3c0f5b7157,
     type: 3}
   muzzleFlash: {fileID: 0}
   ejectBullet: {fileID: 0}
