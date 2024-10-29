@@ -7,11 +7,14 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System.IO;
 
-public class WeaponShop : MonoBehaviour
+public class WeaponUI : MonoBehaviour
 {
+    [Header("References")]
     public WeaponInventory weaponInventory;
     public GameObject buttonPrefab;
     public Transform scrollViewContent;
+
+    [Header("Weapon Info")]
     public TextMeshProUGUI weaponNameText;
     public TextMeshProUGUI weaponLevelText;
     public TextMeshProUGUI weaponStatsText;
@@ -20,28 +23,32 @@ public class WeaponShop : MonoBehaviour
     public TextMeshProUGUI currencyText;
     public TextMeshProUGUI ammoText;
 
+    [Header("Action Button")]
     public Button actionButton;
     public TextMeshProUGUI actionButtonText;
-    public Button optionButton1;
-    public Button optionButton2;
-    public TextMeshProUGUI optionButton1Text;
-    public TextMeshProUGUI optionButton2Text;
+
+    [Header("Ammo & Upgrade")]
     public Button buyAmmoButton;
     public TextMeshProUGUI buyAmmoButtonText;
-
     public Button upgradeButton;
     public TextMeshProUGUI upgradeButtonText;
+
+    [Header("Level Requirement")]
     public GameObject levelRequirementObject;
     public TextMeshProUGUI levelRequirementText;
 
+    [Header("Action Bar")]
+    [SerializeField] private WeaponUIActionBarSlot[] actionBarSlots;
+    [SerializeField] private ConfirmationPrompt confirmPrompt;
+
+    [Header("Colors")]
     public Color purchaseColor = Color.green;
     public Color equipColor = Color.cyan;
     public Color equippedColor = Color.gray;
     public Color ammoButtonColor = Color.blue;
 
-
     private WeaponData selectedWeapon;
-    private enum ActionState { Purchase, Equip, Equipped, ConfirmPurchase, ConfirmEquip }
+    private enum ActionState { Normal, Purchase, Equip, Equipped, ConfirmEquip }
     private ActionState currentState;
 
     private Coroutine currentLerpCoroutine;
@@ -56,6 +63,7 @@ public class WeaponShop : MonoBehaviour
         PopulateWeaponList();
         SetupAmmoButtonHover();
         SetupUpgradeButtonHover();
+        UpdateActionBar();
         UpdateUI();
     }
 
@@ -68,10 +76,65 @@ public class WeaponShop : MonoBehaviour
                 GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
                 Button button = buttonObj.GetComponent<Button>();
                 TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+                Image image = buttonObj.transform.Find("ICON_Next").GetComponent<Image>();
 
                 buttonText.text = weapon.weaponName;
+                image.sprite = weapon.actionBarIcon;
                 button.onClick.AddListener(() => SelectWeapon(weapon)); 
             }
+        }
+    }
+
+    private void UpdateActionBar()
+    {
+        WeaponData[] equippedWeapons = PlayerInventory.Instance.EquippedWeapons;
+
+        for (int i = 0; i < actionBarSlots.Length; i++)
+        {
+            if (i < equippedWeapons.Length)
+            {
+                actionBarSlots[i].SetWeapon(equippedWeapons[i]);
+                actionBarSlots[i].SetInteractable(i > 0 && equippedWeapons[i] != null);
+            }
+        }
+    }
+
+    public void OnActionBarSlotClicked(int slotIndex)
+    {
+        if (currentState == ActionState.ConfirmEquip)
+        {
+            if (slotIndex >= 1 && slotIndex <= 4)
+            {
+                EquipWeapon(slotIndex);
+                currentState = ActionState.Normal;
+                SetActionBarSlotsHighlighted(false);
+                UpdateUI();
+            }
+        }
+        else if (slotIndex > 0 && PlayerInventory.Instance.EquippedWeapons[slotIndex] != null)
+        {
+            WeaponData weaponToUnequip = PlayerInventory.Instance.EquippedWeapons[slotIndex];
+            confirmPrompt.Show(
+                $"Unequip {weaponToUnequip.weaponName} from slot {slotIndex + 1}?",
+                () => UnequipWeapon(slotIndex),
+                UpdateUI
+            );
+        }
+    }
+
+    private void UnequipWeapon(int slotIndex)
+    {
+        PlayerInventory.Instance.UnequipWeapon(slotIndex);
+        UpdateActionBar();
+        UpdateUI();
+    }
+
+    private void SetActionBarSlotsHighlighted(bool highlighted)
+    {
+        for (int i = 1; i < actionBarSlots.Length; i++)
+        {
+            actionBarSlots[i].SetHighlighted(highlighted && currentState == ActionState.ConfirmEquip);
+            actionBarSlots[i].SetInteractable(highlighted || (PlayerInventory.Instance.EquippedWeapons[i] != null));
         }
     }
 
@@ -108,6 +171,7 @@ public class WeaponShop : MonoBehaviour
     private void SelectWeapon(WeaponData weapon)
     {
         selectedWeapon = weapon;
+        currentState = ActionState.Normal;
         UpdateUI();
     }
 
@@ -290,7 +354,6 @@ public class WeaponShop : MonoBehaviour
         weaponTypeText.text = "";
         weaponModeText.text = "";
         actionButton.gameObject.SetActive(false);
-        HideOptionButtons();
     }
 
     private void SetActionButtonState(ActionState state, bool interactable)
@@ -317,11 +380,6 @@ public class WeaponShop : MonoBehaviour
                 actionButton.onClick.RemoveAllListeners();
                 actionButton.GetComponent<Image>().color = equippedColor;
                 break;
-            case ActionState.ConfirmPurchase:
-                actionButtonText.text = "Confirm Purchase?";
-                actionButton.onClick.RemoveAllListeners();
-                actionButton.GetComponent<Image>().color = Color.yellow;
-                break;
             case ActionState.ConfirmEquip:
                 actionButtonText.text = "Cancel";
                 actionButton.onClick.RemoveAllListeners();
@@ -329,51 +387,17 @@ public class WeaponShop : MonoBehaviour
                 actionButton.GetComponent<Image>().color = Color.red;
                 break;
         }
-
-        SetOptionButtonsState(state);
-    }
-
-    private void SetOptionButtonsState(ActionState state)
-    {
-        switch (state)
-        {
-            case ActionState.ConfirmPurchase:
-                ShowOptionButtons("Yes", "No", ConfirmPurchase, CancelAction, Color.green, Color.red);
-                break;
-            case ActionState.ConfirmEquip:
-                ShowOptionButtons("Slot 2", "Slot 3", () => EquipWeapon(1), () => EquipWeapon(2), equipColor, equipColor);
-                break;
-            default:
-                HideOptionButtons();
-                break;
-        }
-    }
-
-    private void ShowOptionButtons(string text1, string text2, UnityEngine.Events.UnityAction action1, UnityEngine.Events.UnityAction action2, Color color1, Color color2)
-    {
-        optionButton1.gameObject.SetActive(true);
-        optionButton2.gameObject.SetActive(true);
-        optionButton1Text.text = text1;
-        optionButton2Text.text = text2;
-        optionButton1.onClick.RemoveAllListeners();
-        optionButton2.onClick.RemoveAllListeners();
-        optionButton1.onClick.AddListener(action1);
-        optionButton2.onClick.AddListener(action2);
-        optionButton1.GetComponent<Image>().color = color1;
-        optionButton2.GetComponent<Image>().color = color2;
-    }
-
-    private void HideOptionButtons()
-    {
-        optionButton1.gameObject.SetActive(false);
-        optionButton2.gameObject.SetActive(false);
     }
 
     private void OnPurchaseClicked()
     {
         if (PlayerInventory.Instance.Currency >= selectedWeapon.weaponPrice)
         {
-            SetActionButtonState(ActionState.ConfirmPurchase, true);
+            confirmPrompt.Show(
+                $"Purchase {selectedWeapon.weaponName} for {selectedWeapon.weaponPrice} currency?",
+                ConfirmPurchase,
+                CancelAction
+            );
         }
         else
         {
@@ -399,7 +423,9 @@ public class WeaponShop : MonoBehaviour
 
     private void OnEquipClicked()
     {
+        currentState = ActionState.ConfirmEquip;
         SetActionButtonState(ActionState.ConfirmEquip, true);
+        SetActionBarSlotsHighlighted(true);
     }
 
     private string GetWeaponType(WeaponData weapon)
@@ -421,7 +447,13 @@ public class WeaponShop : MonoBehaviour
 
     private bool IsWeaponEquipped(WeaponData weapon)
     {
-        return PlayerInventory.Instance.EquippedWeapons[1] == weapon || PlayerInventory.Instance.EquippedWeapons[2] == weapon;
+        WeaponData[] equippedWeapons = PlayerInventory.Instance.EquippedWeapons;
+        for (int i = 1; i <= 4; i++)
+        {
+            if (equippedWeapons[i] == weapon)
+                return true;
+        }
+        return false;
     }
 
     private void ConfirmPurchase()
@@ -429,6 +461,7 @@ public class WeaponShop : MonoBehaviour
         if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.weaponPrice))
         {
             PlayerInventory.Instance.AddWeapon(selectedWeapon);
+            currentState = ActionState.Normal;
             SetActionButtonState(ActionState.Equip, true);
         }
         else
@@ -442,12 +475,15 @@ public class WeaponShop : MonoBehaviour
     private void EquipWeapon(int slot)
     {
         PlayerInventory.Instance.EquipWeapon(selectedWeapon, slot);
+        UpdateActionBar();
         UpdateUI();
 
     }
 
     private void CancelAction()
     {
+        currentState = ActionState.Normal;
+        SetActionBarSlotsHighlighted(false);
         UpdateUI();
     }
 

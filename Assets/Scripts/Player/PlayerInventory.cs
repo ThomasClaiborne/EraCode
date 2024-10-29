@@ -76,7 +76,7 @@ public class PlayerInventory : MonoBehaviour
     {
         OwnedWeapons = new List<WeaponData>();
         passiveAbilities = new List<Ability>();
-        _equippedWeapons = new WeaponData[3];
+        _equippedWeapons = new WeaponData[5];
         equippedAbilities = new Ability[3];
         LoadInventory();
 
@@ -167,6 +167,15 @@ public class PlayerInventory : MonoBehaviour
             OwnedWeapons.Contains(weapon) || weapon == playerPistol)
         {
             EquippedWeapons[slot] = weapon;
+            SaveInventory();
+        }
+    }
+
+    public void UnequipWeapon(int slot)
+    {
+        if (slot >= 0 && slot < EquippedWeapons.Length)
+        {
+            EquippedWeapons[slot] = null;
             SaveInventory();
         }
     }
@@ -371,7 +380,7 @@ public class PlayerInventory : MonoBehaviour
     {
         Currency = 0;
         OwnedWeapons.Clear();
-        EquippedWeapons = new WeaponData[3];
+        EquippedWeapons = new WeaponData[5];
         weaponAmmo.Clear();
         weaponLevels.Clear();
 

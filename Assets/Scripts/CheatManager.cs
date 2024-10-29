@@ -60,7 +60,7 @@ public class CheatManager : MonoBehaviour
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.LevelSystem.AddExperience(100);
-            WeaponShop weaponShop = FindObjectOfType<WeaponShop>();
+            WeaponUI weaponShop = FindObjectOfType<WeaponUI>();
             if (weaponShop != null)
             {
                 weaponShop.UpdateUI();
@@ -89,7 +89,7 @@ public class CheatManager : MonoBehaviour
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.AddCurrency(amount);
-            WeaponShop weaponShop = FindObjectOfType<WeaponShop>();
+            WeaponUI weaponShop = FindObjectOfType<WeaponUI>();
             if (weaponShop != null)
             {
                 weaponShop.UpdateUI();
@@ -111,7 +111,7 @@ public class CheatManager : MonoBehaviour
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.ResetInventory();
-            WeaponShop weaponShop = FindObjectOfType<WeaponShop>();
+            WeaponUI weaponShop = FindObjectOfType<WeaponUI>();
             if (weaponShop != null)
             {
                 weaponShop.UpdateUI();
