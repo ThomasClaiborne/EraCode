@@ -13,6 +13,7 @@ public class WeaponUI : MonoBehaviour
     public WeaponInventory weaponInventory;
     public GameObject buttonPrefab;
     public Transform scrollViewContent;
+    public TextMeshProUGUI currencyText;
 
     [Header("Weapon Info")]
     public TextMeshProUGUI weaponNameText;
@@ -20,7 +21,7 @@ public class WeaponUI : MonoBehaviour
     public TextMeshProUGUI weaponStatsText;
     public TextMeshProUGUI weaponTypeText;
     public TextMeshProUGUI weaponModeText;
-    public TextMeshProUGUI currencyText;
+    public Image weaponIcon;
     public TextMeshProUGUI ammoText;
 
     [Header("Action Button")]
@@ -38,7 +39,7 @@ public class WeaponUI : MonoBehaviour
     public TextMeshProUGUI levelRequirementText;
 
     [Header("Action Bar")]
-    [SerializeField] private WeaponUIActionBarSlot[] actionBarSlots;
+    [SerializeField] private ActionBarSlot[] actionBarSlots;
     [SerializeField] private ConfirmationPrompt confirmPrompt;
 
     [Header("Colors")]
@@ -95,6 +96,11 @@ public class WeaponUI : MonoBehaviour
             {
                 actionBarSlots[i].SetWeapon(equippedWeapons[i]);
                 actionBarSlots[i].SetInteractable(i > 0 && equippedWeapons[i] != null);
+            }
+            else
+            {
+                actionBarSlots[i].SetWeapon(null);
+                actionBarSlots[i].SetInteractable(false);
             }
         }
     }
@@ -177,7 +183,7 @@ public class WeaponUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        currencyText.text = $"Currency: {PlayerInventory.Instance.Currency}";
+        currencyText.text = $"{PlayerInventory.Instance.Currency}";
 
         if (selectedWeapon != null)
         {
@@ -234,6 +240,8 @@ public class WeaponUI : MonoBehaviour
                                $"Fire Rate: {fireRate:F2}\n" +
                                $"Clip Size: {clipSize}\n" +
                                $"Reload Time: {reloadTime:F2}";
+        weaponIcon.sprite = selectedWeapon.weaponIcon;
+        weaponIcon.gameObject.SetActive(true);
     }
 
     private void UpdateAmmoButton()
@@ -354,6 +362,8 @@ public class WeaponUI : MonoBehaviour
         weaponTypeText.text = "";
         weaponModeText.text = "";
         actionButton.gameObject.SetActive(false);
+        weaponIcon.sprite = null;
+        weaponIcon.gameObject.SetActive(false);
     }
 
     private void SetActionButtonState(ActionState state, bool interactable)

@@ -18,7 +18,8 @@ MonoBehaviour:
   requiresTargetArea: 1
   cooldownTime: 2
   currentCooldown: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5ec17eed1a417b944b4494db0a88e645, type: 3}
+  actionBarIcon: {fileID: 21300000, guid: 5ec17eed1a417b944b4494db0a88e645, type: 3}
   abilityID: 1
   damage: 100
   damageRadius: 3

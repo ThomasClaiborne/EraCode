@@ -3,12 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class WeaponUIActionBarSlot : MonoBehaviour
+public class ActionBarSlot : MonoBehaviour
 {
     [SerializeField] private Image backgroundImage;
-    [SerializeField] private Image weaponIcon;
+    [SerializeField] private Image icon;
     [SerializeField] private Button slotButton;
     [SerializeField] private int slotIndex;
+    [SerializeField] private Sprite emptySlotIcon;
 
     private Color defaultColor;
     private Color highlightColor = new Color(0.5f, 1f, 1f, 1f); // Cyan highlight
@@ -23,14 +24,26 @@ public class WeaponUIActionBarSlot : MonoBehaviour
     {
         if (weapon != null)
         {
-            weaponIcon.sprite = weapon.actionBarIcon;
-            weaponIcon.gameObject.SetActive(true);
+            icon.sprite = weapon.actionBarIcon;
         }
         else
         {
-            weaponIcon.sprite = null;
-            weaponIcon.gameObject.SetActive(false);
+            icon.sprite = emptySlotIcon;
         }
+        icon.gameObject.SetActive(true);
+    }
+
+    public void SetAbility(Ability ability)
+    {
+        if (ability != null)
+        {
+            icon.sprite = ability.actionBarIcon;
+        }
+        else
+        {
+            icon.sprite = emptySlotIcon;
+        }
+        icon.gameObject.SetActive(true);
     }
 
     public void SetHighlighted(bool highlighted)
@@ -50,6 +63,12 @@ public class WeaponUIActionBarSlot : MonoBehaviour
         if (weaponUI != null)
         {
             weaponUI.OnActionBarSlotClicked(slotIndex);
+        }
+
+        SkillTreeUI skillTreeUI = GetComponentInParent<SkillTreeUI>();
+        if (skillTreeUI != null)
+        {
+            skillTreeUI.OnActionBarSlotClicked(slotIndex);
         }
     }
 }

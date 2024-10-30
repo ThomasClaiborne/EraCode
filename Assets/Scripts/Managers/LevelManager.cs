@@ -122,7 +122,6 @@ public class LevelManager : MonoBehaviour
         isWaveInProgress = false;
         currentWaveIndex++;
         StartNextWave();
-        Debug.Log($"Wave {currentWaveIndex} completed!");
     }
 
     IEnumerator HandleSpawnInterval(SpawnInterval interval)

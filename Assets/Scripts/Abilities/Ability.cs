@@ -11,6 +11,7 @@ public abstract class Ability : ScriptableObject
     public float cooldownTime;
     public float currentCooldown;
     public Sprite icon;
+    public Sprite actionBarIcon;
 
     public string abilityID;
 

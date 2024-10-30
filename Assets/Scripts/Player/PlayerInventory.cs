@@ -23,14 +23,16 @@ public class PlayerInventory : MonoBehaviour
 
     [SerializeField] private WeaponData playerPistol;
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
+    [SerializeField] private AbilityInventory AllAbilitiesPrefab;
 
     private Dictionary<string,int> weaponAmmo = new Dictionary<string, int>();
     private Dictionary<string, int> weaponLevels = new Dictionary<string, int>();
 
-
     private const string CURRENCY_KEY = "PlayerCurrency";
     private const string OWNED_WEAPONS_KEY = "OwnedWeapons";
     private const string EQUIPPED_WEAPONS_KEY = "EquippedWeapons";
+    private const string EQUIPPED_ABILITIES_KEY = "EquippedAbilities";
+    private const string UNLOCKED_ABILITIES_KEY = "UnlockedAbilities";
     private const string WEAPON_AMMO_KEY = "WeaponAmmo";
     private const string WEAPON_LEVELS_KEY = "WeaponLevels";
     private const string LEVEL_KEY = "PlayerLevel";
@@ -78,6 +80,8 @@ public class PlayerInventory : MonoBehaviour
         passiveAbilities = new List<Ability>();
         _equippedWeapons = new WeaponData[5];
         equippedAbilities = new Ability[3];
+        unlockedAbilityIDs = new List<string>();
+
         LoadInventory();
 
         foreach (var weapon in AllWeaponsPrefab.allWeapons)
@@ -139,6 +143,7 @@ public class PlayerInventory : MonoBehaviour
             {
                 AddPassiveAbility(ability);
             }
+            SaveInventory();
         }
     }
 
@@ -195,6 +200,16 @@ public class PlayerInventory : MonoBehaviour
         if (slot >= 0 && slot < equippedAbilities.Length)
         {
             equippedAbilities[slot] = ability;
+            SaveInventory();
+        }
+    }
+
+    public void UnequipAbility(int slot)
+    {
+        if (slot >= 0 && slot < equippedAbilities.Length)
+        {
+            equippedAbilities[slot] = null;
+            SaveInventory();
         }
     }
 
@@ -282,6 +297,14 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.SetString(OWNED_WEAPONS_KEY, ownedWeaponsString);
 
         string equippedWeaponsString = string.Join(",", EquippedWeapons.Select(w => w != null ? w.weaponId : "null"));
+
+        string equippedAbilitiesString = string.Join(",", equippedAbilities.Select(a => a != null ? a.abilityID : "null"));
+        PlayerPrefs.SetString(EQUIPPED_ABILITIES_KEY, equippedAbilitiesString);
+
+        // Save unlocked abilities
+        string unlockedAbilitiesString = string.Join(",", unlockedAbilityIDs);
+        PlayerPrefs.SetString(UNLOCKED_ABILITIES_KEY, unlockedAbilitiesString);
+
         PlayerPrefs.SetString(EQUIPPED_WEAPONS_KEY, equippedWeaponsString);
 
         string ammoString = string.Join(",", weaponAmmo.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
@@ -315,7 +338,7 @@ public class PlayerInventory : MonoBehaviour
         if (!string.IsNullOrEmpty(equippedWeaponsString))
         {
             string[] equippedIds = equippedWeaponsString.Split(',');
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 if (i < equippedIds.Length && equippedIds[i] != "null")
                 {
@@ -324,6 +347,40 @@ public class PlayerInventory : MonoBehaviour
                 else
                 {
                     _equippedWeapons[i] = null;
+                }
+            }
+        }
+
+        string equippedAbilitiesString = PlayerPrefs.GetString(EQUIPPED_ABILITIES_KEY, "");
+        if (!string.IsNullOrEmpty(equippedAbilitiesString))
+        {
+            string[] equippedIds = equippedAbilitiesString.Split(',');
+            for (int i = 0; i < 3; i++)
+            {
+                if (i < equippedIds.Length && equippedIds[i] != "null")
+                {
+                    equippedAbilities[i] = FindAbilityById(equippedIds[i]);
+                }
+                else
+                {
+                    equippedAbilities[i] = null;
+                }
+            }
+        }
+
+        string unlockedAbilitiesString = PlayerPrefs.GetString(UNLOCKED_ABILITIES_KEY, "");
+        if (!string.IsNullOrEmpty(unlockedAbilitiesString))
+        {
+            unlockedAbilityIDs = unlockedAbilitiesString.Split(',').ToList();
+
+            // Reconstruct passive abilities list from unlocked abilities
+            passiveAbilities.Clear();
+            foreach (string abilityId in unlockedAbilityIDs)
+            {
+                Ability ability = FindAbilityById(abilityId);
+                if (ability != null && ability.isPassive)
+                {
+                    passiveAbilities.Add(ability);
                 }
             }
         }
@@ -367,12 +424,28 @@ public class PlayerInventory : MonoBehaviour
         return AllWeaponsPrefab.allWeapons.FirstOrDefault(w => w != null && w.weaponId == weaponId);
     }
 
+    private Ability FindAbilityById(string abilityId)
+    {
+        if (AllAbilitiesPrefab == null || AllAbilitiesPrefab.allAbilities == null)
+        {
+            Debug.LogError("Issue with AllAbilitiesPrefab in PlayerInventory");
+            return null;
+        }
+        return AllAbilitiesPrefab.allAbilities.FirstOrDefault(a => a != null && a.abilityID == abilityId);
+    }
+
     private void UICheck()
     {
         MainMenuPlayer mainMenuPlayer = FindObjectOfType<MainMenuPlayer>();
         if (mainMenuPlayer != null)
         {
             mainMenuPlayer.UpdateXPDisplay();
+        }
+
+        SkillTreeUI skillTreeUI = FindObjectOfType<SkillTreeUI>();
+        if (skillTreeUI != null)
+        {
+            skillTreeUI.UpdateUI();
         }
     }
 
@@ -381,6 +454,9 @@ public class PlayerInventory : MonoBehaviour
         Currency = 0;
         OwnedWeapons.Clear();
         EquippedWeapons = new WeaponData[5];
+        equippedAbilities = new Ability[3];
+        passiveAbilities.Clear();
+        unlockedAbilityIDs.Clear();
         weaponAmmo.Clear();
         weaponLevels.Clear();
 
@@ -403,6 +479,8 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.DeleteKey(EQUIPPED_WEAPONS_KEY);
         PlayerPrefs.DeleteKey(WEAPON_AMMO_KEY);
         PlayerPrefs.DeleteKey(WEAPON_LEVELS_KEY);
+        PlayerPrefs.DeleteKey(EQUIPPED_ABILITIES_KEY);
+        PlayerPrefs.DeleteKey(UNLOCKED_ABILITIES_KEY);
         PlayerPrefs.Save();
 
         SaveInventory();

@@ -76,7 +76,6 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
     {
         if (!isDead)
         {
-            Debug.Log("Updating BaseEnemy");
             stateMachine?.UpdateState();
             UpdateAttackTimer();
             UpdateAnimationState();

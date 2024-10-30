@@ -9,8 +9,7 @@ public class WeaponSlot : MonoBehaviour
     public event System.Action OnWeaponFired;
 
     [SerializeField] private Transform weaponHolder; 
-    //[SerializeField] private WeaponData defaultWeapon;
-    [SerializeField] private WeaponData[] weaponSlots = new WeaponData[3]; 
+    [SerializeField] private WeaponData[] weaponSlots = new WeaponData[5]; 
     [SerializeField] private int currentSlotIndex = 0;
 
     private GameObject currentWeaponObject;
@@ -40,6 +39,8 @@ public class WeaponSlot : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchToSlot(0);
             if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchToSlot(1);
             if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchToSlot(2);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) SwitchToSlot(3);
+            if (Input.GetKeyDown(KeyCode.Alpha5)) SwitchToSlot(4);
 
             if (currentWeapon.isAutomatic)
             {

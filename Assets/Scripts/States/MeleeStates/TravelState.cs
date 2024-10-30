@@ -9,24 +9,20 @@ public class TravelState : IEnemyState
     public TravelState(BaseMeleeEnemy enemy)
     {
         this.enemy = enemy;
-        Debug.Log("Travel State Constructed");
     }
 
     public void Enter()
     {
         enemy.isMoving = true;
-        Debug.Log("Travel State Entered");
     }
 
     public void Update()
     {
         enemy.MoveAlongPath();
-        Debug.Log("Travel State Updating");
     }
 
     public void Exit()
     {
         enemy.isMoving = false;
-        Debug.Log("Travel State Exited");
     }
 }

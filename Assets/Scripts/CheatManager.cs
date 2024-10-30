@@ -72,11 +72,17 @@ public class CheatManager : MonoBehaviour
                 mainMenuPlayer.UpdateXPDisplay();
             }
 
+            SkillTreeUI skillTreeUI = FindObjectOfType<SkillTreeUI>();
+            if (skillTreeUI != null)
+            {
+                skillTreeUI.UpdateUI();
+            }
+
             if (HUDManager.Instance != null)
             {
                 HUDManager.Instance.UpdateLevelDisplay();
             }
-            Debug.Log($"Added {amount} currency. New total: {PlayerInventory.Instance.Currency}");
+            Debug.Log($"Added {amount} XP. Current Level: {PlayerInventory.Instance.LevelSystem.Level}, Skill Points: {PlayerInventory.Instance.LevelSystem.SkillPoints}");
         }
         else
         {

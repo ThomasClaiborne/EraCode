@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Rocket Launcher
   weaponId: 4
-  actionBarIcon: {fileID: 21300000, guid: 219577edd7ecb16448f647def65df6eb, type: 3}
-  weaponIcon: {fileID: 21300000, guid: 8cc61b1d99867264a9336f8f658179f5, type: 3}
+  actionBarIcon: {fileID: 21300000, guid: 2b784b7904770894db6026a1b9907476, type: 3}
+  weaponIcon: {fileID: 21300000, guid: 65e5106b4c31f474f849f2701f1d2ee2, type: 3}
   bulletPrefab: {fileID: 3448573197674773618, guid: f59a386480ef9894a9cc599baaa462e9,
     type: 3}
   weaponModel: {fileID: 415217281429136081, guid: 05e568a6ffa2fcd4ab80cb96908755b6,

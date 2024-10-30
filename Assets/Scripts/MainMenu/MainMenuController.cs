@@ -9,6 +9,16 @@ public class MainMenuController : MonoBehaviour
     {
         public string name;
         public GameObject menuObject;
+        public List<SubMenuInfo> subMenus = new List<SubMenuInfo>();
+    }
+
+    [System.Serializable]
+    public class SubMenuInfo
+    {
+        public string name;
+        public GameObject menuObject;
+        [Tooltip("If true, will hide other sub-menus when this is shown")]
+        public bool exclusiveDisplay = true;
     }
 
     public List<MenuInfo> menus = new List<MenuInfo>();
@@ -16,25 +26,47 @@ public class MainMenuController : MonoBehaviour
 
     [Header("Menu References")]
     public GameObject gameMenu;
-    public GameObject levelSelectMenu;
-    public GameObject weaponShopMenu;
-    public GameObject skillTreeMenu;
+    public GameObject gameModeMenu;
+    public GameObject storyModeMenu;
+    public GameObject DCODEGloveMenu;
     public GameObject settingsMenu;
+
+    [Header("DCODE Glove Sub-Menus")]
+    public GameObject weaponsTab;
+    public GameObject skillTreeTab;
 
     private void Start()
     {
         InitializeMenus();
-        // Set the initial active menu (e.g., the main game menu)
         SetActiveMenu("GameMenu");
     }
 
     private void InitializeMenus()
     {
-        menus.Add(new MenuInfo { name = "GameMenu", menuObject = gameMenu });
-        menus.Add(new MenuInfo { name = "LevelSelectMenu", menuObject = levelSelectMenu });
-        menus.Add(new MenuInfo { name = "WeaponShopMenu", menuObject = weaponShopMenu });
-        menus.Add(new MenuInfo { name = "SkillTreeMenu", menuObject = skillTreeMenu });
-        menus.Add(new MenuInfo { name = "SettingsMenu", menuObject = settingsMenu });
+        var mainMenu = new MenuInfo { name = "GameMenu", menuObject = gameMenu };
+        var gameMode = new MenuInfo { name = "GameModeMenu", menuObject = this.gameModeMenu };
+        var story = new MenuInfo { name = "StoryModeMenu", menuObject = storyModeMenu };
+        var dcodeGlove = new MenuInfo { name = "DCODEGloveMenu", menuObject = DCODEGloveMenu };
+        var settings = new MenuInfo { name = "SettingsMenu", menuObject = settingsMenu };
+
+        dcodeGlove.subMenus.Add(new SubMenuInfo
+        {
+            name = "WeaponsTab",
+            menuObject = weaponsTab,
+            exclusiveDisplay = true
+        });
+        dcodeGlove.subMenus.Add(new SubMenuInfo
+        {
+            name = "SkillTreeTab",
+            menuObject = skillTreeTab,
+            exclusiveDisplay = true
+        });
+
+        menus.Add(mainMenu);
+        menus.Add(gameMode);
+        menus.Add(story);
+        menus.Add(dcodeGlove);
+        menus.Add(settings);
     }
 
     public void ToggleMenu(string menuName)
@@ -80,11 +112,57 @@ public class MainMenuController : MonoBehaviour
 
             menuToActivate.menuObject.SetActive(true);
             activeMenu = menuToActivate;
+
+            if (menuToActivate.subMenus.Count > 0)
+            {
+                foreach (var subMenu in menuToActivate.subMenus)
+                {
+                    subMenu.menuObject.SetActive(subMenu == menuToActivate.subMenus[0]);
+                }
+            }
         }
         else
         {
             Debug.LogWarning($"Menu '{menuName}' not found.");
         }
+    }
+
+    public void ToggleSubMenu(string subMenuName)
+    {
+        if (activeMenu == null)
+            return;
+
+        SubMenuInfo subMenu = activeMenu.subMenus.Find(sm => sm.name == subMenuName);
+        if (subMenu != null)
+        {
+            if (subMenu.exclusiveDisplay)
+            {
+                // Deactivate all other sub-menus in this menu
+                foreach (var otherSubMenu in activeMenu.subMenus)
+                {
+                    otherSubMenu.menuObject.SetActive(otherSubMenu == subMenu);
+                }
+            }
+            else
+            {
+                // Just toggle this sub-menu
+                subMenu.menuObject.SetActive(!subMenu.menuObject.activeSelf);
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Sub-menu '{subMenuName}' not found in active menu '{activeMenu.name}'.");
+        }
+    }
+
+    // Helper method to check if a sub-menu is active
+    public bool IsSubMenuActive(string subMenuName)
+    {
+        if (activeMenu == null)
+            return false;
+
+        SubMenuInfo subMenu = activeMenu.subMenus.Find(sm => sm.name == subMenuName);
+        return subMenu != null && subMenu.menuObject.activeSelf;
     }
 
     public void LoadLevel(string levelName)
@@ -129,9 +207,9 @@ public class MainMenuController : MonoBehaviour
         SetActiveMenu("GameMenu");
     }
 
-    public void OpenLevelSelectMenu()
+    public void OpenGamemodeMenu()
     {
-        SetActiveMenu("LevelSelectMenu");
+        SetActiveMenu("GameModeMenu");
     }
 
     public void ToggleMenuVisibility(string menuName)

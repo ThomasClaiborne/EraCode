@@ -2,23 +2,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 public class SkillTreeUI : MonoBehaviour
 {
+    [Header("Skill Tree")]
     public SkillTreeManager skillTreeManager;
     public GameObject nodePrefab;
-
-    [Header("Tab System")]
-    public Button offensiveTabButton;
-    public Button defensiveTabButton;
-    public Button utilityTabButton;
-    public Color selectedTabColor = Color.white;
-    public Color unselectedTabColor = Color.gray;
 
     [Header("Path Parents")]
     public GameObject offensivePathParent;
     public GameObject defensivePathParent;
     public GameObject utilityPathParent;
+
+    [Header("Tab System")]
+    public Button offensiveTabButton;
+    public Button defensiveTabButton;
+    public Button utilityTabButton;
 
     [Header("Ability Info")]
     public TextMeshProUGUI abilityNameText;
@@ -28,12 +28,10 @@ public class SkillTreeUI : MonoBehaviour
     [Header("Action Buttons")]
     public Button actionButton;
     public TextMeshProUGUI actionButtonText;
-    public Button optionButton1;
-    public Button optionButton2;
-    public Button optionButton3;
-    public TextMeshProUGUI optionButton1Text;
-    public TextMeshProUGUI optionButton2Text;
-    public TextMeshProUGUI optionButton3Text;
+
+    [Header("Action Bar")]
+    [SerializeField] private ActionBarSlot[] actionBarSlots;
+    [SerializeField] private ConfirmationPrompt confirmPrompt;
 
     [Header("Colors")]
     public Color unlockColor = Color.yellow;
@@ -47,71 +45,96 @@ public class SkillTreeUI : MonoBehaviour
     public float lineThickness = 2f;
     public Color lineColor = Color.white;
 
-    private SkillTreeNode selectedNode;
-    private Dictionary<GameObject, SkillTreeNode> nodeButtonMap = new Dictionary<GameObject, SkillTreeNode>();
-
-    private enum ActionState { Unlock, Equip, Equipped, ConfirmEquip, Owned }
-    private ActionState currentState;
-
     [Header("UI")]
     public TextMeshProUGUI skillPointsText;
 
-    private enum PathType { Offensive, Defensive, Utility }
+    private SkillTreeNode selectedNode;
+    private Dictionary<GameObject, SkillTreeNode> nodeButtonMap = new Dictionary<GameObject, SkillTreeNode>();
+    private enum ActionState { Normal, Unlock, Equip, Equipped, ConfirmEquip }
+    private ActionState currentState;
+
 
     private void Start()
     {
-        offensiveTabButton.onClick.AddListener(() => SwitchTab(PathType.Offensive));
-        defensiveTabButton.onClick.AddListener(() => SwitchTab(PathType.Defensive));
-        utilityTabButton.onClick.AddListener(() => SwitchTab(PathType.Utility));
-
-        // Initialize with Offensive tab selected
-        SwitchTab(PathType.Offensive);
+        offensiveTabButton.onClick.AddListener(() => SwitchPath("Offensive"));
+        defensiveTabButton.onClick.AddListener(() => SwitchPath("Defensive"));
+        utilityTabButton.onClick.AddListener(() => SwitchPath("Utility"));
 
         CreateSkillTreeUI();
         UpdateSkillPointsDisplay();
+        UpdateActionBar();
         HideAbilityInfo();
+
+        // Set default path
+        SwitchPath("Offensive");
+    }
+    public void UpdateUI()
+    {
+        UpdateSkillPointsDisplay();
+        UpdateActionBar();
+        UpdateActionButton();
+        UpdateAllNodesVisuals();
     }
 
-    private void SwitchTab(PathType pathType)
+    private void UpdateActionBar()
     {
-        // Update path visibility
-        offensivePathParent.SetActive(pathType == PathType.Offensive);
-        defensivePathParent.SetActive(pathType == PathType.Defensive);
-        utilityPathParent.SetActive(pathType == PathType.Utility);
+        var equippedAbilities = PlayerInventory.Instance.equippedAbilities;
 
-        // Update tab button visuals
-        UpdateTabButtonVisuals(pathType);
-    }
-
-    private void UpdateTabButtonVisuals(PathType selectedPath)
-    {
-        // Update button colors
-        offensiveTabButton.GetComponent<Image>().color =
-            selectedPath == PathType.Offensive ? selectedTabColor : unselectedTabColor;
-        defensiveTabButton.GetComponent<Image>().color =
-            selectedPath == PathType.Defensive ? selectedTabColor : unselectedTabColor;
-        utilityTabButton.GetComponent<Image>().color =
-            selectedPath == PathType.Utility ? selectedTabColor : unselectedTabColor;
-
-        // Optional: Update text colors if buttons have text
-        if (offensiveTabButton.GetComponentInChildren<TextMeshProUGUI>() != null)
+        for (int i = 0; i < actionBarSlots.Length; i++)
         {
-            offensiveTabButton.GetComponentInChildren<TextMeshProUGUI>().color =
-                selectedPath == PathType.Offensive ? Color.black : Color.white;
-            defensiveTabButton.GetComponentInChildren<TextMeshProUGUI>().color =
-                selectedPath == PathType.Defensive ? Color.black : Color.white;
-            utilityTabButton.GetComponentInChildren<TextMeshProUGUI>().color =
-                selectedPath == PathType.Utility ? Color.black : Color.white;
+            if (i < equippedAbilities.Length)
+            {
+                actionBarSlots[i].SetAbility(equippedAbilities[i]);
+                actionBarSlots[i].SetInteractable(equippedAbilities[i] != null);
+            }
+            else
+            {
+                actionBarSlots[i].SetAbility(null);
+                actionBarSlots[i].SetInteractable(false);
+            }
         }
     }
 
-    //// Optional: Add method to check which tab is currently selected
-    //public PathType GetCurrentTab()
-    //{
-    //    if (offensivePathParent.activeSelf) return PathType.Offensive;
-    //    if (defensivePathParent.activeSelf) return PathType.Defensive;
-    //    return PathType.Utility;
-    //}
+    public void OnActionBarSlotClicked(int slotIndex)
+    {
+        if (currentState == ActionState.ConfirmEquip)
+        {
+            if (slotIndex >= 0 && slotIndex < actionBarSlots.Length)
+            {
+                EquipAbility(slotIndex);
+                currentState = ActionState.Normal;
+                SetActionBarSlotsHighlighted(false);
+                UpdateUI();
+            }
+        }
+        else
+        {
+            var equippedAbilities = PlayerInventory.Instance.equippedAbilities;
+            if (equippedAbilities[slotIndex] != null)
+            {
+                confirmPrompt.Show(
+                    $"Unequip {equippedAbilities[slotIndex].abilityName}?",
+                    () => UnequipAbility(slotIndex),
+                    UpdateUI
+                );
+            }
+        }
+    }
+    private void SetActionBarSlotsHighlighted(bool highlighted)
+    {
+        for (int i = 0; i < actionBarSlots.Length; i++)
+        {
+            actionBarSlots[i].SetHighlighted(highlighted && currentState == ActionState.ConfirmEquip);
+            actionBarSlots[i].SetInteractable(highlighted || PlayerInventory.Instance.equippedAbilities[i] != null);
+        }
+    }
+
+    private void SwitchPath(string pathName)
+    {
+        offensivePathParent.SetActive(pathName == "Offensive");
+        defensivePathParent.SetActive(pathName == "Defensive");
+        utilityPathParent.SetActive(pathName == "Utility");
+    }
 
     private void CreateSkillTreeUI()
     {
@@ -128,7 +151,7 @@ public class SkillTreeUI : MonoBehaviour
     private void CreatePathUI(SkillTreePath path, Transform parent)
     {
         Vector2 currentPosition = Vector2.zero;
-        float xOffset = 100f;
+        float xOffset = 250f;
         GameObject previousNodeObj = null;
 
         foreach (var node in path.nodes)
@@ -143,14 +166,14 @@ public class SkillTreeUI : MonoBehaviour
 
             nodeButton.onClick.AddListener(() => SelectNode(node));
 
-            if (previousNodeObj != null)
-            {
-                CreateConnectionLine(
-                    previousNodeObj.GetComponent<RectTransform>(),
-                    rectTransform,
-                    parent
-                );
-            }
+            //if (previousNodeObj != null)
+            //{
+            //    CreateConnectionLine(
+            //        previousNodeObj.GetComponent<RectTransform>(),
+            //        rectTransform,
+            //        parent
+            //    );
+            //}
 
             // Update for next iteration
             previousNodeObj = nodeObject;
@@ -205,6 +228,8 @@ public class SkillTreeUI : MonoBehaviour
 
     private void UpdateActionButton()
     {
+        if (selectedNode == null) return;
+
         bool isUnlocked = PlayerInventory.Instance.IsAbilityUnlocked(selectedNode.nodeID);
         bool canUnlock = skillTreeManager.CanUnlockNode(selectedNode) &&
                         PlayerInventory.Instance.LevelSystem.SkillPoints >= selectedNode.skillPointCost;
@@ -213,13 +238,9 @@ public class SkillTreeUI : MonoBehaviour
         {
             SetActionButtonState(ActionState.Unlock);
         }
-        else if (isUnlocked)
+        else if (isUnlocked && !selectedNode.ability.isPassive)
         {
-            if (selectedNode.ability.isPassive)
-            {
-                SetActionButtonState(ActionState.Owned);
-            }
-            else if (IsAbilityEquippedAnywhere())
+            if (IsAbilityEquipped(selectedNode.ability))
             {
                 SetActionButtonState(ActionState.Equipped);
             }
@@ -227,6 +248,10 @@ public class SkillTreeUI : MonoBehaviour
             {
                 SetActionButtonState(ActionState.Equip);
             }
+        }
+        else if (isUnlocked)
+        {
+            SetActionButtonState(ActionState.Normal);
         }
     }
 
@@ -237,137 +262,89 @@ public class SkillTreeUI : MonoBehaviour
 
         switch (state)
         {
-case ActionState.Unlock:
-            actionButtonText.text = $"Unlock ({selectedNode.skillPointCost} SP)";
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.onClick.AddListener(OnUnlockClicked);
-            actionButton.GetComponent<Image>().color = unlockColor;
-            actionButton.interactable = true;
-            HideOptionButtons();
-            break;
+            case ActionState.Unlock:
+                actionButtonText.text = $"Unlock ({selectedNode.skillPointCost} SP)";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(OnUnlockClicked);
+                actionButton.GetComponent<Image>().color = unlockColor;
+                actionButton.interactable = true;
+                break;
 
-        case ActionState.Equip:
-            actionButtonText.text = "Equip";
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.onClick.AddListener(OnEquipClicked);
-            actionButton.GetComponent<Image>().color = equipColor;
-            actionButton.interactable = true;
-            HideOptionButtons();
-            break;
+            case ActionState.Equip:
+                actionButtonText.text = "Equip";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(OnEquipClicked);
+                actionButton.GetComponent<Image>().color = equipColor;
+                actionButton.interactable = true;
+                break;
 
-        case ActionState.Equipped:
-            actionButtonText.text = "Equipped";
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.GetComponent<Image>().color = equippedColor;
-            actionButton.interactable = false;
-            HideOptionButtons();
-            break;
+            case ActionState.Equipped:
+                actionButtonText.text = "Equipped";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.GetComponent<Image>().color = equippedColor;
+                actionButton.interactable = false;
+                break;
 
-        case ActionState.ConfirmEquip:
-            actionButtonText.text = "Cancel";
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.onClick.AddListener(CancelEquip);
-            actionButton.GetComponent<Image>().color = Color.red;
-            actionButton.interactable = true;
-            ShowEquipOptions();
-            break;
-
-        case ActionState.Owned:
-            actionButtonText.text = "Owned";
-            actionButton.onClick.RemoveAllListeners();
-            actionButton.GetComponent<Image>().color = ownedColor;
-            actionButton.interactable = false;
-            HideOptionButtons();
-            break;
+            case ActionState.ConfirmEquip:
+                actionButtonText.text = "Cancel";
+                actionButton.onClick.RemoveAllListeners();
+                actionButton.onClick.AddListener(CancelAction);
+                actionButton.GetComponent<Image>().color = Color.red;
+                SetActionBarSlotsHighlighted(true);
+                break;
         }
     }
 
     private void OnUnlockClicked()
     {
-        if (PlayerInventory.Instance.LevelSystem.SkillPoints >= selectedNode.skillPointCost)
-        {
-            if (PlayerInventory.Instance.LevelSystem.SpendSkillPoints(selectedNode.skillPointCost))
-            {
-                PlayerInventory.Instance.UnlockAbility(selectedNode.nodeID, selectedNode.ability);
-
-                if (selectedNode.ability.isPassive)
-                {
-                    SetActionButtonState(ActionState.Owned);
-                }
-                else
-                {
-                    SetActionButtonState(ActionState.Equip);
-                }
-                UpdateAllNodesVisuals();
-                UpdateSkillPointsDisplay();
-            }
-        }
+        confirmPrompt.Show(
+            $"Spend {selectedNode.skillPointCost} Skill Points to unlock {selectedNode.ability.abilityName}?",
+            ConfirmUnlock,
+            CancelAction
+        );
     }
 
     private void OnEquipClicked()
     {
+        currentState = ActionState.ConfirmEquip;
         SetActionButtonState(ActionState.ConfirmEquip);
+        SetActionBarSlotsHighlighted(true);
     }
 
-    private void CancelEquip()
+    private void ConfirmUnlock()
     {
-        SetActionButtonState(ActionState.Equip);
+        if (PlayerInventory.Instance.LevelSystem.SpendSkillPoints(selectedNode.skillPointCost))
+        {
+            PlayerInventory.Instance.UnlockAbility(selectedNode.nodeID, selectedNode.ability);
+            UpdateAllNodesVisuals();
+            UpdateSkillPointsDisplay();
+            UpdateActionButton();
+        }
     }
 
     private void EquipAbility(int slot)
     {
         PlayerInventory.Instance.EquipAbility(selectedNode.ability, slot);
-        SetActionButtonState(ActionState.Equipped);
+        UpdateActionBar();
+        UpdateUI();
     }
 
-    private void ShowEquipOptions()
+    private void UnequipAbility(int slot)
     {
-        optionButton1.gameObject.SetActive(true);
-        optionButton2.gameObject.SetActive(true);
-        optionButton3.gameObject.SetActive(true);
-
-        optionButton1Text.text = "Slot 1";
-        optionButton2Text.text = "Slot 2";
-        optionButton3Text.text = "Slot 3";
-
-        optionButton1.onClick.RemoveAllListeners();
-        optionButton2.onClick.RemoveAllListeners();
-        optionButton3.onClick.RemoveAllListeners();
-
-        optionButton1.onClick.AddListener(() => EquipAbility(0));
-        optionButton2.onClick.AddListener(() => EquipAbility(1));
-        optionButton3.onClick.AddListener(() => EquipAbility(2));
-
-        optionButton1.interactable = !IsAbilityEquippedInSlot(0);
-        optionButton2.interactable = !IsAbilityEquippedInSlot(1);
-        optionButton3.interactable = !IsAbilityEquippedInSlot(2);
-
-        optionButton1.GetComponent<Image>().color = equipColor;
-        optionButton2.GetComponent<Image>().color = equipColor;
-        optionButton3.GetComponent<Image>().color = equipColor;
+        PlayerInventory.Instance.UnequipAbility(slot);
+        UpdateActionBar();
+        UpdateUI();
+    }
+    private void CancelAction()
+    {
+        currentState = ActionState.Normal;
+        SetActionBarSlotsHighlighted(false);
+        UpdateUI();
     }
 
-    private void HideOptionButtons()
+    private bool IsAbilityEquipped(Ability ability)
     {
-        optionButton1.gameObject.SetActive(false);
-        optionButton2.gameObject.SetActive(false);
-        optionButton3.gameObject.SetActive(false);
-    }
-
-    private bool IsAbilityEquippedInSlot(int slot)
-    {
-        return PlayerInventory.Instance.equippedAbilities[slot] != null &&
-               PlayerInventory.Instance.equippedAbilities[slot].abilityID == selectedNode.ability.abilityID;
-    }
-
-    private bool IsAbilityEquippedAnywhere()
-    {
-        for (int i = 0; i < PlayerInventory.Instance.equippedAbilities.Length; i++)
-        {
-            if (IsAbilityEquippedInSlot(i))
-                return true;
-        }
-        return false;
+        return System.Array.Exists(PlayerInventory.Instance.equippedAbilities, a => a != null && a.abilityID == ability.abilityID);
     }
 
     private void UpdateNodeVisuals(GameObject nodeObj, SkillTreeNode node)

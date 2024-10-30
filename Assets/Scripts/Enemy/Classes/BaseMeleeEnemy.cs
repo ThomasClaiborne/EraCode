@@ -18,7 +18,6 @@ public abstract class BaseMeleeEnemy : BaseEnemy
 
     protected override void InitializeStateMachine()
     {
-        Debug.Log("Initializing Enemy State Machine");
         stateMachine = new EnemyStateMachine();
 
         // Add all possible states
@@ -27,7 +26,6 @@ public abstract class BaseMeleeEnemy : BaseEnemy
         stateMachine.AddState(new AttackState(this));
 
         // Set initial state
-        Debug.Log("Setting initial state to TravelState");
         stateMachine.SetState<TravelState>();
     }
 
@@ -39,7 +37,6 @@ public abstract class BaseMeleeEnemy : BaseEnemy
         Vector3 direction = (targetWaypoint.position - transform.position).normalized;
 
         rb.MovePosition(rb.position + direction * stats.speed * Time.deltaTime);
-        Debug.Log("Moving along path");
 
         if (direction != Vector3.zero)
         {

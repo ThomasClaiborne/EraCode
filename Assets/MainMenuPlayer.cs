@@ -5,7 +5,7 @@ using TMPro;
 public class MainMenuPlayer : MonoBehaviour
 {
     [Header("XP Bar")]
-    public Image xpBar;
+    public Slider xpBar;
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI levelText;
 
@@ -21,10 +21,10 @@ public class MainMenuPlayer : MonoBehaviour
             LevelSystem levelSystem = PlayerInventory.Instance.LevelSystem;
 
             // Update XP bar fill
-            xpBar.fillAmount = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
+            xpBar.value = (float)levelSystem.Experience / levelSystem.ExperienceToNextLevel;
 
             // Update level text
-            levelText.text = $"Level: {levelSystem.Level}";
+            levelText.text = $"{levelSystem.Level}";
 
             // Update XP text
             xpText.text = $"{levelSystem.Experience} / {levelSystem.ExperienceToNextLevel} XP";
