@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-
     public static UIManager Instance;
 
     [Header("Pause Menu")]
@@ -45,6 +44,7 @@ public class UIManager : MonoBehaviour
     private GameObject activeMenu;
     private Coroutine deactivateCoroutine;
     private GameObject currentMissionStatus;
+    private bool canPause;
 
     private void Awake()
     {
@@ -58,6 +58,8 @@ public class UIManager : MonoBehaviour
     }
     void Start()
     {
+        canPause = true;
+
         if (missionStatusObject != null)
             missionStatusObject.SetActive(false);
         if (missionResultObject != null)
@@ -66,7 +68,7 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && canPause)
         {
             if (GameManager.Instance.isPaused)
             {
@@ -77,6 +79,11 @@ public class UIManager : MonoBehaviour
                 GameManager.Instance.statePaused();
             }
         }
+    }
+
+    public void CanPause(bool input)
+    {
+        canPause = input;
     }
 
     public void ShowMessage(string message, Color messageColor, float duration)
@@ -205,14 +212,14 @@ public class UIManager : MonoBehaviour
 
     public void ShowWinMenu()
     {
+        CanPause(false);
         ShowMissionStatus(true);
-        //SetActiveMenu(menuWin);
     }
 
     public void ShowLoseMenu()
     {
+        CanPause(false);
         ShowMissionStatus(false);
-        //SetActiveMenu(menuLose);
     }
 
     public void OnContinueButtonPressed()

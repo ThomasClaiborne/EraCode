@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WeaponSlot : MonoBehaviour
 {
-
     public event System.Action<WeaponData> OnWeaponChanged;
     public event System.Action OnWeaponFired;
 
@@ -16,18 +15,22 @@ public class WeaponSlot : MonoBehaviour
     private WeaponData currentWeapon;
     private int currentClipSize;
 
-    private bool canShoot = true;
-    private bool isShooting = false;
     private bool isReloading = false;
     private Dictionary<WeaponData, int> ammoCountPerWeapon = new Dictionary<WeaponData, int>();
+    private Dictionary<int, float> weaponCooldowns = new Dictionary<int, float>();
+    private Dictionary<int, bool> isWeaponCoolingDown = new Dictionary<int, bool>();
     private Coroutine reloadCoroutine;
 
     public WeaponData CurrentWeapon => currentWeapon;
 
     private void Start()
     {
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            weaponCooldowns[i] = 0f;
+            isWeaponCoolingDown[i] = false;
+        }
         SwitchToSlot(0);
-
         HUDManager.Instance.PopulateActionBar(weaponSlots);
     }
 
@@ -36,6 +39,8 @@ public class WeaponSlot : MonoBehaviour
 
         if (!GameManager.Instance.isPaused)
         {
+            UpdateWeaponCooldowns();
+
             if (Input.GetKeyDown(KeyCode.Alpha1)) SwitchToSlot(0);
             if (Input.GetKeyDown(KeyCode.Alpha2)) SwitchToSlot(1);
             if (Input.GetKeyDown(KeyCode.Alpha3)) SwitchToSlot(2);
@@ -64,19 +69,33 @@ public class WeaponSlot : MonoBehaviour
         }
     }
 
+    private void UpdateWeaponCooldowns()
+    {
+        for (int i = 0; i < weaponSlots.Length; i++)
+        {
+            if (isWeaponCoolingDown[i])
+            {
+                weaponCooldowns[i] -= Time.deltaTime;
+
+                if (weaponCooldowns[i] <= 0)
+                {
+                    weaponCooldowns[i] = 0;
+                    isWeaponCoolingDown[i] = false;
+                }
+            }
+        }
+    }
+
     private bool CanShoot()
     {
         if(GameManager.Instance.abilitySlot.selectingAbilityIndex != -1) return false;
 
+        if (isWeaponCoolingDown[currentSlotIndex]) return false;
 
-        //if (currentClipSize <= 0)
-            //HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.weaponAmmoText, Color.red, 0.2f);
-
-        return canShoot && !isReloading && currentClipSize > 0 &&
-               (currentWeapon.isAutomatic || (!currentWeapon.isAutomatic && !isShooting));
+        return !isReloading && currentClipSize > 0;
     }
 
-    private bool CanReload()
+    public bool CanReload()
     {
         if (isReloading || currentClipSize >= currentWeapon.clipSize)
             return false;
@@ -90,7 +109,7 @@ public class WeaponSlot : MonoBehaviour
 
     private void Shoot()
     {
-        isShooting = true;
+        StartWeaponCooldown(currentSlotIndex);
         OnWeaponFired?.Invoke();
 
         Transform shootPoint = currentWeaponObject.transform.Find("ShootPoint");
@@ -111,7 +130,9 @@ public class WeaponSlot : MonoBehaviour
         }
         currentClipSize--;
         HUDManager.Instance.ConsumeBullet();
-        StartCoroutine(ShootCooldown());
+
+        if (currentClipSize <= 0 && CanReload())
+            reloadCoroutine = StartCoroutine(Reload());
     }
 
     private void RegularShot(Transform shootPoint)
@@ -153,12 +174,13 @@ public class WeaponSlot : MonoBehaviour
         }
     }
 
-    private IEnumerator ShootCooldown()
+    private void StartWeaponCooldown(int slotIndex)
     {
-        canShoot = false;
-        yield return new WaitForSeconds(currentWeapon.fireRate);
-        canShoot = true;
-        isShooting = false;
+        if (weaponSlots[slotIndex] != null)
+        {
+            weaponCooldowns[slotIndex] = weaponSlots[slotIndex].fireRate;
+            isWeaponCoolingDown[slotIndex] = true;
+        }
     }
 
     private IEnumerator Reload()
@@ -225,6 +247,24 @@ public class WeaponSlot : MonoBehaviour
         EquipWeapon(weaponSlots[slotIndex]);
 
         HUDManager.Instance.HighlightSlot(slotIndex);
+    }
+
+    public float GetWeaponCooldown(int slotIndex)
+    {
+        if (weaponCooldowns.ContainsKey(slotIndex))
+        {
+            return weaponCooldowns[slotIndex];
+        }
+        return 0f;
+    }
+
+    public void ResetWeaponCooldowns()
+    {
+        foreach (var slot in weaponCooldowns.Keys)
+        {
+            weaponCooldowns[slot] = 0f;
+            isWeaponCoolingDown[slot] = false;
+        }
     }
 
     private void ShowEmptySlotMessage(int slotIndex)

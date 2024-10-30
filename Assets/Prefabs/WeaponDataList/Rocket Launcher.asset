@@ -18,13 +18,13 @@ MonoBehaviour:
   weaponIcon: {fileID: 21300000, guid: 65e5106b4c31f474f849f2701f1d2ee2, type: 3}
   bulletPrefab: {fileID: 3448573197674773618, guid: f59a386480ef9894a9cc599baaa462e9,
     type: 3}
-  weaponModel: {fileID: 415217281429136081, guid: 05e568a6ffa2fcd4ab80cb96908755b6,
+  weaponModel: {fileID: 232756952529360563, guid: a69da7392239f564487739e2b6be640f,
     type: 3}
   muzzleFlash: {fileID: 0}
   ejectBullet: {fileID: 0}
   ejectPoint: {fileID: 0}
-  holdPosition: {x: 0, y: 0, z: 0}
-  holdRotation: {x: 0, y: 0, z: 0}
+  holdPosition: {x: 0.26, y: 0.041, z: 0.16}
+  holdRotation: {x: -6.35, y: 58.18, z: -95}
   damage: 10
   clipSize: 1
   ammo: 15

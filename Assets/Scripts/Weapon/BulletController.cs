@@ -46,7 +46,6 @@ public class BulletController : MonoBehaviour
 
         if (isExplosive)
         {
-            Debug.Log("The Rocket hit: " + other.name);
             Explode();
         }
         else
@@ -96,18 +95,19 @@ public class BulletController : MonoBehaviour
                 dmg.takeDamage(explosionDamage, false);
             }
         }
-        GameObject effect = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        float scaleFactor = explosionRadius / 1f;
-        effect.transform.localScale = Vector3.one * scaleFactor;
 
-        ParticleSystem[] particleSystems = effect.GetComponentsInChildren<ParticleSystem>();
-        foreach (ParticleSystem ps in particleSystems)
-        {
-            var main = ps.main;
-            main.startSizeMultiplier *= scaleFactor;
-        }
+        //GameObject effect = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        //float scaleFactor = explosionRadius / 1f;
+        //effect.transform.localScale = Vector3.one * scaleFactor;
 
-        Destroy(effect, scaleFactor);
+        //ParticleSystem[] particleSystems = effect.GetComponentsInChildren<ParticleSystem>();
+        //foreach (ParticleSystem ps in particleSystems)
+        //{
+        //    var main = ps.main;
+        //    main.startSizeMultiplier *= scaleFactor;
+        //}
+
+        //Destroy(effect, scaleFactor);
         //Destroy(gameObject);
     }
 
