@@ -8,10 +8,13 @@ public class MainMenuPlayer : MonoBehaviour
     public Slider xpBar;
     public TextMeshProUGUI xpText;
     public TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI playerNameText;
+
 
     private void Start()
     {
         UpdateXPDisplay();
+        UpdatePlayerNameDisplay();
     }
 
     public void UpdateXPDisplay()
@@ -32,6 +35,15 @@ public class MainMenuPlayer : MonoBehaviour
         else
         {
             Debug.LogWarning("PlayerInventory or LevelSystem is not initialized.");
+        }
+    }
+
+    public void UpdatePlayerNameDisplay()
+    {
+        if (playerNameText != null && PlayerInventory.Instance != null)
+        {
+            string name = PlayerInventory.Instance.GetPlayerName();
+            playerNameText.text = string.IsNullOrEmpty(name) ? "New Decoder" : name;
         }
     }
 }

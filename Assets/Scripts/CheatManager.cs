@@ -122,7 +122,13 @@ public class CheatManager : MonoBehaviour
             {
                 weaponShop.UpdateUI();
             }
-            Debug.Log("Player stats reset.");
+
+            MainMenuPlayer mainMenuPlayer = FindObjectOfType<MainMenuPlayer>();
+            if (mainMenuPlayer != null)
+            {
+                mainMenuPlayer.UpdateXPDisplay();
+                mainMenuPlayer.UpdatePlayerNameDisplay();
+            }
         }
         else
         {

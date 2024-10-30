@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
+    private string playerName;
     public static PlayerInventory Instance { get; private set; }
     public int Currency { get; private set; }
     public LevelSystem LevelSystem { get; private set; }
@@ -53,6 +54,16 @@ public class PlayerInventory : MonoBehaviour
         }
     }
 
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+
+    public void SetPlayerName(string name)
+    {
+        playerName = name;
+        SaveInventory(); 
+    }
     public void AddAmmo(string weaponId, int amount)
     {
         if (!weaponAmmo.ContainsKey(weaponId))
@@ -291,6 +302,8 @@ public class PlayerInventory : MonoBehaviour
 
     public void SaveInventory()
     {
+        PlayerPrefs.SetString("PlayerName", playerName);
+
         PlayerPrefs.SetInt(CURRENCY_KEY, Currency);
 
         string ownedWeaponsString = string.Join(",", OwnedWeapons.Select(w => w.weaponId));
@@ -322,6 +335,8 @@ public class PlayerInventory : MonoBehaviour
 
     public void LoadInventory()
     {
+        playerName = PlayerPrefs.GetString("PlayerName", "");
+
         Currency = PlayerPrefs.GetInt(CURRENCY_KEY, 0);
 
         string ownedWeaponsString = PlayerPrefs.GetString(OWNED_WEAPONS_KEY, "");
@@ -451,6 +466,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void ResetInventory()
     {
+        playerName = null;
         Currency = 0;
         OwnedWeapons.Clear();
         EquippedWeapons = new WeaponData[5];
@@ -473,6 +489,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.DeleteKey(LEVEL_KEY);
         PlayerPrefs.DeleteKey(EXPERIENCE_KEY);
         PlayerPrefs.DeleteKey(STAT_POINTS_KEY);
+        PlayerPrefs.DeleteKey("PlayerName");
 
         PlayerPrefs.DeleteKey(CURRENCY_KEY);
         PlayerPrefs.DeleteKey(OWNED_WEAPONS_KEY);
