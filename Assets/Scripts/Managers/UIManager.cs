@@ -253,7 +253,6 @@ public class UIManager : MonoBehaviour
 
         // Show and animate
         missionResultObject.SetActive(true);
-        Debug.Log("Showing mission result");
         if (missionResultAnimator != null)
         {
             missionResultAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;

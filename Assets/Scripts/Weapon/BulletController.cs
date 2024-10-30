@@ -5,8 +5,6 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     [Header("Bullet Properties")]
-    //[SerializeField] Rigidbody rb;
-    //[SerializeField] int speed;
     [SerializeField] private GameObject objectHitEffect;
     [SerializeField] private GameObject explosionEffect;
 
@@ -27,16 +25,8 @@ public class BulletController : MonoBehaviour
 
     void Start()
     {
-        //rb.velocity = transform.forward * speed;
+        projectileMover = GetComponent<HS_ProjectileMover>();
         Destroy(gameObject, timeToDestroy);
-
-        //projectileMover = GetComponent<HS_ProjectileMover>();
-        //projectilePS = GetComponentInChildren<ParticleSystem>();
-
-        //if (projectileMover != null)
-        //{
-        //    projectileMover.speed = speed;
-        //}
     }
 
     private void OnTriggerEnter(Collider other)
@@ -47,15 +37,16 @@ public class BulletController : MonoBehaviour
         if (isExplosive)
         {
             Explode();
+            projectileMover.HandleCollision(other);
         }
         else
         {
             DealDamage(other);
         }
 
-        if (!isPiercing || pierceCount >= pierceLimit || other.CompareTag("Obstacle")) // Limit piercing to 3 enemies
+        if (!isPiercing || pierceCount >= pierceLimit || other.CompareTag("Obstacle")) 
         {
-            //Destroy(gameObject);
+            projectileMover.HandleCollision(other);
         }
     }
 
@@ -66,12 +57,14 @@ public class BulletController : MonoBehaviour
         {
             int currentDamage = Mathf.RoundToInt(damageAmount * Mathf.Pow(1 - piercingDamageReduction, pierceCount));
             dmg.takeDamage(currentDamage, false);
+
+            if (objectHitEffect != null)
+            {
+                GameObject effect = Instantiate(objectHitEffect, transform.position, Quaternion.identity);
+                Destroy(effect, 0.5f);
+            }
+
             pierceCount++;
-        }
-        else
-        {
-            GameObject effect = Instantiate(objectHitEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 0.5f);
         }
     }
 
@@ -95,20 +88,5 @@ public class BulletController : MonoBehaviour
                 dmg.takeDamage(explosionDamage, false);
             }
         }
-
-        //GameObject effect = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        //float scaleFactor = explosionRadius / 1f;
-        //effect.transform.localScale = Vector3.one * scaleFactor;
-
-        //ParticleSystem[] particleSystems = effect.GetComponentsInChildren<ParticleSystem>();
-        //foreach (ParticleSystem ps in particleSystems)
-        //{
-        //    var main = ps.main;
-        //    main.startSizeMultiplier *= scaleFactor;
-        //}
-
-        //Destroy(effect, scaleFactor);
-        //Destroy(gameObject);
     }
-
 }

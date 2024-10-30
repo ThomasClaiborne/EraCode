@@ -158,19 +158,21 @@ public class WeaponSlot : MonoBehaviour
         float totalSpreadAngle = currentWeapon.maxSpreadAngle * 2;
         float angleStep = totalSpreadAngle / (currentWeapon.bulletCount - 1);
 
+        Vector3 baseDirection = GameManager.Instance.player.transform.forward;
+        Quaternion baseRotation = Quaternion.LookRotation(baseDirection);
+
         for (int i = 0; i < currentWeapon.bulletCount; i++)
         {
-            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, shootPoint.rotation);
-            BulletController bulletController = bullet.GetComponent<BulletController>();
+            float spreadAngle = -currentWeapon.maxSpreadAngle + (i * angleStep);
 
+            // Create rotation for spread
+            Quaternion spreadRotation = baseRotation * Quaternion.Euler(0, spreadAngle, 0);
+
+            // Instantiate bullet with the calculated spread rotation
+            GameObject bullet = Instantiate(currentWeapon.bulletPrefab, shootPoint.position, spreadRotation);
+            BulletController bulletController = bullet.GetComponent<BulletController>();
             bulletController.damageAmount = currentWeapon.damage;
             bulletController.timeToDestroy = currentWeapon.bulletLifeSpan;
-
-            float spreadAngle = -currentWeapon.maxSpreadAngle + (i * angleStep);
-            Quaternion spreadRotation = Quaternion.Euler(0, spreadAngle, 0);
-
-            Vector3 spreadDirection = spreadRotation * shootPoint.forward;
-            bullet.transform.forward = spreadDirection;
         }
     }
 

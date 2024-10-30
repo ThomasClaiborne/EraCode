@@ -71,8 +71,7 @@ public class HS_ProjectileMover : MonoBehaviour
         }
     }
 
-    //https ://docs.unity3d.com/ScriptReference/Rigidbody.OnCollisionEnter.html
-    protected virtual void OnTriggerEnter(Collider other)
+    public void HandleCollision(Collider other)
     {
         if (other.isTrigger || other.CompareTag("Player") || other.CompareTag("PlayerWall") || other.CompareTag("Environment"))
             return;

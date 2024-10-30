@@ -30,7 +30,7 @@ MonoBehaviour:
   ammo: 50
   reloadTime: 1.2
   fireRate: 2
-  bulletLifeSpan: 0
+  bulletLifeSpan: 1
   maxSpreadAngle: 0
   bulletCount: 1
   recoil: 0
