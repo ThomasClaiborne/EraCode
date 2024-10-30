@@ -247,9 +247,22 @@ public class WeaponUI : MonoBehaviour
     private void UpdateAmmoButton()
     {
         ToggleAmmoButton(true);
+
         int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
-        buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
         ammoText.text = $"Ammo: {currentAmmo}";
+        int maxAmmo = 999;
+        if (currentAmmo >= maxAmmo)
+        {
+            buyAmmoButtonText.text = "MAX AMMO";
+            buyAmmoButton.interactable = false;
+            return;
+        }
+        else
+        {
+            buyAmmoButton.interactable = true;
+        }
+
+        buyAmmoButtonText.text = $"Buy Ammo +{selectedWeapon.clipSize}";
         buyAmmoButton.onClick.RemoveAllListeners();
         buyAmmoButton.onClick.AddListener(OnBuyAmmoClicked);
         buyAmmoButton.GetComponent<Image>().color = ammoButtonColor;
@@ -273,20 +286,46 @@ public class WeaponUI : MonoBehaviour
     private void OnAmmoButtonHoverEnter()
     {
         isPointerOverAmmoButton = true;
+
+        int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
+        if (currentAmmo >= 999)
+        {
+            buyAmmoButtonText.text = "MAX AMMO";
+            buyAmmoButton.interactable = false;
+            return;
+        }
+
         buyAmmoButtonText.text = $"Price: ${selectedWeapon.ammoPrice}";
     }
 
     private void OnAmmoButtonHoverExit()
     {
         isPointerOverAmmoButton = false;
+
+        int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
+        if (currentAmmo >= 999)
+        {
+            buyAmmoButtonText.text = "MAX AMMO";
+            buyAmmoButton.interactable = false;
+            return;
+        }
+
         buyAmmoButtonText.text = $"Buy Ammo +{PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId)}";
     }
 
     private void UpdateUpgradeButton()
     {
         ToggleUpgradeButton(true);
-        int upgradeCost = PlayerInventory.Instance.GetWeaponUpgradeCost(selectedWeapon.weaponId);
-        upgradeButtonText.text = $"Upgrade to level ({PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId) + 1})";
+        int currentLevel = PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId);
+
+        if (currentLevel >= selectedWeapon.maxLevel)
+        {
+            upgradeButtonText.text = "MAX LEVEL";
+            upgradeButton.interactable = false;
+            return;
+        }
+
+        upgradeButtonText.text = $"Upgrade to level ({currentLevel + 1})";
         upgradeButton.onClick.RemoveAllListeners();
         upgradeButton.onClick.AddListener(OnUpgradeClicked);
         upgradeButton.interactable = selectedWeapon.currentLevel < selectedWeapon.maxLevel;
@@ -308,12 +347,10 @@ public class WeaponUI : MonoBehaviour
         if (PlayerInventory.Instance.SpendCurrency(upgradeCost))
         {
             PlayerInventory.Instance.UpgradeWeapon(selectedWeapon.weaponId);
-            //selectedWeapon.UpgradeWeapon();
             UpdateUI();
         }
         else
         {
-            Debug.Log("Not enough currency to upgrade weapon.");
             StartColorLerp(upgradeButtonText, Color.red, 0.3f);
         }
     }
@@ -321,6 +358,14 @@ public class WeaponUI : MonoBehaviour
     private void OnUpgradeButtonHoverEnter()
     {
         isPointerOverUpgradeButton = true;
+
+        int currentLevel = PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId);
+        if (currentLevel >= selectedWeapon.maxLevel)
+        {
+            upgradeButtonText.text = "MAX LEVEL";
+            upgradeButton.interactable = false;
+            return;
+        }
 
         int currentDamage = PlayerInventory.Instance.GetWeaponDamage(selectedWeapon.weaponId);
         float currentFireRate = PlayerInventory.Instance.GetWeaponFireRate(selectedWeapon.weaponId);
@@ -338,6 +383,14 @@ public class WeaponUI : MonoBehaviour
     private void OnUpgradeButtonHoverExit()
     {
         isPointerOverUpgradeButton = false;
+
+        int currentLevel = PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId);
+        if (currentLevel >= selectedWeapon.maxLevel)
+        {
+            upgradeButtonText.text = "MAX LEVEL";
+            upgradeButton.interactable = false;
+            return;
+        }
 
         UpdateWeaponStats();
         upgradeButtonText.text = $"Upgrade to level ({PlayerInventory.Instance.GetWeaponLevel(selectedWeapon.weaponId) + 1})";
@@ -418,9 +471,20 @@ public class WeaponUI : MonoBehaviour
 
     private void OnBuyAmmoClicked()
     {
+        int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
+        int clipSize = PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId);
+        int maxAmmo = 999;
+
         if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.ammoPrice))
         {
-            PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId));
+            if(currentAmmo + clipSize > maxAmmo)
+            {
+                PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, maxAmmo - currentAmmo);
+            }
+            else
+            {
+                PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, clipSize);
+            }
             UpdateUI();
             OnAmmoButtonHoverEnter();
         }

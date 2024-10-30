@@ -180,7 +180,8 @@ public class WeaponSlot : MonoBehaviour
     {
         if (weaponSlots[slotIndex] != null)
         {
-            weaponCooldowns[slotIndex] = weaponSlots[slotIndex].fireRate;
+            float cooldownDuration = currentWeapon.fireRate;
+            weaponCooldowns[slotIndex] = cooldownDuration;
             isWeaponCoolingDown[slotIndex] = true;
         }
     }
@@ -238,49 +239,12 @@ public class WeaponSlot : MonoBehaviour
     private void SwitchToSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= weaponSlots.Length) return;
-        if (weaponSlots[slotIndex] == null && slotIndex != 0)
-        {
-            ShowEmptySlotMessage(slotIndex);
-            return;
-        }
 
         CancelReload();
         currentSlotIndex = slotIndex;
         EquipWeapon(weaponSlots[slotIndex]);
 
         HUDManager.Instance.HighlightSlot(slotIndex);
-    }
-
-    public float GetWeaponCooldown(int slotIndex)
-    {
-        if (weaponCooldowns.ContainsKey(slotIndex))
-        {
-            return weaponCooldowns[slotIndex];
-        }
-        return 0f;
-    }
-
-    public void ResetWeaponCooldowns()
-    {
-        foreach (var slot in weaponCooldowns.Keys)
-        {
-            weaponCooldowns[slot] = 0f;
-            isWeaponCoolingDown[slot] = false;
-        }
-    }
-
-    private void ShowEmptySlotMessage(int slotIndex)
-    {
-        string message = $"Slot {slotIndex + 1} is empty";
-        HUDManager.Instance.messageText.text = message;
-        HUDManager.Instance.TriggerTextLerp(HUDManager.Instance.messageText, Color.red, 0.5f);
-        StartCoroutine(ClearMessageAfterDelay(1.0f));
-    }
-
-    private IEnumerator ClearMessageAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        HUDManager.Instance.messageText.text = "";
     }
 
     private void EquipWeapon(WeaponData newWeapon)
@@ -325,7 +289,7 @@ public class WeaponSlot : MonoBehaviour
         if (currentWeapon.shotAudioClips.Count > 0)
         {
             string clipName = currentWeapon.shotAudioClips[UnityEngine.Random.Range(0, currentWeapon.shotAudioClips.Count)];
-            //AudioManager.instance.PlaySFX(clipName);
+            //AudioManager.Instance.PlaySFX(clipName);
         }
     }
 
@@ -347,6 +311,4 @@ public class WeaponSlot : MonoBehaviour
             HUDManager.Instance.ammoCountText.text = currentWeapon.isInfiniteAmmo ? "\u221E" : totalAmmo.ToString();
         }
     }
-
-    // Additional helper methods as needed
 }
