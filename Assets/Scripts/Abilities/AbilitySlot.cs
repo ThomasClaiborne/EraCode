@@ -1,13 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class AbilitySlot : MonoBehaviour
 {
     public Ability[] equippedAbilities = new Ability[3];
     public List<Ability> passiveAbilities = new List<Ability>();
     public int selectingAbilityIndex = -1;
+    private bool isActivatingAbility = false; 
 
     private PlayerController playerController;
+
 
     private void Start()
     {
@@ -48,8 +51,16 @@ public class AbilitySlot : MonoBehaviour
 
         if (selectingAbilityIndex != -1 && Input.GetMouseButtonDown(0))
         {
+            isActivatingAbility = true;
             ActivateTargetedAbility();
+            StartCoroutine(ResetActivationFlag());
         }
+    }
+
+    private IEnumerator ResetActivationFlag()
+    {
+        yield return new WaitForEndOfFrame();
+        isActivatingAbility = false;
     }
 
     private void HandleAbilityActivation(int index)
@@ -76,6 +87,14 @@ public class AbilitySlot : MonoBehaviour
 
     private void StartTargetSelection(int index)
     {
+        for (int i = 0; i < equippedAbilities.Length; i++)
+        {
+            if (i != index && equippedAbilities[i] != null)
+            {
+                equippedAbilities[i].CancelTargeting();
+            }
+        }
+
         selectingAbilityIndex = index;
         equippedAbilities[index].StartTargeting();
         // TODO: Implement visual indicator for target selection
@@ -164,5 +183,9 @@ public class AbilitySlot : MonoBehaviour
             passiveAbilities.Add(ability);
             ability.Initialize(playerController);
         }
+    }
+    public bool IsAbilityActive()
+    {
+        return selectingAbilityIndex != -1 || isActivatingAbility;
     }
 }

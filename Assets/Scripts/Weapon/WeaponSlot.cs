@@ -88,7 +88,7 @@ public class WeaponSlot : MonoBehaviour
 
     private bool CanShoot()
     {
-        if(GameManager.Instance.abilitySlot.selectingAbilityIndex != -1) return false;
+        if(GameManager.Instance.abilitySlot.IsAbilityActive()) return false;
 
         if (isWeaponCoolingDown[currentSlotIndex]) return false;
 
