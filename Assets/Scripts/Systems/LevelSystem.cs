@@ -8,7 +8,7 @@ public class LevelSystem
     public int SkillPoints { get; private set; }
 
     private const int BaseExperience = 100;
-    private const float ExperienceMultiplier = 1.5f;
+    private const float ExperienceMultiplier = 1.15f;
 
     public LevelSystem(int level = 1, int experience = 0, int statPoints = 0)
     {

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Westbound
+  m_EditorClassIdentifier: 
+  weaponName: Westbound
+  weaponId: Westbound
+  actionBarIcon: {fileID: 21300000, guid: f71fdb546bc4ec444a36c97caeaa8146, type: 3}
+  weaponIcon: {fileID: 21300000, guid: 29f3798d75c14a04f9e0dfdec3b775a3, type: 3}
+  bulletPrefab: {fileID: 628302780804052978, guid: d69ceaa336bf9f84c87bed3499c98902,
+    type: 3}
+  weaponModel: {fileID: 1190792675101273204, guid: 1e99666aabdbe294f937935ebcf6de05,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: -0.018, y: -0.006, z: 0.022}
+  holdRotation: {x: -17.34, y: -297.25, z: -80}
+  damage: 3
+  clipSize: 5
+  ammo: 50
+  reloadTime: 1.2
+  fireRate: 0.6
+  bulletLifeSpan: 1
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  weaponSoundSetName: Sniper
+  toggleSoundSetName: SniperToggle
+  isAutomatic: 0
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 0
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 1
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 1
+  piercingDamageReduction: 0.2
+  pierceLimit: 2
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 28000
+  ammoPrice: 2500
+  upgradeCost: 4750
+  requiredLevel: 18
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.07
+  fireRateUpgradeMultiplier: 0.98
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.03

@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Chaos
+  m_EditorClassIdentifier: 
+  weaponName: Chaos
+  weaponId: Chaos
+  actionBarIcon: {fileID: 21300000, guid: 7069794ddaf99a64a8cdf2f54f67f25b, type: 3}
+  weaponIcon: {fileID: 21300000, guid: 060e9c55ef60c1347b315b31105a7fc4, type: 3}
+  bulletPrefab: {fileID: 3448573197674773618, guid: f59a386480ef9894a9cc599baaa462e9,
+    type: 3}
+  weaponModel: {fileID: 7931139637967272486, guid: 47a0c30992ed1254f8ae306561cc8eda,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: 0.26, y: 0.041, z: 0.16}
+  holdRotation: {x: -6.35, y: 58.18, z: -95}
+  damage: 10
+  clipSize: 1
+  ammo: 15
+  reloadTime: 3
+  fireRate: 3
+  bulletLifeSpan: 5
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  weaponSoundSetName: RPG
+  toggleSoundSetName: RPGToggle
+  isAutomatic: 0
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 0
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 0
+  isRocketLauncher: 1
+  isPistol: 0
+  isPiercing: 0
+  piercingDamageReduction: 0
+  pierceLimit: 0
+  isExplosive: 1
+  explosionRadius: 3
+  explosionForce: 30
+  weaponPrice: 100000
+  ammoPrice: 10000
+  upgradeCost: 55000
+  requiredLevel: 25
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.1
+  fireRateUpgradeMultiplier: 0.99
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.1

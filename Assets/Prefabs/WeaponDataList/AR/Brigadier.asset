@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Brigadier
+  m_EditorClassIdentifier: 
+  weaponName: Brigadier
+  weaponId: Brigadier
+  actionBarIcon: {fileID: 21300000, guid: 0bae76c0d3a47144fbe51cc8a12156ce, type: 3}
+  weaponIcon: {fileID: 21300000, guid: f9c2d8259d19aad45b1932b0d4841b30, type: 3}
+  bulletPrefab: {fileID: 1641085697380562518, guid: 66c6cc29c93cbd344aaa899e1abc5f97,
+    type: 3}
+  weaponModel: {fileID: 1319486647288349681, guid: 60fa86b091415e944bdd7d6bfd80382f,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: -0.018, y: -0.006, z: 0.022}
+  holdRotation: {x: -17.34, y: -297.25, z: -80}
+  damage: 1
+  clipSize: 25
+  ammo: 100
+  reloadTime: 1
+  fireRate: 0.25
+  bulletLifeSpan: 3
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  weaponSoundSetName: AR
+  toggleSoundSetName: ARToggle
+  isAutomatic: 1
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 1
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 0
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 0
+  piercingDamageReduction: 0
+  pierceLimit: 0
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 1000
+  ammoPrice: 100
+  upgradeCost: 500
+  requiredLevel: 2
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.05
+  fireRateUpgradeMultiplier: 0.97
+  reloadTimeUpgradeMultiplier: 0.96
+  clipSizeUpgradeMultiplier: 1.03

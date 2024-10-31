@@ -59,7 +59,7 @@ public class WeaponUI : MonoBehaviour
     private Color originalTextColor;
     private bool isPointerOverAmmoButton = false;
     private bool isPointerOverUpgradeButton = false;
-
+    private bool isFirstWeaponDisplayed = false;
 
 
     private void Start()
@@ -183,6 +183,12 @@ public class WeaponUI : MonoBehaviour
 
     private void SelectWeapon(WeaponData weapon)
     {
+        if (isFirstWeaponDisplayed)
+            AudioManager.Instance.PlaySFXSet(weapon.toggleSoundSetName);
+
+        if (!isFirstWeaponDisplayed)
+            isFirstWeaponDisplayed = true;
+
         selectedWeapon = weapon;
         currentState = ActionState.Normal;
         UpdateUI();

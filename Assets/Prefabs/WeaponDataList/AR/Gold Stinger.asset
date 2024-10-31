@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08be39007d6a4a4e96c0fe9e6d55cd7, type: 3}
+  m_Name: Gold Stinger
+  m_EditorClassIdentifier: 
+  weaponName: Gold Stinger
+  weaponId: GoldStinger
+  actionBarIcon: {fileID: 21300000, guid: 2be4428dea5d82542b49aa9d1e34d899, type: 3}
+  weaponIcon: {fileID: 21300000, guid: dde287580be7270408cb254cce653dcb, type: 3}
+  bulletPrefab: {fileID: 1641085697380562518, guid: 66c6cc29c93cbd344aaa899e1abc5f97,
+    type: 3}
+  weaponModel: {fileID: 8948408879245280773, guid: 2b4166e8b26ffee4c978694dd6e76d50,
+    type: 3}
+  muzzleFlash: {fileID: 0}
+  ejectBullet: {fileID: 0}
+  ejectPoint: {fileID: 0}
+  holdPosition: {x: -0.018, y: -0.006, z: 0.022}
+  holdRotation: {x: -17.34, y: -297.25, z: -80}
+  damage: 1
+  clipSize: 25
+  ammo: 100
+  reloadTime: 1
+  fireRate: 0.25
+  bulletLifeSpan: 3
+  maxSpreadAngle: 0
+  bulletCount: 1
+  recoil: 0
+  weaponSoundSetName: AR
+  toggleSoundSetName: ARToggle
+  isAutomatic: 1
+  isBurst: 0
+  isInfiniteAmmo: 0
+  isAssaultRifle: 1
+  isSubmachineGun: 0
+  isShotgun: 0
+  isSniper: 0
+  isRocketLauncher: 0
+  isPistol: 0
+  isPiercing: 0
+  piercingDamageReduction: 0
+  pierceLimit: 0
+  isExplosive: 0
+  explosionRadius: 0
+  explosionForce: 0
+  weaponPrice: 200
+  ammoPrice: 10
+  upgradeCost: 100
+  requiredLevel: 300
+  currentLevel: 1
+  maxLevel: 10
+  upgradeCostMultiplier: 1.5
+  damageUpgradeMultiplier: 1.1
+  fireRateUpgradeMultiplier: 0.89
+  reloadTimeUpgradeMultiplier: 0.95
+  clipSizeUpgradeMultiplier: 1.1

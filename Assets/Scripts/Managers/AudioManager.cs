@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour
     [Header("Audio Sources")]
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource musicSource;
-    [SerializeField] private AudioSource weaponTailSource;  // New source for weapon tails
+    [SerializeField] private AudioSource weaponTailSource;
 
 
     [Header("Mixer")]
@@ -52,8 +52,8 @@ public class AudioManager : MonoBehaviour
     [System.Serializable]
     public class SoundSet
     {
-        public string setName;          // e.g., "ZombieImpact", "RobotImpact"
-        public AudioClip[] Sounds;  // Array of impact variations
+        public string setName;          // e.g., "EnemyImpact", "PlayerImpact"
+        public AudioClip[] Sounds;  // Array of variations
     }
 
     [Header("Sound Collections")]
@@ -260,13 +260,13 @@ public class AudioManager : MonoBehaviour
     {
         if (!sfxSoundLookup.TryGetValue(setName, out SoundSet set))
         {
-            Debug.LogWarning($"Enemy impact set not found: {setName}");
+            Debug.LogWarning($"sound set not found: {setName}");
             return;
         }
 
         if (set.Sounds == null || set.Sounds.Length == 0)
         {
-            Debug.LogWarning($"No impact sounds in set: {setName}");
+            Debug.LogWarning($"No sounds in set: {setName}");
             return;
         }
 
@@ -274,6 +274,5 @@ public class AudioManager : MonoBehaviour
         AudioClip sfx = set.Sounds[randomIndex];
 
         sfxSource.PlayOneShot(sfx);
-        Debug.Log($"Playing impact sound from set: {setName}");
     }
 }

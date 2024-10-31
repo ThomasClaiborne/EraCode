@@ -45,12 +45,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allWeapons:
+  - {fileID: 11400000, guid: e005f5400ddc2c44b9054f7b52e3b429, type: 2}
+  - {fileID: 11400000, guid: b94032147d26ea041bff42a023a9d583, type: 2}
+  - {fileID: 11400000, guid: 955bb16065317ce49b909ede6ccf423f, type: 2}
+  - {fileID: 11400000, guid: 13563f4185afeb44aa82676d6c2b6ca6, type: 2}
   - {fileID: 11400000, guid: 28de307f1d83fed4a87e6614d29eccac, type: 2}
-  - {fileID: 11400000, guid: 19da4e1f1585a344d9a21c096adb2fc1, type: 2}
   - {fileID: 11400000, guid: 9b95a15346038c14a90d575e122e3b54, type: 2}
-  - {fileID: 11400000, guid: e248711b6fbd98e4982fa1bd5b8f3bcb, type: 2}
-  - {fileID: 11400000, guid: 93c4950fd30a745419a2e70d25452ec8, type: 2}
+  - {fileID: 11400000, guid: b7a38a293b18dd54b9a6136692e2da4c, type: 2}
+  - {fileID: 11400000, guid: f09226c71beedd5409fa985d240a08d5, type: 2}
+  - {fileID: 11400000, guid: 422141427477acb40b4ae385f8cdc8d4, type: 2}
+  - {fileID: 11400000, guid: 19da4e1f1585a344d9a21c096adb2fc1, type: 2}
+  - {fileID: 11400000, guid: c16bf89541abbd641a9b813931e7222d, type: 2}
+  - {fileID: 11400000, guid: 0358b05a74961be4b93ef85d8067fc83, type: 2}
+  - {fileID: 11400000, guid: abab6313cd1fe8b4bad25a1b02dc94ce, type: 2}
+  - {fileID: 11400000, guid: 657a9fde9b307c84ba5a43e1668f36e2, type: 2}
+  - {fileID: 11400000, guid: fd24058eec145c945b980c4363bad105, type: 2}
+  - {fileID: 11400000, guid: 6b4024881f2d38c4aabc4807521d61b7, type: 2}
+  - {fileID: 11400000, guid: 05a2310857a343c40a57251937b37434, type: 2}
+  - {fileID: 11400000, guid: 0f14d764437b44c4290ecea58bda6b35, type: 2}
+  - {fileID: 11400000, guid: 4ad520040fe208e4fb92ae13b06a5b9d, type: 2}
+  - {fileID: 11400000, guid: cf9797d027bb4eb46a1d2d9ca1b9f859, type: 2}
   - {fileID: 11400000, guid: 85d9642c1c4b43f45bafcaa9cf63f997, type: 2}
+  - {fileID: 11400000, guid: 0079eb4216b5f104bacd82435b10326e, type: 2}
+  - {fileID: 11400000, guid: 292898d6ba9ef014097e5c6b2ea19997, type: 2}
+  - {fileID: 11400000, guid: 7de0e2d42699b734b8b91334dd0e50fd, type: 2}
+  - {fileID: 11400000, guid: e248711b6fbd98e4982fa1bd5b8f3bcb, type: 2}
+  - {fileID: 11400000, guid: 24b2a1a86b495ae49a3b4d11f1dd4e4d, type: 2}
+  - {fileID: 11400000, guid: 5bdefbec9edc15949a29a8b8fa23e7ba, type: 2}
+  - {fileID: 11400000, guid: 7fde51bcd5bea4c4e92e19c265838231, type: 2}
+  - {fileID: 11400000, guid: 93c4950fd30a745419a2e70d25452ec8, type: 2}
+  - {fileID: 11400000, guid: fb7611cee40eea34187d11669fa354ce, type: 2}
+  - {fileID: 11400000, guid: 85fba0c91f3ce9748b31e84deb3d9fce, type: 2}
+  - {fileID: 11400000, guid: 9001b145fd3ada94e9c1ed627c9f6d7b, type: 2}
+  - {fileID: 11400000, guid: 669808b6860b7ef4f825652f74e74ace, type: 2}
   assaultRifles: []
   submachineGuns: []
   shotguns: []
