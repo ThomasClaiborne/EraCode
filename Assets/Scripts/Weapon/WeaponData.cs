@@ -35,6 +35,7 @@ public class WeaponData: ScriptableObject
 
     [Header("Weapon Sounds")]
     public string weaponSoundSetName;
+    public string toggleSoundSetName;
 
     [Header("Weapon Shoot Mode")]
     public bool isAutomatic;

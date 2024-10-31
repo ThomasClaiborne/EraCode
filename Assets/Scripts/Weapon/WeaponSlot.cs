@@ -195,7 +195,9 @@ public class WeaponSlot : MonoBehaviour
         isReloading = true;
         HUDManager.Instance.StartReloadIndicator(currentWeapon.reloadTime);
 
+        AudioManager.Instance.PlaySFX("ReloadIn");
         yield return new WaitForSeconds(currentWeapon.reloadTime);
+        AudioManager.Instance.PlaySFX("ReloadOut");
 
         if (!isReloading) yield break;
 
@@ -278,6 +280,7 @@ public class WeaponSlot : MonoBehaviour
         currentWeapon.reloadTime = PlayerInventory.Instance.GetWeaponReloadTime(newWeapon.weaponId);
         currentWeapon.clipSize = PlayerInventory.Instance.GetWeaponClipSize(newWeapon.weaponId);
 
+        AudioManager.Instance.PlaySFXSet(currentWeapon.toggleSoundSetName);
         HUDManager.Instance.UpdateCurrentWeapon(currentWeapon, currentClipSize, PlayerInventory.Instance.GetAmmo(currentWeapon.weaponId));
     }
 

@@ -2213,7 +2213,7 @@ MonoBehaviour:
   synthiumTextSpawnPoint: {fileID: 7750870372531029272}
   deathEffectPrefab: {fileID: 0}
   hitFlashMaterial: {fileID: 0}
-  impactSoundSetName: Normal
+  impactSoundSetName: EnemyImpact
 --- !u!136 &325633867029406926
 CapsuleCollider:
   m_ObjectHideFlags: 0

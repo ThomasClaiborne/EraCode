@@ -22,7 +22,6 @@ public class PlayerInventory : MonoBehaviour
     public List<string> unlockedAbilityIDs = new List<string>();
     public Dictionary<string, string> chosenPathsByCategory = new Dictionary<string, string>();
 
-    [SerializeField] private WeaponData playerPistol;
     [SerializeField] private WeaponInventory AllWeaponsPrefab;
     [SerializeField] private AbilityInventory AllAbilitiesPrefab;
 
@@ -105,7 +104,8 @@ public class PlayerInventory : MonoBehaviour
 
         if (_equippedWeapons[0] == null)
         {
-            EquipWeapon(playerPistol, 0);
+            AddWeapon(AllWeaponsPrefab.allWeapons[0]);
+            EquipWeapon(OwnedWeapons[0], 0);
         }
     }
 
@@ -180,7 +180,7 @@ public class PlayerInventory : MonoBehaviour
     public void EquipWeapon(WeaponData weapon, int slot)
     {
         if (slot >= 0 && slot < EquippedWeapons.Length &&
-            OwnedWeapons.Contains(weapon) || weapon == playerPistol)
+            OwnedWeapons.Contains(weapon))
         {
             EquippedWeapons[slot] = weapon;
             SaveInventory();
@@ -483,7 +483,8 @@ public class PlayerInventory : MonoBehaviour
             weaponLevels[weapon.weaponId] = 1;
         }
 
-        EquipWeapon(playerPistol, 0);
+        AddWeapon(AllWeaponsPrefab.allWeapons[0]);
+        EquipWeapon(OwnedWeapons[0],0);
 
         LevelSystem = new LevelSystem();
         PlayerPrefs.DeleteKey(LEVEL_KEY);

@@ -141,7 +141,7 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
         currentHealth -= actualDamage;
         UpdateHealthBar();
         OnDamaged();
-        AudioManager.Instance.PlayEnemyImpact(impactSoundSetName);
+        AudioManager.Instance.PlaySFXSet(impactSoundSetName);
 
         if (currentHealth <= 0)
         {

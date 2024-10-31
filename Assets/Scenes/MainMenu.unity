@@ -8316,6 +8316,14 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 5de16570d443320439bae91025f2a985, type: 3}
     volume: 1
     pitch: 1
+  - name: ReloadIn
+    clip: {fileID: 8300000, guid: 4ff95af3c5d85294abd8d6287dbbc73d, type: 3}
+    volume: 1
+    pitch: 1
+  - name: ReloadOut
+    clip: {fileID: 8300000, guid: 3ffc260e6fef2cb4c9383eaf9add002a, type: 3}
+    volume: 1
+    pitch: 1
   music:
   - name: LevelMusic
     clip: {fileID: 8300000, guid: 1f19361d8c63d82479701b63c2ea0e83, type: 3}
@@ -8497,9 +8505,9 @@ MonoBehaviour:
     lastShot: {fileID: 0}
     tailFadeTime: 0.5
     sequenceResetTime: 0.5
-  enemyImpactSets:
-  - setName: Normal
-    impactSounds:
+  sfxSets:
+  - setName: EnemyImpact
+    Sounds:
     - {fileID: 8300000, guid: ea1826a70ede1ae44872ec2398a3e324, type: 3}
     - {fileID: 8300000, guid: 7cac22ab16af26441809e3f4eea0efea, type: 3}
     - {fileID: 8300000, guid: a525cfd1a9a29f0409380a169375e03a, type: 3}
@@ -8508,8 +8516,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3b7c60d9697a0f14499046c85d6ff006, type: 3}
     - {fileID: 8300000, guid: ac4ced05126165c4fac830c9104e37a0, type: 3}
     - {fileID: 8300000, guid: 6e7b4d739a2dfbc4eb00495ea5846ed8, type: 3}
-  - setName: Armor
-    impactSounds:
+  - setName: ArmorImpact
+    Sounds:
     - {fileID: 8300000, guid: 5d104f36d562e4540bb23aa4323c8fe8, type: 3}
     - {fileID: 8300000, guid: deae572f406307d4099ec6149c70ed45, type: 3}
     - {fileID: 8300000, guid: 6bfbf215a613d724983e0bfa3b14f5bf, type: 3}
@@ -8519,8 +8527,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 6163008aa3d4e8440852edc9f855952b, type: 3}
     - {fileID: 8300000, guid: 25146b30da458c042b8eb8c21b337b12, type: 3}
     - {fileID: 8300000, guid: 9e661956bd16d3546a3c2c74154d3a74, type: 3}
-  - setName: Blocked
-    impactSounds:
+  - setName: MetalImpact
+    Sounds:
     - {fileID: 8300000, guid: 507c57759ce626849b96cbaf62adfa65, type: 3}
     - {fileID: 8300000, guid: 194e8626c8e1c2c48adb3d7532086b41, type: 3}
     - {fileID: 8300000, guid: fd9a8606fd950bf41acb7f370f2e055b, type: 3}
@@ -8537,6 +8545,54 @@ MonoBehaviour:
     - {fileID: 8300000, guid: e02edaa774c184b429eadaa5ff42f7b3, type: 3}
     - {fileID: 8300000, guid: 023f1ccbf004a1b418de31aef03d7124, type: 3}
     - {fileID: 8300000, guid: b84ed2cbac465124791644742849967a, type: 3}
+  - setName: PistolToggle
+    Sounds:
+    - {fileID: 8300000, guid: b408f789ac2608a439bc552b16f68369, type: 3}
+    - {fileID: 8300000, guid: 633ca826c360a3742b61281fc1b6fde0, type: 3}
+    - {fileID: 8300000, guid: eb25652f9d34fd8419acfaf1d2dda815, type: 3}
+    - {fileID: 8300000, guid: af1b70aa52a96f74da38c51197ce5685, type: 3}
+    - {fileID: 8300000, guid: 4151b90ab727e84498821d24313e7d1c, type: 3}
+    - {fileID: 8300000, guid: 80980668ec199f14eb2a7be83376547d, type: 3}
+    - {fileID: 8300000, guid: e546f5f919d087b4dbc274d52397d494, type: 3}
+  - setName: RevolverToggle
+    Sounds:
+    - {fileID: 8300000, guid: df21b4edbeddd0147b28d0b602d95358, type: 3}
+    - {fileID: 8300000, guid: afb9a786ef39ec342b18b596a86e5979, type: 3}
+    - {fileID: 8300000, guid: 747148d6aef41e44a8f59f90c8ea3bdb, type: 3}
+    - {fileID: 8300000, guid: 09f47d42baa718f4aa660ae988b37fdf, type: 3}
+    - {fileID: 8300000, guid: 09c4eff34d1f9da46b2910a84ee892af, type: 3}
+  - setName: HeavyRifleToggle
+    Sounds:
+    - {fileID: 8300000, guid: 43b68fa6e6581cc4d8534f5afcc5f859, type: 3}
+    - {fileID: 8300000, guid: 54f86bf0769a63342a672d7f3096fb37, type: 3}
+    - {fileID: 8300000, guid: 6bacba6d8f6cdc54087725b346a583c2, type: 3}
+    - {fileID: 8300000, guid: 5fa71ebb053161340947863d1c6e8e78, type: 3}
+  - setName: RifleToggle
+    Sounds:
+    - {fileID: 8300000, guid: 7ad0c527c3bb5414cb975ff4b368c320, type: 3}
+    - {fileID: 8300000, guid: dd2b95cccd099664f8f7d3dc7ae07a33, type: 3}
+    - {fileID: 8300000, guid: 6e41cf88f2576184786a01c4da0ccd9f, type: 3}
+    - {fileID: 8300000, guid: f40f06300134155459a57d587276d5a1, type: 3}
+    - {fileID: 8300000, guid: 51e52ef8517223e4c8f94ddb68f30af8, type: 3}
+  - setName: ShotgunToggle
+    Sounds:
+    - {fileID: 8300000, guid: 1caa243d43747a34bbddeddde9f9a331, type: 3}
+    - {fileID: 8300000, guid: ec8379471f960574bb1e0b03de9bc36c, type: 3}
+    - {fileID: 8300000, guid: 95abe3a311310a947b1c4e04b9bcbaaa, type: 3}
+    - {fileID: 8300000, guid: b114204c079a81545a9c411ce94695ed, type: 3}
+    - {fileID: 8300000, guid: ffae4cc139a2fcd4288e302838623be3, type: 3}
+  - setName: SniperToggle
+    Sounds:
+    - {fileID: 8300000, guid: a9e32ed3c68fe4043b86352f1f74423e, type: 3}
+    - {fileID: 8300000, guid: 8c9bad4d3a94f0949bc60efc6da37f39, type: 3}
+    - {fileID: 8300000, guid: d36a1b73892d6a9488e019a891694fc3, type: 3}
+    - {fileID: 8300000, guid: e3b5b58ca61eca647b2278c4248a1983, type: 3}
+  - setName: SMGToggle
+    Sounds:
+    - {fileID: 8300000, guid: 3582e19a0fa44044888b40a983d150ab, type: 3}
+    - {fileID: 8300000, guid: 154da7e71d72aec4abe5bfd66afed2dd, type: 3}
+    - {fileID: 8300000, guid: 5fabe29d6a749a340af78df0d2c497e9, type: 3}
+    - {fileID: 8300000, guid: 43434247388f28542818d02f44dcb24e, type: 3}
 --- !u!4 &742389402
 Transform:
   m_ObjectHideFlags: 0
@@ -26639,7 +26695,6 @@ MonoBehaviour:
   equippedAbilities: []
   passiveAbilities: []
   unlockedAbilityIDs: []
-  playerPistol: {fileID: 11400000, guid: 28de307f1d83fed4a87e6614d29eccac, type: 2}
   AllWeaponsPrefab: {fileID: 1326787399595159164, guid: 303929b38f2f3d34ba8b1d01bf9e032f,
     type: 3}
   AllAbilitiesPrefab: {fileID: 8440620045434013295, guid: 1e576ac0d23f7b240a256e466a4ba071,
@@ -27620,8 +27675,8 @@ MonoBehaviour:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
-    m_SelectedTrigger: 
-    m_DisabledTrigger: 
+    m_SelectedTrigger: Normal
+    m_DisabledTrigger: Normal
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5543040359096762195}
   m_OnClick:
@@ -27918,8 +27973,8 @@ MonoBehaviour:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
-    m_SelectedTrigger: 
-    m_DisabledTrigger: 
+    m_SelectedTrigger: Normal
+    m_DisabledTrigger: Normal
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4683769168051392188}
   m_OnClick:

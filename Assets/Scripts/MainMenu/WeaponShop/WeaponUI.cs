@@ -65,27 +65,27 @@ public class WeaponUI : MonoBehaviour
     private void Start()
     {
         PopulateWeaponList();
+        SelectWeapon(weaponInventory.allWeapons[0]);
         SetupAmmoButtonHover();
         SetupUpgradeButtonHover();
         UpdateActionBar();
         UpdateUI();
+
     }
 
     private void PopulateWeaponList()
     {
         foreach (var weapon in weaponInventory.allWeapons)
         {
-            if (weapon.name != "Pistol")
-            {
-                GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
-                Button button = buttonObj.GetComponent<Button>();
-                TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-                Image image = buttonObj.transform.Find("ICON_Next").GetComponent<Image>();
+            GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
+            Button button = buttonObj.GetComponent<Button>();
+            TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
+            Image image = buttonObj.transform.Find("ICON_Next").GetComponent<Image>();
 
-                buttonText.text = weapon.weaponName;
-                image.sprite = weapon.actionBarIcon;
-                button.onClick.AddListener(() => SelectWeapon(weapon)); 
-            }
+            buttonText.text = weapon.weaponName;
+            image.sprite = weapon.actionBarIcon;
+            button.onClick.AddListener(() => SelectWeapon(weapon)); 
+            
         }
     }
 
@@ -123,6 +123,7 @@ public class WeaponUI : MonoBehaviour
         else if (slotIndex > 0 && PlayerInventory.Instance.EquippedWeapons[slotIndex] != null)
         {
             WeaponData weaponToUnequip = PlayerInventory.Instance.EquippedWeapons[slotIndex];
+            AudioManager.Instance.PlaySFXSet(weaponToUnequip.toggleSoundSetName);
             confirmPrompt.Show(
                 $"Unequip {weaponToUnequip.weaponName} from slot {slotIndex + 1}?",
                 () => UnequipWeapon(slotIndex),
@@ -133,9 +134,12 @@ public class WeaponUI : MonoBehaviour
 
     private void UnequipWeapon(int slotIndex)
     {
-        PlayerInventory.Instance.UnequipWeapon(slotIndex);
-        UpdateActionBar();
-        UpdateUI();
+        if (slotIndex > 0)
+        {
+            PlayerInventory.Instance.UnequipWeapon(slotIndex);
+            UpdateActionBar();
+            UpdateUI();
+        }
     }
 
     private void SetActionBarSlotsHighlighted(bool highlighted)
@@ -259,6 +263,13 @@ public class WeaponUI : MonoBehaviour
             buyAmmoButton.interactable = false;
             return;
         }
+        else if (selectedWeapon.isPistol)
+        {
+            buyAmmoButtonText.text = "INFINITE";
+            buyAmmoButton.interactable = false;
+            ammoText.text = $"Ammo: \u221E";
+            return;
+        }
         else
         {
             buyAmmoButton.interactable = true;
@@ -296,6 +307,12 @@ public class WeaponUI : MonoBehaviour
             buyAmmoButton.interactable = false;
             return;
         }
+        if (selectedWeapon.isPistol)
+        {
+            buyAmmoButtonText.text = "INFINITE";
+            buyAmmoButton.interactable = false;
+            return;
+        }
 
         buyAmmoButtonText.text = $"Price: ${selectedWeapon.ammoPrice}";
     }
@@ -308,6 +325,12 @@ public class WeaponUI : MonoBehaviour
         if (currentAmmo >= 999)
         {
             buyAmmoButtonText.text = "MAX AMMO";
+            buyAmmoButton.interactable = false;
+            return;
+        }
+        if (selectedWeapon.isPistol)
+        {
+            buyAmmoButtonText.text = "INFINITE";
             buyAmmoButton.interactable = false;
             return;
         }
@@ -338,7 +361,7 @@ public class WeaponUI : MonoBehaviour
         }
     }
 
-        private void ToggleUpgradeButton(bool active)
+    private void ToggleUpgradeButton(bool active)
     {
         upgradeButton.gameObject.SetActive(active);
     }
@@ -498,9 +521,16 @@ public class WeaponUI : MonoBehaviour
 
     private void OnEquipClicked()
     {
-        currentState = ActionState.ConfirmEquip;
-        SetActionButtonState(ActionState.ConfirmEquip, true);
-        SetActionBarSlotsHighlighted(true);
+        if (selectedWeapon.isPistol)
+        {
+            EquipWeapon(0);
+        }
+        else
+        {
+            currentState = ActionState.ConfirmEquip;
+            SetActionButtonState(ActionState.ConfirmEquip, true);
+            SetActionBarSlotsHighlighted(true);
+        }
     }
 
     private string GetWeaponType(WeaponData weapon)
@@ -523,7 +553,7 @@ public class WeaponUI : MonoBehaviour
     private bool IsWeaponEquipped(WeaponData weapon)
     {
         WeaponData[] equippedWeapons = PlayerInventory.Instance.EquippedWeapons;
-        for (int i = 1; i <= 4; i++)
+        for (int i = 0; i <= 4; i++)
         {
             if (equippedWeapons[i] == weapon)
                 return true;
@@ -549,10 +579,15 @@ public class WeaponUI : MonoBehaviour
 
     private void EquipWeapon(int slot)
     {
+
+        if (selectedWeapon.isPistol)
+        {
+            slot = 0;
+        }
+
         PlayerInventory.Instance.EquipWeapon(selectedWeapon, slot);
         UpdateActionBar();
         UpdateUI();
-
     }
 
     private void CancelAction()

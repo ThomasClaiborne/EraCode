@@ -50,22 +50,22 @@ public class AudioManager : MonoBehaviour
     }
 
     [System.Serializable]
-    public class EnemyImpactSet
+    public class SoundSet
     {
         public string setName;          // e.g., "ZombieImpact", "RobotImpact"
-        public AudioClip[] impactSounds;  // Array of impact variations
+        public AudioClip[] Sounds;  // Array of impact variations
     }
 
     [Header("Sound Collections")]
     [SerializeField] private Sound[] sfx;
     [SerializeField] private Sound[] music;
     [SerializeField] private WeaponSoundSet[] weaponSoundSets;
-    [SerializeField] private EnemyImpactSet[] enemyImpactSets;
+    [SerializeField] private SoundSet[] sfxSets;
 
     private Dictionary<string, Sound> sfxLookup = new Dictionary<string, Sound>();
     private Dictionary<string, Sound> musicLookup = new Dictionary<string, Sound>();
     private Dictionary<string, WeaponSoundSet> weaponSoundLookup = new Dictionary<string, WeaponSoundSet>();
-    private Dictionary<string, EnemyImpactSet> enemyImpactLookup = new Dictionary<string, EnemyImpactSet>();
+    private Dictionary<string, SoundSet> sfxSoundLookup = new Dictionary<string, SoundSet>();
     private Dictionary<string, float> lastShotTimes = new Dictionary<string, float>();
     private Coroutine currentTailFade;
 
@@ -114,11 +114,11 @@ public class AudioManager : MonoBehaviour
         }
 
         // Initialize Enemy Impact Sounds dictionary
-        foreach (EnemyImpactSet eis in enemyImpactSets)
+        foreach (SoundSet eis in sfxSets)
         {
-            if (!enemyImpactLookup.ContainsKey(eis.setName))
+            if (!sfxSoundLookup.ContainsKey(eis.setName))
             {
-                enemyImpactLookup.Add(eis.setName, eis);
+                sfxSoundLookup.Add(eis.setName, eis);
             }
         }
 
@@ -256,26 +256,24 @@ public class AudioManager : MonoBehaviour
         weaponTailSource.volume = startVolume;
     }
 
-    public void PlayEnemyImpact(string impactSetName)
+    public void PlaySFXSet(string setName)
     {
-        if (!enemyImpactLookup.TryGetValue(impactSetName, out EnemyImpactSet impactSet))
+        if (!sfxSoundLookup.TryGetValue(setName, out SoundSet set))
         {
-            Debug.LogWarning($"Enemy impact set not found: {impactSetName}");
+            Debug.LogWarning($"Enemy impact set not found: {setName}");
             return;
         }
 
-        if (impactSet.impactSounds == null || impactSet.impactSounds.Length == 0)
+        if (set.Sounds == null || set.Sounds.Length == 0)
         {
-            Debug.LogWarning($"No impact sounds in set: {impactSetName}");
+            Debug.LogWarning($"No impact sounds in set: {setName}");
             return;
         }
 
-        // Pick random impact sound
-        int randomIndex = Random.Range(0, impactSet.impactSounds.Length);
-        AudioClip impactSound = impactSet.impactSounds[randomIndex];
+        int randomIndex = Random.Range(0, set.Sounds.Length);
+        AudioClip sfx = set.Sounds[randomIndex];
 
-        // Play the impact sound
-        sfxSource.PlayOneShot(impactSound);
-        Debug.Log($"Playing impact sound from set: {impactSetName}");
+        sfxSource.PlayOneShot(sfx);
+        Debug.Log($"Playing impact sound from set: {setName}");
     }
 }

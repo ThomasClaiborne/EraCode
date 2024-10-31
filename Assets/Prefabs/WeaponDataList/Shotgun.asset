@@ -35,6 +35,7 @@ MonoBehaviour:
   bulletCount: 3
   recoil: 0
   weaponSoundSetName: Shotgun
+  toggleSoundSetName: ShotgunToggle
   isAutomatic: 0
   isBurst: 0
   isInfiniteAmmo: 0

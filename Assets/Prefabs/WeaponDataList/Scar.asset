@@ -35,6 +35,7 @@ MonoBehaviour:
   bulletCount: 1
   recoil: 0
   weaponSoundSetName: AssaultRifle
+  toggleSoundSetName: RifleToggle
   isAutomatic: 1
   isBurst: 0
   isInfiniteAmmo: 0
