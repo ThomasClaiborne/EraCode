@@ -49,6 +49,7 @@ public class LevelManager : MonoBehaviour
         StartNextWave();
         PlayerKills = 0;
         SynthiumEarned = 0;
+        AudioManager.Instance.PlayMusic("LevelMusic");
     }
 
     void InitializeEnemySpawners()

@@ -38,6 +38,9 @@ public class WeaponUI : MonoBehaviour
     public GameObject levelRequirementObject;
     public TextMeshProUGUI levelRequirementText;
 
+    [Header("Ammo Limit")]
+    public int ammoLimit = 999;
+
     [Header("Action Bar")]
     [SerializeField] private ActionBarSlot[] actionBarSlots;
     [SerializeField] private ConfirmationPrompt confirmPrompt;
@@ -250,8 +253,7 @@ public class WeaponUI : MonoBehaviour
 
         int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
         ammoText.text = $"Ammo: {currentAmmo}";
-        int maxAmmo = 999;
-        if (currentAmmo >= maxAmmo)
+        if (currentAmmo >= ammoLimit)
         {
             buyAmmoButtonText.text = "MAX AMMO";
             buyAmmoButton.interactable = false;
@@ -473,13 +475,12 @@ public class WeaponUI : MonoBehaviour
     {
         int currentAmmo = PlayerInventory.Instance.GetAmmo(selectedWeapon.weaponId);
         int clipSize = PlayerInventory.Instance.GetWeaponClipSize(selectedWeapon.weaponId);
-        int maxAmmo = 999;
 
         if (PlayerInventory.Instance.SpendCurrency(selectedWeapon.ammoPrice))
         {
-            if(currentAmmo + clipSize > maxAmmo)
+            if(currentAmmo + clipSize > ammoLimit)
             {
-                PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, maxAmmo - currentAmmo);
+                PlayerInventory.Instance.AddAmmo(selectedWeapon.weaponId, ammoLimit - currentAmmo);
             }
             else
             {

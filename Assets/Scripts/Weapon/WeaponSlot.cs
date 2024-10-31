@@ -128,6 +128,10 @@ public class WeaponSlot : MonoBehaviour
         {
             RegularShot(shootPoint);
         }
+
+        bool isLastShot = currentClipSize <= 1;
+        AudioManager.Instance.PlayWeaponSound(currentWeapon.weaponSoundSetName, isLastShot);
+
         currentClipSize--;
         HUDManager.Instance.ConsumeBullet();
 
@@ -282,15 +286,6 @@ public class WeaponSlot : MonoBehaviour
         if (slotIndex >= weaponSlots.Length) return; // Can't modify slot 0 (default weapon)
 
         weaponSlots[slotIndex] = ScriptableObject.Instantiate(weapon);
-    }
-
-    private void PlayRandomShotSound()
-    {
-        if (currentWeapon.shotAudioClips.Count > 0)
-        {
-            string clipName = currentWeapon.shotAudioClips[UnityEngine.Random.Range(0, currentWeapon.shotAudioClips.Count)];
-            //AudioManager.Instance.PlaySFX(clipName);
-        }
     }
 
     private void PlayReloadAudio()

@@ -34,8 +34,7 @@ MonoBehaviour:
   maxSpreadAngle: 0
   bulletCount: 1
   recoil: 0
-  shotAudioClips: []
-  reloadAudioClips: []
+  weaponSoundSetName: Sniper
   isAutomatic: 0
   isBurst: 0
   isInfiniteAmmo: 0

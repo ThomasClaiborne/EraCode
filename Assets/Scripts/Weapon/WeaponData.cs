@@ -32,8 +32,9 @@ public class WeaponData: ScriptableObject
     public float maxSpreadAngle;
     public int bulletCount = 1;
     public float recoil;
-    public List<string> shotAudioClips;
-    public List<string> reloadAudioClips;
+
+    [Header("Weapon Sounds")]
+    public string weaponSoundSetName;
 
     [Header("Weapon Shoot Mode")]
     public bool isAutomatic;

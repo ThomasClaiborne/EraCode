@@ -39,6 +39,7 @@ public class MainMenuController : MonoBehaviour
     {
         InitializeMenus();
         SetActiveMenu("GameMenu");
+        AudioManager.Instance.PlayMusic("MainMenuMusic");
     }
 
     private void InitializeMenus()

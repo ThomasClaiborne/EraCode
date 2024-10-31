@@ -34,8 +34,7 @@ MonoBehaviour:
   maxSpreadAngle: 10
   bulletCount: 3
   recoil: 0
-  shotAudioClips: []
-  reloadAudioClips: []
+  weaponSoundSetName: Shotgun
   isAutomatic: 0
   isBurst: 0
   isInfiniteAmmo: 0
