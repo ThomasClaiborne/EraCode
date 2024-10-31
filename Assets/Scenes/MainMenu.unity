@@ -8311,8 +8311,20 @@ MonoBehaviour:
     type: 2}
   musicMixerGroup: {fileID: 6182564531986428933, guid: 66750d7cecb7d6f4caf50779ad58d0e0,
     type: 2}
-  sfx: []
-  music: []
+  sfx:
+  - name: EnemyDestroyed
+    clip: {fileID: 8300000, guid: 5de16570d443320439bae91025f2a985, type: 3}
+    volume: 1
+    pitch: 1
+  music:
+  - name: LevelMusic
+    clip: {fileID: 8300000, guid: 1f19361d8c63d82479701b63c2ea0e83, type: 3}
+    volume: 1
+    pitch: 1
+  - name: MainMenuMusic
+    clip: {fileID: 8300000, guid: ffe717537c4be5940a843acafd6db718, type: 3}
+    volume: 1
+    pitch: 1
   weaponSoundSets:
   - setName: Pistol
     isAutomatic: 0
@@ -8485,6 +8497,46 @@ MonoBehaviour:
     lastShot: {fileID: 0}
     tailFadeTime: 0.5
     sequenceResetTime: 0.5
+  enemyImpactSets:
+  - setName: Normal
+    impactSounds:
+    - {fileID: 8300000, guid: ea1826a70ede1ae44872ec2398a3e324, type: 3}
+    - {fileID: 8300000, guid: 7cac22ab16af26441809e3f4eea0efea, type: 3}
+    - {fileID: 8300000, guid: a525cfd1a9a29f0409380a169375e03a, type: 3}
+    - {fileID: 8300000, guid: 9cc3478477cee024db6df95456d18b44, type: 3}
+    - {fileID: 8300000, guid: 0fff1be3564c70345aa46afee4593235, type: 3}
+    - {fileID: 8300000, guid: 3b7c60d9697a0f14499046c85d6ff006, type: 3}
+    - {fileID: 8300000, guid: ac4ced05126165c4fac830c9104e37a0, type: 3}
+    - {fileID: 8300000, guid: 6e7b4d739a2dfbc4eb00495ea5846ed8, type: 3}
+  - setName: Armor
+    impactSounds:
+    - {fileID: 8300000, guid: 5d104f36d562e4540bb23aa4323c8fe8, type: 3}
+    - {fileID: 8300000, guid: deae572f406307d4099ec6149c70ed45, type: 3}
+    - {fileID: 8300000, guid: 6bfbf215a613d724983e0bfa3b14f5bf, type: 3}
+    - {fileID: 8300000, guid: 56f1243055a94c444ad81df97d226109, type: 3}
+    - {fileID: 8300000, guid: 61252f58e2cebd642b30c430de0ef8c9, type: 3}
+    - {fileID: 8300000, guid: 4d591e22a0180e64c9e556cfdf0fe94e, type: 3}
+    - {fileID: 8300000, guid: 6163008aa3d4e8440852edc9f855952b, type: 3}
+    - {fileID: 8300000, guid: 25146b30da458c042b8eb8c21b337b12, type: 3}
+    - {fileID: 8300000, guid: 9e661956bd16d3546a3c2c74154d3a74, type: 3}
+  - setName: Blocked
+    impactSounds:
+    - {fileID: 8300000, guid: 507c57759ce626849b96cbaf62adfa65, type: 3}
+    - {fileID: 8300000, guid: 194e8626c8e1c2c48adb3d7532086b41, type: 3}
+    - {fileID: 8300000, guid: fd9a8606fd950bf41acb7f370f2e055b, type: 3}
+    - {fileID: 8300000, guid: 45fdfb7979b2f6d408381a62c78af711, type: 3}
+    - {fileID: 8300000, guid: b2e7f9cef65947d42b2f06424f130868, type: 3}
+    - {fileID: 8300000, guid: 15f94d8e8bf969f4f88292954c34aa24, type: 3}
+    - {fileID: 8300000, guid: 7e793136bb7e8cc46a2cc4e6b03b17ea, type: 3}
+    - {fileID: 8300000, guid: f9107daa45dd1d1428ebbbd443f56aaa, type: 3}
+    - {fileID: 8300000, guid: 8e6a727c9b4ef194fad4031f650f41db, type: 3}
+    - {fileID: 8300000, guid: fe09ed128070d7544acaf87079e8eac6, type: 3}
+    - {fileID: 8300000, guid: 985de07a0d6602443932ffabb0b1a242, type: 3}
+    - {fileID: 8300000, guid: c401a76b9e7debb4cb8443b5af2b594c, type: 3}
+    - {fileID: 8300000, guid: 71d7c4fbfce792941ba90f4cf71ca4fe, type: 3}
+    - {fileID: 8300000, guid: e02edaa774c184b429eadaa5ff42f7b3, type: 3}
+    - {fileID: 8300000, guid: 023f1ccbf004a1b418de31aef03d7124, type: 3}
+    - {fileID: 8300000, guid: b84ed2cbac465124791644742849967a, type: 3}
 --- !u!4 &742389402
 Transform:
   m_ObjectHideFlags: 0

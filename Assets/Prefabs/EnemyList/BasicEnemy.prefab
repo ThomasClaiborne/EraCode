@@ -6123,6 +6123,7 @@ MonoBehaviour:
   synthiumTextSpawnPoint: {fileID: 1111392839968467782}
   deathEffectPrefab: {fileID: 0}
   hitFlashMaterial: {fileID: 0}
+  impactSoundSetName: Normal
 --- !u!136 &6805085799496957267
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -38,6 +38,9 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
     [SerializeField] protected GameObject deathEffectPrefab;
     [SerializeField] protected Material hitFlashMaterial;
 
+    [Header("Audio")]
+    [SerializeField] protected string impactSoundSetName;
+
     protected Rigidbody rb;
     protected EnemyStateMachine stateMachine;
     protected BaseEnemyAnimationController animationController;
@@ -138,6 +141,7 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
         currentHealth -= actualDamage;
         UpdateHealthBar();
         OnDamaged();
+        AudioManager.Instance.PlayEnemyImpact(impactSoundSetName);
 
         if (currentHealth <= 0)
         {
@@ -179,6 +183,7 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
             GameObject effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
             Destroy(effect, 0.5f);
         }
+        AudioManager.Instance.PlaySFX("EnemyDestroyed");
 
         Destroy(gameObject);
     }
@@ -190,6 +195,7 @@ public abstract class BaseEnemy : MonoBehaviour, IDamage
         LevelManager.Instance.AddSynthium(rewards.synthiumReward);
         DisplaySynthiumReward();
         HUDManager.Instance.UpdateSynthiumText();
+        HUDManager.Instance.UpdateLevelDisplay();
     }
 
     protected virtual void DisplaySynthiumReward()
