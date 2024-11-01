@@ -213,6 +213,7 @@ public class UIManager : MonoBehaviour
     public void ShowWinMenu()
     {
         CanPause(false);
+        PlayerInventory.Instance.UnlockNextLevel(LevelManager.Instance.LevelName);
         ShowMissionStatus(true);
     }
 

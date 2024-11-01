@@ -178,9 +178,6 @@ public class MainMenuController : MonoBehaviour
 
     public void ExitGame()
     {
-        // Reset the player's inventory when exiting the game
-        PlayerInventory.Instance.ResetInventory();
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

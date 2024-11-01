@@ -39,10 +39,16 @@ public class PlayerInventory : MonoBehaviour
     private const string EXPERIENCE_KEY = "PlayerExperience";
     private const string STAT_POINTS_KEY = "PlayerStatPoints";
 
+    [Header("Level Progress")]
+    [SerializeField] private List<LevelData> allLevels;
+    public HashSet<string> unlockedLevels = new HashSet<string>();
+    private const string UNLOCKED_LEVELS_KEY = "UnlockedLevels";
+
     private void Awake()
     {
         if (Instance == null)
         {
+
             Instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeInventory();   
@@ -62,6 +68,45 @@ public class PlayerInventory : MonoBehaviour
     {
         playerName = name;
         SaveInventory(); 
+    }
+
+    public void UnlockNextLevel(string currentLevelId)
+    {
+        // Get the next level ID by incrementing the number
+        string[] parts = currentLevelId.Split('-');
+        if (parts.Length == 2 && int.TryParse(parts[1], out int levelNumber))
+        {
+            string nextLevelId = $"{parts[0]}-{levelNumber + 1}";
+            unlockedLevels.Add(nextLevelId);
+            SaveInventory();
+        }
+    }
+
+    public void UnlockLevel(string levelId)
+    {
+        if (!unlockedLevels.Contains(levelId))
+        {
+            unlockedLevels.Add(levelId);
+
+            // Find and unlock next level in sequence
+            LevelData currentLevel = allLevels.Find(l => l.levelId == levelId);
+            if (currentLevel != null && !string.IsNullOrEmpty(currentLevel.nextLevelId))
+            {
+                unlockedLevels.Add(currentLevel.nextLevelId);
+            }
+
+            SaveInventory();
+        }
+    }
+
+    public bool IsLevelUnlocked(string levelId)
+    {
+        // First level is always unlocked
+        LevelData level = allLevels.Find(l => l.levelId == levelId);
+        if (level != null && level.isFirstLevel)
+            return true;
+
+        return unlockedLevels.Contains(levelId);
     }
     public void AddAmmo(string weaponId, int amount)
     {
@@ -107,6 +152,12 @@ public class PlayerInventory : MonoBehaviour
             AddWeapon(AllWeaponsPrefab.allWeapons[0]);
             EquipWeapon(OwnedWeapons[0], 0);
         }
+
+        if (!unlockedLevels.Contains("OPZ1-1"))
+        {
+            unlockedLevels.Add("OPZ1-1");
+        }
+
     }
 
     public void AddCurrency(int amount)
@@ -330,6 +381,9 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.SetInt(EXPERIENCE_KEY, LevelSystem.Experience);
         PlayerPrefs.SetInt(STAT_POINTS_KEY, LevelSystem.SkillPoints);
 
+        string unlockedLevelsString = string.Join(",", unlockedLevels);
+        PlayerPrefs.SetString(UNLOCKED_LEVELS_KEY, unlockedLevelsString);
+
         PlayerPrefs.Save();
     }
 
@@ -422,6 +476,9 @@ public class PlayerInventory : MonoBehaviour
                 );
         }
 
+        string unlockedLevelsString = PlayerPrefs.GetString(UNLOCKED_LEVELS_KEY, "OPZ1-1");
+        unlockedLevels = new HashSet<string>(unlockedLevelsString.Split(','));
+
         int savedLevel = PlayerPrefs.GetInt(LEVEL_KEY, 1);
         int savedExperience = PlayerPrefs.GetInt(EXPERIENCE_KEY, 0);
         int savedStatPoints = PlayerPrefs.GetInt(STAT_POINTS_KEY, 0);
@@ -475,6 +532,7 @@ public class PlayerInventory : MonoBehaviour
         unlockedAbilityIDs.Clear();
         weaponAmmo.Clear();
         weaponLevels.Clear();
+        unlockedLevels.Clear();
 
 
         foreach (var weapon in AllWeaponsPrefab.allWeapons)
@@ -482,6 +540,8 @@ public class PlayerInventory : MonoBehaviour
             weaponAmmo[weapon.weaponId] = weapon.ammo;
             weaponLevels[weapon.weaponId] = 1;
         }
+
+        unlockedLevels.Add("OPZ1-1");
 
         AddWeapon(AllWeaponsPrefab.allWeapons[0]);
         EquipWeapon(OwnedWeapons[0],0);
@@ -499,6 +559,8 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.DeleteKey(WEAPON_LEVELS_KEY);
         PlayerPrefs.DeleteKey(EQUIPPED_ABILITIES_KEY);
         PlayerPrefs.DeleteKey(UNLOCKED_ABILITIES_KEY);
+        PlayerPrefs.DeleteKey(UNLOCKED_LEVELS_KEY);
+
         PlayerPrefs.Save();
 
         SaveInventory();

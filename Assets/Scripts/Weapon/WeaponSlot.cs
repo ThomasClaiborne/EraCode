@@ -244,7 +244,7 @@ public class WeaponSlot : MonoBehaviour
 
     private void SwitchToSlot(int slotIndex)
     {
-        if (slotIndex < 0 || slotIndex >= weaponSlots.Length) return;
+        if (slotIndex < 0 || slotIndex >= weaponSlots.Length || weaponSlots[slotIndex] == null) return;
 
         CancelReload();
         currentSlotIndex = slotIndex;

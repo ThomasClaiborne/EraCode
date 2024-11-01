@@ -157,22 +157,35 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private float ConvertToDecibels(float volume)
+    {
+        // Return minimum decibels (-80dB) when volume is 0
+        if (volume <= 0)
+            return -80f;
+
+        // Convert linear (0-1) volume to decibels
+        return Mathf.Log10(volume) * 20f;
+    }
+
     public void SetMasterVolume(float volume)
     {
         volume = Mathf.Clamp01(volume);
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(volume) * 20f);
+        float mixerVolume = ConvertToDecibels(volume);
+        audioMixer.SetFloat("MasterVolume", mixerVolume);
     }
 
     public void SetSFXVolume(float volume)
     {
         volume = Mathf.Clamp01(volume);
-        audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20f);
+        float mixerVolume = ConvertToDecibels(volume);
+        audioMixer.SetFloat("SFXVolume", mixerVolume);
     }
 
     public void SetMusicVolume(float volume)
     {
         volume = Mathf.Clamp01(volume);
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20f);
+        float mixerVolume = ConvertToDecibels(volume);
+        audioMixer.SetFloat("MusicVolume", mixerVolume);
     }
 
     public void PlayWeaponSound(string soundSetName, bool isLastShot = false)
