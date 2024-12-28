@@ -20,7 +20,6 @@ public class SpawnInterval
     }
 }
 
-
 [System.Serializable]
 public class EnemyWave
 {

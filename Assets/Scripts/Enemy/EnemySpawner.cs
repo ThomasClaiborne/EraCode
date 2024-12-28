@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
 
     private float spawnTimer;
 
-    public float spawnInterval = 5f; 
+    public float spawnInterval = 3f; 
     public int numberofEnemies;
     public int spawnerID;
 
