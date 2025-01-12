@@ -1,0 +1,106 @@
+EraCode
+Game Overview
+EraCode is a 3D top-down shooter set in a post-apocalyptic world where humanity struggles to reclaim their planet from Synthionix , a powerful tech organization. Players join the Decoders, a special group of resistance fighters equipped with advanced DCODE gloves, battling against an army of Synthroids – robotic, android, and cyborg entities.
+Setting
+The game takes place in a world that blends modern urban decay with futuristic technology. Crumbling cityscapes are intertwined with Synthionix 's advanced tech, creating a visually striking contrast between destruction and innovation. Neon lights flicker amidst the ruins, and nature slowly reclaims abandoned structures, setting a mood that's both eerie and awe-inspiring.
+Core Gameplay
+
+Perspective: 3D top-down shooter
+Player Position: Fixed at the bottom center of the screen (16:9 aspect ratio)
+Combat Style: Wave-based defense behind a destructible wall
+Primary Objective: Clear and secure various sites from Synthionix 's Synthroid army, progressing towards their main facility
+
+Key Features
+DCODE Glove System
+
+Unique ability-granting device genetically bound to each Decoder
+Customizable abilities: weapon enhancements, elemental attacks, defensive skills
+Upgradeable using parts collected from defeated Synthroids
+
+Weapons and Combat
+
+Default pistol with unlimited ammo (accessed with '1' key)
+Customizable weapon slots (initially 2, expandable to 5)
+Variety of purchasable and upgradeable weapons
+Ammo management for non-default weapons
+
+Progression System
+
+XP gained through Synthroid kills and level completion
+Player leveling unlocks new weapons and abilities
+Currency system for purchasing weapons, upgrades, and ammo
+
+Enemy Variety
+
+Diverse range of Synthroids, including robotic, android, and cyborg foes
+Multiple boss encounters, each representing different divisions of Synthionix 
+Final confrontation with the head of Synthionix 
+
+Level Design
+
+Multiple sites to clear and secure from Synthionix 's control
+Each level features unique environmental challenges and Synthroid compositions
+Progressive difficulty leading to Synthionix 's final facility
+
+Customization
+
+Character creation with customizable appearance
+DCODE glove personalization
+Flexible loadout system for weapons and abilities
+
+Technical Details
+Unity Integration
+
+Developed using Unity URP (Universal Render Pipeline)
+Utilizes ScriptableObjects for weapon data management
+
+Game Systems
+
+Main Menu: Level selection, Weapon Shop, Exit options
+Weapon Shop: Interface for purchasing, equipping, upgrading weapons and buying ammo
+PlayerInventory: Persistent singleton managing Decoder stats, inventory, and progression
+GameManager: Controls game state and key object references
+LevelManager: Customizes and manages Synthroid waves for each level
+HUDManager: Displays Decoder health, currency, XP, and other vital information
+UIManager: Handles pause, win, and lose menu interfaces
+
+Visual Style
+
+Post-apocalyptic cityscape with a blend of decay and Synthionix 's high-tech elements
+Contrast between dark, muted tones of destruction and vibrant glows of surviving technology
+Atmospheric effects including dynamic lighting, particle systems, and post-processing
+
+Target Audience
+Gamers who enjoy:
+
+Fast-paced shooter gameplay
+Sci-fi and post-apocalyptic settings
+Character customization and progression systems
+Strategic combat with ability and weapon management
+
+Future Development Goals
+
+Expansion of the DCODE glove ability system
+Implementation of varied AI behaviors for different Synthroid types
+Creation of additional levels showcasing diverse Synthionix -controlled environments
+Development of a mission-based storyline following the Decoders' fight against Synthionix 
+Potential monetization through cosmetic items or seasonal content
+
+Factions
+The Decoders
+
+Player's faction
+Resistance fighters equipped with DCODE gloves
+Mission to reclaim the world from Synthionix 
+
+Synthionix 
+
+Main antagonist organization
+Controls an army of Synthroids
+Multiple divisions, each with unique tech specializations
+
+Synthroids
+
+Collective term for Synthionix 's robotic, android, and cyborg forces
+Various types with different abilities and combat roles
+Parts can be salvaged to upgrade DCODE gloves
