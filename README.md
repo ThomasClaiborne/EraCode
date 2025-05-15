@@ -82,7 +82,7 @@ Era Code was developed as a solo project during the Devtober game jam over a 4-w
 - Boss battles with unique mechanics
 
 ## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 About the Developer
 Created by [Thomas Claiborne](https://thomasclaiborne.github.io) as part of his game development portfolio. Connect on [LinkedIn](https://www.linkedin.com/in/trc3/) or check out more projects on [GitHub](https://github.com/ThomasClaiborne).
