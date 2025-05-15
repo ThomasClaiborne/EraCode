@@ -1,6 +1,6 @@
 # Era Code - Unity Top-Down Shooter
 
-![Era Code Banner](https://github.com/ThomasClaiborne/EraCode/raw/main/Images/Banner.png)
+![Era Code Banner](https://github.com/ThomasClaiborne/EraCode/blob/main/Images/PlayerPistolImage.png)
 
 ## 📝 Overview
 Era Code is a top-down defense shooter where players defend against waves of diverse robot enemies in intense fixed-position combat. Players have access to various weapon categories including SMGs, ARs, pistols, rocket launchers, and LMGs, each with unique characteristics and behaviors.
@@ -45,14 +45,14 @@ Era Code was developed as a solo project during the Devtober game jam over a 4-w
 
 ## 📸 Screenshots & Media
 
-![Gameplay Screenshot 1](https://github.com/ThomasClaiborne/EraCode/raw/main/Images/Gameplay1.png)
+![Gameplay Screenshot 1](https://github.com/ThomasClaiborne/EraCode/blob/main/Images/Screenshot%202025-05-15%20070921.png)
 *Wave combat with multiple enemy types*
 
-![Gameplay Screenshot 2](https://github.com/ThomasClaiborne/EraCode/raw/main/Images/Gameplay2.png)
+![Gameplay Screenshot 2](https://github.com/ThomasClaiborne/EraCode/blob/main/Images/Screenshot%202025-05-15%20071141.png)
 *Weapon selection and shop interface*
 
 ## 🎥 Demo Video
-[Watch Gameplay Demo](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+[Watch Gameplay Demo](https://github.com/ThomasClaiborne/EraCode/blob/main/Images/EraCodeWeaponVariety.mp4)
 
 ## 🚀 Installation & Controls
 1. Clone this repository
