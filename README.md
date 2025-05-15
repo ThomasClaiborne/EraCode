@@ -52,7 +52,7 @@ Era Code was developed as a solo project during the Devtober game jam over a 4-w
 *Weapon selection and shop interface*
 
 ## 🎥 Demo Video
-[Watch Gameplay Demo](https://github.com/ThomasClaiborne/EraCode/blob/main/Images/EraCodeWeaponVariety.mp4)
+[![Era Code Gameplay](https://img.youtube.com/vi/C6hz4RMnxmM/0.jpg)](https://youtu.be/C6hz4RMnxmM)
 
 ## 🚀 Installation & Controls
 1. Clone this repository
