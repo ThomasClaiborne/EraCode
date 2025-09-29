@@ -41,7 +41,7 @@ public class HS_ProjectileMover2D : MonoBehaviour
     {
 		if (speed != 0)
         {
-            rb.velocity = transform.forward * speed;
+            rb.linearVelocity = transform.forward * speed;
             //transform.position += transform.forward * (speed * Time.deltaTime);         
         }
 	}
